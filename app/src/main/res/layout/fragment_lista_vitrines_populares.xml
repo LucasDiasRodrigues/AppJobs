@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:animateLayoutChanges="true"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent" android:fitsSystemWindows="true">
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/txtTitulo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="2dp"
+                android:text="@string/minhasVitrines"
+                android:textSize="@dimen/abc_text_size_medium_material"
+                android:textColor="#000000"
+                android:textStyle="bold"
+                android:visibility="visible"
+
+                />
+
+            <TextView
+                android:id="@+id/txtSubtitulo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:visibility="gone"
+                android:text="subtitulo"
+                />
+
+
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recycler_view_vitrines_populares"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scrollbars="vertical"
+                app:layoutManager="android.support.v7.widget.LinearLayoutManager"
+                tools:listitem="@layout/item_list_vitrines_populares"
+                android:padding="8dp"
+                android:clipToPadding="false"/>
+
+        </LinearLayout>
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/txtSemVitrines"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="6dp"
+        android:gravity="center"
+        android:text="Nenhuma vitrine"
+        android:textSize="@dimen/abc_text_size_large_material"
+        android:visibility="gone" />
+
+</android.support.design.widget.CoordinatorLayout>

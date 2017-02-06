@@ -1,0 +1,216 @@
+<resources>
+    <string name="app_name">AppJobs</string>
+    <string name="GCMSenderId">435540487325</string>
+    <string name="GCMServerAPIKey">AIzaSyBhGCg7gA2yxYltjxjyRDDy6Pzb8Uu1AmA</string>
+    <string name="imageserver">http://4runnerapp.com.br/AppJobs/img/</string>
+    <string name="imageservermini">http://4runnerapp.com.br/AppJobs/img_thumb/</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
+    <string name="validade..">Validade:</string>
+    <string name="sobre">Sobre</string>
+    <string name="promocoes">Promoções</string>
+    <string name="portifolio">Portifólio</string>
+
+    <string name="configuracoes">Configurações</string>
+    <string name="title_activity_cadastro_usuario">CadastroUsuarioActivity</string>
+    <string name="title_activity_configuracao_conta">Configuração</string>
+
+
+    <string name="email">E-mail</string>
+    <string name="senha">Senha</string>
+    <string name="esqueciSenha">Esqueci minha senha</string>
+    <string name="entrar">Entrar</string>
+
+    <string name="descricao..">Descrição:</string>
+
+    <string name="datacadastro..">Data de Publicação:</string>
+    <string name="situacao..">Situação:</string>
+
+    <string name="limpar">Limpar</string>
+    <string name="masculino">Masculino</string>
+    <string name="feminino">Feminino</string>
+    <string name="sexo">Sexo</string>
+    <string name="nome">Nome</string>
+    <string name="sobreNome">Sobrenome</string>
+    <string name="datanasc">Data de Nascimento</string>
+    <string name="avancar">Avançar</string>
+    <string name="telefone">Telefone</string>
+    <string name="escolhafoto">Escolha uma foto</string>
+    <string name="tirarfoto">Tirar Foto</string>
+    <string name="escolherdagaleria">Escolher da galeria</string>
+    <string name="cancelar">Cancelar</string>
+    <string name="editarPromocao">Editar</string>
+    <string name="cancelarPromocao">Cancelar</string>
+    <string name="desejaCancelarPromocao">Tem certeza que deseja cancelar essa promoção?</string>
+    <string name="desejaReativarPromocao">Tem certeza que deseja reativar essa promoção?</string>
+    <string name="promoCancelada">Promoção cancelada</string>
+
+
+    <string name="ativarPromocao">Reativar</string>
+
+    <string name="perfil">Perfil</string>
+    <string name="conta">Conta</string>
+
+
+    <string name="desativarconta">Desativar conta</string>
+    <string name="desejadesativarconta">Tem certeza que deseja desativar sua conta?</string>
+    <string name="contadesativada">Conta desativada.</string>
+
+
+    <string name="deletarPortifolio">Deletar do portifólio</string>
+    <string name="desejaDeletarPortifolip">Tem certeza que deseja deletar essa imagem do seu portifólio?</string>
+    <string name="portifDeletado">Imagem deletada</string>
+
+    <string name="preenchacampo">Preencha este campo</string>
+    <string name="cadastrar">Cadastrar</string>
+    <string name="sim">Sim</string>
+    <string name="nao">Não</string>
+    <string name="tenhocerteza">Tenho certeza!</string>
+    <string name="ops">Ops!</string>
+    <string name="opserro">Ops... ocorreu algum erro. Tente novamente</string>
+    <string name="confirmar">Confirmar</string>
+    <string name="observacoes">Observações</string>
+    <string name="fim">Fim</string>
+    <string name="status">Status</string>
+    <string name="chat">Chat</string>
+    <string name="localizacao">Localização</string>
+    <string name="okentendi">Ok, entendi</string>
+    <string name="alterarSenha">Alterar senha</string>
+    <string name="atencao">Atenção!</string>
+
+    <string name="senhaatual">Senha atual</string>
+    <string name="privacidade">Privacidade</string>
+    <string name="novasenha">Nova senha</string>
+    <string name="confirmarnovasenha">Confirmar nova senha</string>
+    <string name="salvaralteracao">Salvar alteração</string>
+    <string name="senhasdiferentes">Senhas não são iguais</string>
+    <string name="senhaalterada">Senha alterada!</string>
+    <string name="senhaincorreta">Senha atual incorreta</string>
+    <string name="conversas">Conversas</string>
+    <string name="parabens">Parabéns!!!</string>
+    <string name="ok">Ok</string>
+    <string name="bemvindo">Bem vindo!</string>
+    <string name="cadastrese">Cadastre-se</string>
+    <string name="sucesso">Sucesso!</string>
+    <string name="cadastrado">Cadastro concluído</string>
+    <string name="conexaoIndosponivel">Você está offline. Verifique sua conexão com a internet</string>
+
+    <string name="salvar">Salvar</string>
+    <string name="continuar">Continuar</string>
+
+    <string name="sair">Sair</string>
+    <string name="desejasair">Realmente deseja sair do aplicativo?</string>
+
+    <string name="finalizarCadastro">Finalizar cadastro</string>
+
+    <string name="senhacurta">A senha deve conter no mínimo 5 caracteres</string>
+
+    <string name="confirmarSenha">Confirmar senha</string>
+
+    <string name="cadastroVitrine">Cadastro de vitrine</string>
+    <string name="nomedaVitrine">Nome da vitrine</string>
+    <string name="minhasVitrines">Minhas vitrines</string>
+    <string name="novosAnuncios">Novos anúncios</string>
+
+    <string name="criadaEm">Criada em</string>
+    <string name="anunciadaEm">Anunciado em</string>
+
+    <string name="subcatnaoselecionada">Selecione uma categoria</string>
+
+    <string name="metodoDeCobranca">Método de cobrança</string>
+    <string name="tags">#Tags:</string>
+    <string name="links">Links:</string>
+
+    <string name="ativarVitrine">Ativar vitrine</string>
+    <string name="desejaAtivarVitrine">Deseja inativar essa vitrine? Ela ficará visivel para todos os usuários.</string>
+    <string name="vitrineAtivada">Vitrine ativada.</string>
+
+    <string name="promocaoReativada">Promoção reativada.</string>
+
+    <string name="inativarVitrine">Inativar vitrine</string>
+    <string name="desejaInativarVitrine">Tem certeza que deseja inativar essa vitrine?</string>
+    <string name="vitrineInativada">Vitrine inativada.</string>
+
+    <string name="emailInvalido">E-mail inválido</string>
+    <string name="dadosInvalidos">Dados inválidos</string>
+
+
+    <string name="home">Novos</string>
+    <string name="melhorAvaliados">Populares</string>
+    <string name="proximos">Buscar</string>
+
+    <string name="sexonaopreenchido">Escolha uma opção</string>
+    <string name="cadastroDeUsuario">Cadastro de Usuário</string>
+
+    <string name="emailjacadastrado">Este e-mail já Está cadastrado em nosso banco de dados. Por favor, escolha outro.</string>
+    <string name="obtendoLocalizacao">Obtendo localização</string>
+
+    <string name="gpsDesligado">O GPS está desligado, deseja ligar agora?</string>
+    <string name="semNovidades">Não há novidades para exibir.</string>
+    <string name="semPromocoes">Não há promoções para exibir.</string>
+    <string name="semPortifolio">Não há fotos para exibir.</string>
+    <string name="segundaFeira">Segunda-feira</string>
+    <string name="tercaFeira">Terça-feira</string>
+    <string name="quartaFeira">Quarta-feira</string>
+    <string name="quintaFeira">Quinta-feira</string>
+    <string name="sextaFeira">Sexta-feira</string>
+    <string name="sabado">Sábado</string>
+    <string name="domingo">Domingo</string>
+
+    <string name="curtidas">Curtidas</string>
+    <string name="seguidores">Seguidores</string>
+
+    <string name="anos">anos</string>
+    <string name="campopreenchidoincorretamente">Campo preenchido incorretamente</string>
+
+    <string name="camposerrados">Existem campos não preenchidos ou preenchidos incorretamente</string>
+
+    <string name="emailEnviado">Email enviado!</string>
+    <string name="acesseemailparasenha">Agora você só precisa acessar o seu email para recuperar sua senha.</string>
+
+    <string name="informacoesInvalidas">Certifique-se que os dados informados estão corretos.</string>
+    <string name="configConta">Configuração de conta</string>
+
+    <!-- Vitrine -->
+    <string name="nomevitrine">Nome:</string>
+    <string name="descricaovitrine">Descrição - Use esse campo para vender o peixe ;D :</string>
+    <string name="faixaprecovitrine">Faixa de preço (R$):</string>
+    <string name="paramvitrine">Por:</string>
+    <string name="unidades">Unidades:</string>
+    <string name="quantidade">quantidade</string>
+    <string name="catvitrine">Selecione a categoria do seu negócio:</string>
+    <string name="linksvitrine">Adicionar links:</string>
+    <string name="tagvirgulas">(Para adicionar mais de uma TAG separe-as com vírgulas)</string>
+    <string name="categoria">Categoria</string>
+    <string name="subcategoria">Subcategoria</string>
+    <string name="link">Link</string>
+
+
+    <string name="tagvitrine">Adicionar #hastags - Use esse campo para criar etiquetas com assuntos relacionados ao seu negócio. (Para adicionar mais de uma TAG separe-as com vírgulas)</string>
+
+    <!-- Promoções -->
+    <string name="titulopromo">Título:</string>
+    <string name="descricaopromo">Descrição:</string>
+    <string name="publicPromo">Publicação de promoção:</string>
+    <string name="iniciopromo">Promo válida de:</string>
+    <string name="fimpromo">Até:</string>
+    <string name="regraspromo">Regras:</string>
+    <string name="title_activity_login">LoginActivity</string>
+    <string name="title_activity_minha_vitrine">MinhaVitrineActivity</string>
+    <string name="title_activity_vitrine">Vitrine XXXX</string>
+
+
+
+    <string name="permitir">Permitir</string>
+    <string name="negar">Negar</string>
+    <string name="permissaoNegada">Permissão negada.</string>
+    <string name="permissaoNegadaMsg">Essa funcionalidade só poderá ser utilizada se você permitir que acessemos sua localização.</string>
+
+
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>

@@ -1,0 +1,485 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:card_view="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.design.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+
+            <android.support.v7.widget.CardView
+                android:id="@+id/cardImagem"
+                android:layout_width="match_parent"
+                android:layout_height="280dp"
+                android:layout_gravity="center"
+                android:layout_marginBottom="10dp"
+                app:cardElevation="8dp"
+                card_view:cardCornerRadius="1dp">
+
+                <ImageView
+                    android:id="@+id/fotoVitrine"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:elevation="8dp"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/image_back_4runner" />
+
+            </android.support.v7.widget.CardView>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="6dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginTop="6dp"
+                android:orientation="vertical">
+
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <EditText
+                        android:id="@+id/editTextNome"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/nomedaVitrine"
+                        android:inputType="textPersonName" />
+                </android.support.design.widget.TextInputLayout>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:text="@string/descricaovitrine"
+                    android:textSize="18dp" />
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp">
+
+                    <EditText
+                        android:id="@+id/editTextDescricao"
+                        android:layout_width="match_parent"
+                        android:layout_height="150dp"
+                        android:inputType="textImeMultiLine" />
+                </android.support.design.widget.TextInputLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/faixaprecovitrine"
+                        android:textSize="18dp" />
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <EditText
+                        android:id="@+id/valorInicial"
+                        android:layout_width="0dp"
+                        android:layout_weight="4"
+                        android:layout_height="wrap_content"
+                        android:hint="R$"
+                        android:inputType="numberDecimal" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:text="a"
+                        android:gravity="center_horizontal"
+                        android:layout_marginLeft="6dp"
+                        android:layout_marginRight="6dp"
+                        android:textSize="18dp" />
+
+                    <EditText
+                        android:id="@+id/valorFinal"
+                        android:layout_width="0dp"
+                        android:layout_weight="4"
+                        android:layout_height="wrap_content"
+                        android:hint="R$"
+                        android:inputType="numberDecimal" />
+
+
+                </LinearLayout>
+
+
+                <!--SeekBar
+                    android:id="@+id/seekBarInicial"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="6dp"
+                    android:layout_marginTop="16dp"
+                    android:backgroundTint="@color/colorAccent"
+                    android:progress="10"
+                    android:progressBackgroundTint="@color/colorAccent"
+                    android:progressTint="@color/colorAccent"
+                    android:theme="@style/AppTheme" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:gravity="center_horizontal"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="a"
+                        android:layout_gravity="center_horizontal"
+                        android:textSize="18dp" />
+
+
+
+                </LinearLayout>
+
+                <SeekBar
+                    android:id="@+id/seekBarFinal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    android:layout_marginTop="6dp"
+                    android:backgroundTint="@color/colorAccent"
+                    android:progress="80"
+                    android:progressBackgroundTint="@color/colorAccent"
+                    android:progressTint="@color/colorAccent"
+                    android:theme="@style/AppTheme" /-->
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/paramvitrine"
+                        android:textSize="18dp" />
+
+
+                    <RadioGroup
+                        android:id="@+id/radiogroupParametro"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginLeft="16dp"
+                        android:baselineAligned="false"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:measureWithLargestChild="false"
+                        android:orientation="vertical"
+                        android:transitionGroup="true">
+
+                        <RadioButton
+                            android:id="@+id/radiobuttonhora"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:checked="true"
+                            android:text="hora"
+                            android:textColor="@android:color/primary_text_light"
+                            android:textSize="15dp" />
+
+                        <RadioButton
+                            android:id="@+id/radiobuttonUnidade"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:checked="false"
+                            android:text="unidade"
+                            android:textColor="@android:color/primary_text_light"
+                            android:textSize="15dp" />
+
+                        <EditText
+                            android:id="@+id/editTextQtdUnidades"
+                            android:layout_width="120dp"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/quantidade"
+                            android:inputType="numberDecimal"
+                            android:visibility="gone" />
+
+
+                    </RadioGroup>
+
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:text="@string/categoria"
+                    android:textSize="18dp" />
+
+                <Spinner
+                    android:id="@+id/spinnerCategoria"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:drawSelectorOnTop="true" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:text="@string/subcategoria"
+                    android:textSize="18dp" />
+
+                <Spinner
+                    android:id="@+id/spinnerSubCategoria"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:drawSelectorOnTop="true" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:visibility="gone">
+
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:text="@string/tagvitrine"
+                    android:textSize="18dp" />
+
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <EditText
+                        android:id="@+id/editTextTags"
+                        android:layout_width="match_parent"
+                        android:layout_height="80dp"
+                        android:inputType="textCapWords" />
+                </android.support.design.widget.TextInputLayout>
+
+
+                <!-- links-->
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:text="@string/linksvitrine"
+                    android:textSize="18dp" />
+
+                <LinearLayout
+                    android:id="@+id/linearLayoutLink5"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone">
+
+                    <android.support.design.widget.TextInputLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="7">
+
+                        <EditText
+                            android:id="@+id/editTextLink5"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/link"
+                            android:imeOptions="actionNext"
+                            android:inputType="text" />
+                    </android.support.design.widget.TextInputLayout>
+
+                    <ImageView
+                        android:id="@+id/btnClearLink5"
+                        android:layout_width="0dp"
+                        android:layout_height="30dp"
+                        android:layout_gravity="center_vertical"
+                        android:layout_weight="1"
+                        android:clickable="true"
+                        android:src="@drawable/close"
+                        android:tint="@color/wallet_hint_foreground_holo_light" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/linearLayoutLink4"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone">
+
+                    <android.support.design.widget.TextInputLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="7">
+
+                        <EditText
+                            android:id="@+id/editTextLink4"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/link"
+                            android:imeOptions="actionNext"
+                            android:inputType="text" />
+                    </android.support.design.widget.TextInputLayout>
+
+                    <ImageView
+                        android:id="@+id/btnClearLink4"
+                        android:layout_width="0dp"
+                        android:layout_height="30dp"
+                        android:layout_gravity="center_vertical"
+                        android:layout_weight="1"
+                        android:clickable="true"
+                        android:src="@drawable/close"
+                        android:tint="@color/wallet_hint_foreground_holo_light" />
+
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:id="@+id/linearLayoutLink3"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone">
+
+                    <android.support.design.widget.TextInputLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="7">
+
+                        <EditText
+                            android:id="@+id/editTextLink3"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/link"
+                            android:imeOptions="actionNext"
+                            android:inputType="text" />
+                    </android.support.design.widget.TextInputLayout>
+
+                    <ImageView
+                        android:id="@+id/btnClearLink3"
+                        android:layout_width="0dp"
+                        android:layout_height="30dp"
+                        android:layout_gravity="center_vertical"
+                        android:layout_weight="1"
+                        android:clickable="true"
+                        android:src="@drawable/close"
+                        android:tint="@color/wallet_hint_foreground_holo_light" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/linearLayoutlink2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone">
+
+                    <android.support.design.widget.TextInputLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="7">
+
+                        <EditText
+                            android:id="@+id/editTextLink2"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/link"
+                            android:imeOptions="actionNext"
+                            android:inputType="text" />
+                    </android.support.design.widget.TextInputLayout>
+
+                    <ImageView
+                        android:id="@+id/btnClearLink2"
+                        android:layout_width="0dp"
+                        android:layout_height="30dp"
+                        android:layout_gravity="center_vertical"
+                        android:layout_weight="1"
+                        android:clickable="true"
+                        android:src="@drawable/close"
+                        android:tint="@color/wallet_hint_foreground_holo_light" />
+
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <android.support.design.widget.TextInputLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="7">
+
+                        <EditText
+                            android:id="@+id/editTextLink"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/link"
+                            android:imeOptions="actionDone"
+                            android:inputType="text" />
+                    </android.support.design.widget.TextInputLayout>
+
+                    <ImageView
+                        android:id="@+id/btnAddLink"
+                        android:layout_width="0dp"
+                        android:layout_height="35dp"
+                        android:layout_gravity="center_vertical"
+                        android:layout_weight="1"
+                        android:clickable="true"
+                        android:src="@drawable/plus"
+                        android:tint="@color/wallet_hint_foreground_holo_light" />
+
+                    <ImageView
+                        android:id="@+id/btnClearLink1"
+                        android:layout_width="0dp"
+                        android:layout_height="30dp"
+                        android:layout_gravity="center_vertical"
+                        android:layout_weight="1"
+                        android:clickable="true"
+                        android:src="@drawable/close"
+                        android:tint="@color/wallet_hint_foreground_holo_light"
+                        android:visibility="gone" />
+
+                </LinearLayout>
+
+                            </LinearLayout>
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/btnCamera"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:backgroundTint="@color/colorAccent"
+            android:elevation="8dp"
+            android:src="@drawable/ic_menu_camera"
+            android:tint="#ffffff"
+            app:borderWidth="0dp"
+            app:fabSize="normal"
+            app:layout_anchor="@id/cardImagem"
+            app:layout_anchorGravity="bottom|right|end"
+            app:pressedTranslationZ="12dp"
+            app:rippleColor="@color/button_material_light" />
+
+    </android.support.design.widget.CoordinatorLayout>
+
+
+</ScrollView>

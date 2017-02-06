@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/home"
+            android:icon="@drawable/ic_home"
+            android:title="Home" />
+        <item
+            android:id="@+id/minhasVitrines"
+            android:icon="@drawable/ic_menu_gallery"
+            android:title="Minhas vitrines" />
+        <item
+            android:id="@+id/vitrinesQueSigo"
+            android:icon="@drawable/ic_heart"
+            android:title="Vitrines que eu sigo" />
+        <item
+            android:id="@+id/chat"
+            android:icon="@drawable/ic_comment_multiple_outline"
+            android:title="Chat" />
+
+        <item
+            android:id="@+id/configuracoes"
+            android:icon="@drawable/ic_menu_manage"
+            android:title="@string/configuracoes" />
+
+    </group>
+
+</menu>

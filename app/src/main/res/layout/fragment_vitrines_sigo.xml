@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:animateLayoutChanges="true"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:elevation="4dp"
+            android:id="@+id/linearLayout">
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recycler_view_sigo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layoutManager="android.support.v7.widget.LinearLayoutManager"
+                tools:listitem="@layout/item_list_sigo"
+                android:padding="8dp"
+
+                android:clipToPadding="false"/>
+
+
+        </LinearLayout>
+
+
+   <!--     <HorizontalScrollView
+            android:id="@+id/horizontal_scrollview"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_centerHorizontal="true"
+            android:layout_alignParentTop="true"
+            android:divider="@drawable/linha"
+            android:showDividers="end">
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/recycler_view_sigo"
+                    android:layout_width="429dp"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    app:layoutManager="android.support.v7.widget.LinearLayoutManager"
+                    tools:listitem="@layout/item_list_sigo"
+                    android:padding="8dp"
+                    android:clipToPadding="false"/>
+</HorizontalScrollView> -->
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:weightSum="1"
+            android:layout_alignParentBottom="true"
+            android:layout_below="@+id/linearLayout">
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@android:color/darker_gray"/>
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recycler_view_vitrines"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scrollbars="vertical"
+                app:layoutManager="android.support.v7.widget.LinearLayoutManager"
+                tools:listitem="@layout/item_list_promocoes"
+
+                android:clipToPadding="false" />
+
+        </LinearLayout>
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/txtSemVitrines"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="6dp"
+        android:gravity="center"
+        android:text="Nenhuma vitrine"
+        android:textSize="@dimen/abc_text_size_large_material"
+        android:visibility="gone" />
+
+</android.support.design.widget.CoordinatorLayout>
