@@ -54,10 +54,9 @@
             android:layout_above="@+id/loadItemsLayout_recyclerView"
             android:layout_gravity="center"
             android:paddingBottom="6dp"
-            android:paddingEnd="6dp"
-            android:paddingLeft="6dp"
-            android:paddingRight="6dp"
-            android:paddingStart="6dp" />
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="?android:attr/selectableItemBackground"/>
 
         <ProgressBar
             android:id="@+id/progressUpdate"

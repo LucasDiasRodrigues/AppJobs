@@ -8,9 +8,11 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.MenuItemCompat;
+import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
@@ -20,8 +22,10 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.FrameLayout;
 
 import com.teamappjobs.appjobs.R;
+import com.teamappjobs.appjobs.adapter.PagerAdapterHome;
 import com.teamappjobs.appjobs.asyncTask.LogOutTask;
 import com.teamappjobs.appjobs.fragment.BuscaFragment;
 import com.teamappjobs.appjobs.fragment.ConfiguracoesFragment;
@@ -36,14 +40,21 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private FloatingActionButton fabExemplo;
     private SearchView searchView;
 
+    //Tabs
+    private Toolbar toolbar;
+    private ViewPager mViewPager;
+    private int numTabs = 2;
+    private TabLayout mTabLayout;
+
+    private View frameLayout;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
 
         //Tratar usuario previamente logado
         Boolean logado = EstaLogado();
@@ -53,26 +64,24 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 finish();
         }
 
+        frameLayout = findViewById(R.id.frameLayout);
+
+        //What?
         fabExemplo = (FloatingActionButton) findViewById(R.id.fab);
         fabExemplo.hide();
-
-
         fabCadastrarVitrine = (FloatingActionButton) findViewById(R.id.fabCadastroVitrine);
         fabCadastrarVitrine.hide();
         fabCadastrarVitrine.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 Intent intent = new Intent(MainActivity.this, CadastroVitrineActivity.class);
                 intent.putExtra("editar",false);
-
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     startActivity(intent,
                             ActivityOptions.makeSceneTransitionAnimation(MainActivity.this).toBundle());
                 } else {
                     startActivity(intent);
                 }
-
             }
         });
 
@@ -84,10 +93,35 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-        HomeFragment fragmentHome = new HomeFragment();
-        FragmentTransaction transactionHome = getSupportFragmentManager().beginTransaction();
-        transactionHome.replace(R.id.frameLayout, fragmentHome);
-        transactionHome.commit();
+        //HomeFragment fragmentHome = new HomeFragment();
+        //FragmentTransaction transactionHome = getSupportFragmentManager().beginTransaction();
+        //transactionHome.replace(R.id.frameLayout, fragmentHome);
+        //transactionHome.commit();
+
+        //Para as tabs
+        //Configurando as tabs e fragments
+        mViewPager = (ViewPager) findViewById(R.id.pager);
+        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+
+
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
+
+        mTabLayout = (TabLayout) findViewById(R.id.tabs);
+        ligaTabs(true);
+
     }
 
     @Override
@@ -186,16 +220,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         int id = item.getItemId();
 
         if (id == R.id.home) {
-            HomeFragment fragmentHome = new HomeFragment();
-            FragmentTransaction transactionHome = getSupportFragmentManager().beginTransaction();
-            transactionHome.replace(R.id.frameLayout, fragmentHome);
-            transactionHome.commit();
+            //HomeFragment fragmentHome = new HomeFragment();
+            //FragmentTransaction transactionHome = getSupportFragmentManager().beginTransaction();
+            //transactionHome.replace(R.id.frameLayout, fragmentHome);
+            //transactionHome.commit();
+            ligaTabs(true);
+
+
             fabCadastrarVitrine.hide();
             fabExemplo.hide();
 
-
         } else if (id == R.id.minhasVitrines) {
-
+            ligaTabs(false);
             MinhasVitrinesFragment fragmentMinhasVitrines = new MinhasVitrinesFragment();
             android.support.v4.app.FragmentTransaction transactionMinhasVitrines = getSupportFragmentManager().beginTransaction();
             transactionMinhasVitrines.replace(R.id.frameLayout, fragmentMinhasVitrines);
@@ -204,24 +240,24 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             fabExemplo.hide();
 
         } else if (id == R.id.vitrinesQueSigo) {
+            ligaTabs(false);
             VitrinesSigoFragment fragmentVitrinesSigo = new VitrinesSigoFragment();
             android.support.v4.app.FragmentTransaction transactionVitrines = getSupportFragmentManager().beginTransaction();
             transactionVitrines.replace(R.id.frameLayout, fragmentVitrinesSigo);
             transactionVitrines.commit();
-
             fabCadastrarVitrine.hide();
-          //  fabExemplo.show();
+            toolbar.setKeepScreenOn(true);
+            //  fabExemplo.show();
 
         } else if (id == R.id.chat) {
 
 
         } else if (id == R.id.configuracoes) {
+            ligaTabs(false);
             ConfiguracoesFragment fragmentConfig = new ConfiguracoesFragment();
             FragmentTransaction transactionConfig = getSupportFragmentManager().beginTransaction();
             transactionConfig.replace(R.id.frameLayout, fragmentConfig);
             transactionConfig.commit();
-
-
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -253,4 +289,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     }
 
+    public void ligaTabs(boolean liga){
+        if(liga){
+            frameLayout.setVisibility(View.GONE);
+            mTabLayout.setVisibility(View.VISIBLE);
+            mViewPager.setVisibility(View.VISIBLE);
+            PagerAdapterHome pagerAdapter = new PagerAdapterHome(getSupportFragmentManager(), this, numTabs);
+            mViewPager.setAdapter(pagerAdapter);
+            mTabLayout.setupWithViewPager(mViewPager);
+        } else {
+            frameLayout.setVisibility(View.VISIBLE);
+            mTabLayout.setVisibility(View.GONE);
+            mViewPager.setVisibility(View.GONE);
+            mViewPager.setAdapter(null);
+        }
+    }
 }

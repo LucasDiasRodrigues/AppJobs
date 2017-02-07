@@ -52,7 +52,9 @@
             android:id="@+id/recyclerview"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_above="@+id/loadItemsLayout_recyclerView"
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="?android:attr/selectableItemBackground"
             android:layout_gravity="center"
             android:layout_weight="11" />
 
