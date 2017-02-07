@@ -32,8 +32,8 @@ public class HomePopularesFragment extends Fragment {
     private RecyclerViewHomePopularesAdapter adapter;
     private List<Vitrine> vitrines;
     private RecyclerView listVitrines;
-    private TextView txtTitulo;
-    private TextView txtSubTitulo;
+   // private TextView txtTitulo;
+   // private TextView txtSubTitulo;
     private TextView txtSemVitrines;
 
 
@@ -46,116 +46,71 @@ public class HomePopularesFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View fragment = inflater.inflate(R.layout.fragment_home_populares, container, false);
 
-
-
         listVitrines = (RecyclerView) fragment.findViewById(R.id.recycler_view_vitrines_populares);
-        txtTitulo = (TextView) fragment.findViewById(R.id.txtTitulo);
-        txtSubTitulo = (TextView) fragment.findViewById(R.id.txtSubtitulo);
+   //     txtTitulo = (TextView) fragment.findViewById(R.id.txtTitulo);
+     //   txtSubTitulo = (TextView) fragment.findViewById(R.id.txtSubtitulo);
         txtSemVitrines = (TextView) fragment.findViewById(R.id.txtSemVitrines);
-
-
 
         progressBar = (ProgressBar) fragment.findViewById(R.id.progress);
         progressBarUpdate = (ProgressBar) fragment.findViewById(R.id.progressUpdate);
         mRecyclerView = (RecyclerView) fragment.findViewById(R.id.recyclerview);
 
-
-
-
-
         listaNovidades();
 
         //Controle de scroll
         mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-
             boolean userScrolled;
-
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
-
                 if (newState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL) {
                     userScrolled = true;
-
                 }
-
             }
-
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
-
                 visibleItemCount = mLayoutManager.getChildCount();
                 totalItemCount = mLayoutManager.getItemCount();
                 pastVisiblesItems = mLayoutManager
                         .findFirstVisibleItemPosition();
-
                 if (userScrolled
                         && (visibleItemCount + pastVisiblesItems) == totalItemCount) {
                     userScrolled = false;
-
                     updateRecyclerView();
-
                 }
-
-
             }
         });
-
         return fragment;
     }
-
-    public void listaNovidades(){
-
+    public void listaNovidades() {
         //Task para baixar mais itens
-        ListaPopularesTask task = new ListaPopularesTask(getActivity(),this);
+        ListaPopularesTask task = new ListaPopularesTask(getActivity(), this);
         task.execute();
-
-
-
     }
 
-    public void mostraListaNovidades(List<Vitrine> vitrines){
-        this.vitrines=vitrines;
-
-        adapter = new RecyclerViewHomePopularesAdapter(getActivity(), null /*Bundles*/ );
-        mLayoutManager = new LinearLayoutManager(getActivity());
-        mRecyclerView.setLayoutManager(mLayoutManager);
-        mRecyclerView.setAdapter(adapter);
-
-
-
-
-        if(vitrines.size() > 0){
-            Log.i("atualizaListaVitr","");
-            txtTitulo.setVisibility(View.VISIBLE);
+    public void mostraListaNovidades(List<Vitrine> vitrines) {
+        this.vitrines = vitrines;
+        if (vitrines.size() > 0) {
+            Log.i("atualizaListaVitr", "");
+            //txtTitulo.setVisibility(View.VISIBLE);
             txtSemVitrines.setVisibility(View.GONE);
 
-            RecyclerViewHomePopularesAdapter adapter = new RecyclerViewHomePopularesAdapter(getActivity(),vitrines);
+            adapter = new RecyclerViewHomePopularesAdapter(getActivity(), vitrines, "Melhor avaliados", "");
             mLayoutManager = new LinearLayoutManager(getActivity());
             mRecyclerView.setLayoutManager(mLayoutManager);
             mRecyclerView.setAdapter(adapter);
         } else {
-            txtTitulo.setVisibility(View.GONE);
+            //txtTitulo.setVisibility(View.GONE);
             txtSemVitrines.setVisibility(View.VISIBLE);
         }
-
-
-
-
-
-
     }
 
-
-
     public void updateRecyclerView() {
-
         progressBarUpdate.setVisibility(View.VISIBLE);
         //Task para baixar mais itens
         adapter.notifyDataSetChanged();
         progressBarUpdate.setVisibility(View.GONE);
-
     }
 
 

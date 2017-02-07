@@ -117,7 +117,7 @@ public class BuscaVitrinesFragment extends Fragment {
             txtTitulo.setVisibility(View.VISIBLE);
             txtSemVitrines.setVisibility(View.GONE);
 
-            RecyclerViewHomeTimeLineAdapter adapter = new RecyclerViewHomeTimeLineAdapter(getActivity(),event.getVitrines());
+            RecyclerViewHomeTimeLineAdapter adapter = new RecyclerViewHomeTimeLineAdapter(getActivity(),event.getVitrines(),"Vitrines","");
             mLayoutManager = new LinearLayoutManager(getActivity());
             mRecyclerView.setLayoutManager(mLayoutManager);
             mRecyclerView.setAdapter(adapter);

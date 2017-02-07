@@ -17,35 +17,6 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_collapseMode="none"
-            app:layout_scrollFlags="scroll">
-
-
-            <TextView
-                android:id="@+id/txtTitulo"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:text="Novos anúncios"
-                android:textColor="#000000"
-                android:textSize="@dimen/abc_text_size_medium_material"
-                android:visibility="visible" />
-
-            <TextView
-                android:id="@+id/txtSubtitulo"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginTop="-10dp"
-                android:text="subtitulo"
-                android:visibility="gone" />
-
-        </LinearLayout>
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/recyclerview"
@@ -53,10 +24,10 @@
             android:layout_height="match_parent"
             android:layout_above="@+id/loadItemsLayout_recyclerView"
             android:layout_gravity="center"
-            android:paddingBottom="6dp"
             android:clickable="true"
             android:focusable="true"
-            android:foreground="?android:attr/selectableItemBackground"/>
+            android:foreground="?android:attr/selectableItemBackground"
+            android:paddingBottom="6dp" />
 
         <ProgressBar
             android:id="@+id/progressUpdate"

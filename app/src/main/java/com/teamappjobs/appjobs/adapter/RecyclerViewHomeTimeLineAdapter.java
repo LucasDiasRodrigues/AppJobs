@@ -15,46 +15,80 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 import com.teamappjobs.appjobs.R;
-import com.teamappjobs.appjobs.activity.MinhaVitrineActivity;
 import com.teamappjobs.appjobs.activity.VitrineActivity;
 import com.teamappjobs.appjobs.modelo.Vitrine;
 
 import java.text.DateFormat;
-import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RecyclerViewHomeTimeLineAdapter extends RecyclerView.Adapter<RecyclerViewHomeTimeLineAdapter.MyViewHolder> {
+public class RecyclerViewHomeTimeLineAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private static Activity activity;
     private static List<Vitrine> vitrines = new ArrayList<Vitrine>();
     private LayoutInflater layoutInflater;
     private DateFormat format = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
-    private  boolean GEO;
+    private boolean GEO;
 
-    public RecyclerViewHomeTimeLineAdapter(Activity activity, List<Vitrine> vitrines) {
+    private String headerTitulo;
+    private String headerSubtitulo;
+
+    private static final int tipo_header = 0;
+    private static final int tipo_item = 1;
+
+    public RecyclerViewHomeTimeLineAdapter(Activity activity, List<Vitrine> vitrines, String headerTitulo, String headerSub) {
         this.activity = activity;
         this.vitrines = vitrines;
         this.layoutInflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         this.GEO = GEO;
+        this.headerTitulo = headerTitulo;
+        this.headerSubtitulo = headerSub;
     }
 
 
     @Override
-    public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = layoutInflater.inflate(R.layout.item_list_todas_vitrines, parent, false);
-        MyViewHolder myViewHolder = new MyViewHolder(view);
-        return myViewHolder;
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        if (viewType == tipo_header) {
+            View view = layoutInflater.inflate(R.layout.item_header_recyclerview, parent, false);
+            HeaderViewHolder headerViewHolder = new HeaderViewHolder(view);
+            return headerViewHolder;
+        } else {
+            View view = layoutInflater.inflate(R.layout.item_list_todas_vitrines, parent, false);
+            ItemViewHolder itemViewHolder = new ItemViewHolder(view);
+            return itemViewHolder;
+        }
+    }
+
+
+    @Override
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+        if (holder instanceof HeaderViewHolder) {
+            HeaderViewHolder headerViewHolder = (HeaderViewHolder) holder;
+            headerViewHolder.txtTitulo.setText(headerTitulo);
+            if (!headerSubtitulo.equals("")) {
+                headerViewHolder.txtSubtitulo.setVisibility(View.VISIBLE);
+                headerViewHolder.txtSubtitulo.setText(headerSubtitulo);
+            } else {
+                headerViewHolder.txtSubtitulo.setVisibility(View.GONE);
+            }
+        } else {
+            int currentPosition = position - 1;
+            ItemViewHolder itemViewHolder = (ItemViewHolder) holder;
+            Picasso.with(activity).load(activity.getResources().getString(R.string.imageserver) + vitrines.get(currentPosition).getFoto()).into(itemViewHolder.imageVitrine);
+            itemViewHolder.txtNomeVitrine.setText(vitrines.get(currentPosition).getNome());
+            itemViewHolder.txtCategoriaVitrine.setText(vitrines.get(currentPosition).getDescCategoria());
+            itemViewHolder.txtDtCriacao.setText(format.format(vitrines.get(currentPosition).getDataCriacao()));
+        }
+
     }
 
     @Override
-    public void onBindViewHolder(MyViewHolder holder, int position) {
-        Picasso.with(activity).load(activity.getResources().getString(R.string.imageserver) + vitrines.get(position).getFoto()).into(holder.imageVitrine);
-        holder.txtNomeVitrine.setText(vitrines.get(position).getNome());
-        holder.txtCategoriaVitrine.setText(vitrines.get(position).getDescCategoria());
-        holder.txtDtCriacao.setText(format.format(vitrines.get(position).getDataCriacao()));
-
+    public int getItemViewType(int position) {
+        if (position == 0)
+            return tipo_header;
+        else
+            return tipo_item;
     }
 
     @Override
@@ -62,7 +96,7 @@ public class RecyclerViewHomeTimeLineAdapter extends RecyclerView.Adapter<Recycl
         return vitrines.size();
     }
 
-    public static class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public static class ItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private ImageView imageVitrine;
         private TextView txtNomeVitrine;
         private TextView txtCategoriaVitrine;
@@ -70,21 +104,22 @@ public class RecyclerViewHomeTimeLineAdapter extends RecyclerView.Adapter<Recycl
         private TextView txtDtCriacao;
         private Button btnVerVitrine;
 
-        public MyViewHolder(View itemView) {
+        public ItemViewHolder(View itemView) {
             super(itemView);
             itemView.setOnClickListener(this);
             imageVitrine = (ImageView) itemView.findViewById(R.id.imageViewCapa);
             txtNomeVitrine = (TextView) itemView.findViewById(R.id.txtNomeVitrine);
             txtCategoriaVitrine = (TextView) itemView.findViewById(R.id.categoriaVitrine);
-          //  txtSubcatVitrine = (TextView) itemView.findViewById(R.id.subcategoriaVitrine);
+            //  txtSubcatVitrine = (TextView) itemView.findViewById(R.id.subcategoriaVitrine);
             txtDtCriacao = (TextView) itemView.findViewById(R.id.dtCriacaoVitrine);
-            btnVerVitrine=(Button) itemView.findViewById(R.id.btnVerMais);
+            btnVerVitrine = (Button) itemView.findViewById(R.id.btnVerMais);
         }
 
 
         @Override
         public void onClick(View v) {
-            Vitrine vitrineSelecionada = vitrines.get(getPosition());
+            int currentPosition = getAdapterPosition() - 1;
+            Vitrine vitrineSelecionada = vitrines.get(currentPosition);
             Intent intent = new Intent(activity, VitrineActivity.class);
             intent.putExtra("vitrine", vitrineSelecionada);
 
@@ -95,6 +130,17 @@ public class RecyclerViewHomeTimeLineAdapter extends RecyclerView.Adapter<Recycl
             } else {
                 activity.startActivity(intent);
             }
+        }
+    }
+
+    public class HeaderViewHolder extends RecyclerView.ViewHolder {
+        private TextView txtTitulo;
+        private TextView txtSubtitulo;
+
+        public HeaderViewHolder(View itemView) {
+            super(itemView);
+            txtTitulo = (TextView) itemView.findViewById(R.id.txtTitulo);
+            txtSubtitulo = (TextView) itemView.findViewById(R.id.txtSubtitulo);
         }
     }
 }
