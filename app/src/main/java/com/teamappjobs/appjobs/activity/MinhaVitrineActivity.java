@@ -43,31 +43,22 @@ public class MinhaVitrineActivity extends AppCompatActivity implements AppBarLay
     private TextView txtCurtidas;
     private TextView txtSeguidores;
     private int mMaxScrollSize;
-    //
-
-
     private ImageView fotoVitrine;
     private TextView txtNomeVitrine;
-
     private ViewPager mViewPager;
     private int numTabs = 3;
     private TabLayout mTabLayout;
     private Toolbar toolbar;
-
     private CoordinatorLayout mCoordinator;
     private ImageView imageViewToolbar;
-
     private FloatingActionButton fabEditVitrine;
     private FloatingActionButton fabCadastroPortifolio;
     private FloatingActionButton fabCadastroPromocoes;
-
     public Vitrine vitrine;
-
 
     public Vitrine getVitrine() {
         return vitrine;
     }
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,21 +73,17 @@ public class MinhaVitrineActivity extends AppCompatActivity implements AppBarLay
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
-
         AppBarLayout appbarLayout = (AppBarLayout) findViewById(R.id.materialup_appbar);
         appbarLayout.addOnOffsetChangedListener(this);
         mMaxScrollSize = appbarLayout.getTotalScrollRange();
         mProfileImage = (CircleImageView) findViewById(R.id.materialup_profile_image);
         fotoVitrine = (ImageView) findViewById(R.id.profile_backdrop);
         txtNomeVitrine = (TextView) findViewById(R.id.txtNomeVitrine);
-
         Picasso.with(this).load(getResources().getString(R.string.imageserver) + vitrine.getFoto()).into(fotoVitrine);
         txtNomeVitrine.setText(vitrine.getNome());
-
         txtCurtidas = (TextView) findViewById(R.id.txtCurtidas);
         txtSeguidores = (TextView) findViewById(R.id.txtSeguidores);
         mCoordinator = (CoordinatorLayout) findViewById(R.id.root_coordinator);
-
 
         //Configurando as tabs e fragments
         PagerAdapterMinhaVitrine pagerAdapter = new PagerAdapterMinhaVitrine(getSupportFragmentManager(), this, numTabs);
@@ -105,87 +92,25 @@ public class MinhaVitrineActivity extends AppCompatActivity implements AppBarLay
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
             }
 
             @Override
             public void onPageSelected(int position) {
-
                 changeFloatingButtons(position);
-
-
             }
 
             @Override
             public void onPageScrollStateChanged(int state) {
-
             }
         });
 
         mTabLayout = (TabLayout) findViewById(R.id.tabs);
         mTabLayout.setupWithViewPager(mViewPager);
+
         fabCadastroPromocoes = (FloatingActionButton) findViewById(R.id.fabPromocoes);
-        fabCadastroPortifolio = (FloatingActionButton) findViewById(R.id.fabPortifolio);
-        fabEditVitrine= (FloatingActionButton) findViewById(R.id.fabEdit);
-
-
-
-        fabEditVitrine.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intentEditar = new Intent(MinhaVitrineActivity.this, CadastroVitrineActivity.class);
-                intentEditar.putExtra("vitrine", vitrine);
-                intentEditar.putExtra("editar",true);
-
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    startActivity(intentEditar, ActivityOptions.makeSceneTransitionAnimation(MinhaVitrineActivity.this).toBundle());
-                } else {
-                    startActivity(intentEditar);
-                }
-
-            }
-        });
-        fabEditVitrine.show();
-        fabCadastroPortifolio.hide();
-        fabCadastroPromocoes.hide();
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        fabCadastroPortifolio.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                Intent intentPortifolio = new Intent(MinhaVitrineActivity.this, CadastroPortifolioActivity.class);
-                intentPortifolio.putExtra("vitrine", vitrine);
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    startActivity(intentPortifolio, ActivityOptions.makeSceneTransitionAnimation(MinhaVitrineActivity.this).toBundle());
-                } else {
-                    startActivity(intentPortifolio);
-                }
-
-            }
-        });
-        fabCadastroPortifolio.hide();
-        fabEditVitrine.hide();
-
-
-
         fabCadastroPromocoes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 Intent intentPromocao = new Intent(MinhaVitrineActivity.this, PublicarPromocaoActivity.class);
                 intentPromocao.putExtra("vitrine", vitrine);
 
@@ -196,16 +121,44 @@ public class MinhaVitrineActivity extends AppCompatActivity implements AppBarLay
                 }
             }
         });
+        fabCadastroPortifolio = (FloatingActionButton) findViewById(R.id.fabPortifolio);
+        fabCadastroPortifolio.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intentPortifolio = new Intent(MinhaVitrineActivity.this, CadastroPortifolioActivity.class);
+                intentPortifolio.putExtra("vitrine", vitrine);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    startActivity(intentPortifolio, ActivityOptions.makeSceneTransitionAnimation(MinhaVitrineActivity.this).toBundle());
+                } else {
+                    startActivity(intentPortifolio);
+                }
+            }
+        });
+        fabEditVitrine = (FloatingActionButton) findViewById(R.id.fabEdit);
+        fabEditVitrine.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intentEditar = new Intent(MinhaVitrineActivity.this, CadastroVitrineActivity.class);
+                intentEditar.putExtra("vitrine", vitrine);
+                intentEditar.putExtra("editar", true);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    startActivity(intentEditar, ActivityOptions.makeSceneTransitionAnimation(MinhaVitrineActivity.this).toBundle());
+                } else {
+                    startActivity(intentEditar);
+                }
+            }
+        });
+
+        fabEditVitrine.show();
+        fabCadastroPortifolio.hide();
         fabCadastroPromocoes.hide();
-        fabEditVitrine.hide();
+
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-
         buscaDetalhesVitrine();
-
     }
 
     @Override
@@ -272,7 +225,7 @@ public class MinhaVitrineActivity extends AppCompatActivity implements AppBarLay
 
         if (bundle != null) {
 
-            if (!(bundle.getString("foto","").equals(""))) {
+            if (!(bundle.getString("foto", "").equals(""))) {
                 Picasso.with(this).load(getResources().getString(R.string.imageservermini) + bundle.getString("foto")).into(mProfileImage);
             }
             String auxCurtidas = bundle.getInt("curtidas", 0) + " " + getResources().getString(R.string.curtidas);
@@ -287,7 +240,7 @@ public class MinhaVitrineActivity extends AppCompatActivity implements AppBarLay
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_minha_vitrine, menu);
 
-        if(vitrine.getSituacao().equals("ativa")){
+        if (vitrine.getSituacao().equals("ativa")) {
             menu.removeItem(R.id.ativar);
         } else {
             menu.removeItem(R.id.inativar);

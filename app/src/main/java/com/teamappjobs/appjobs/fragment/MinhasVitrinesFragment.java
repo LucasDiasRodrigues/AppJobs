@@ -11,16 +11,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
-import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.teamappjobs.appjobs.R;
 import com.teamappjobs.appjobs.adapter.RecyclerViewMinhasVitrinesAdapter;
 import com.teamappjobs.appjobs.asyncTask.ListaVitrinesTask;
 import com.teamappjobs.appjobs.modelo.Vitrine;
-
-import org.w3c.dom.Text;
 
 import java.util.List;
 
@@ -30,24 +27,22 @@ import java.util.List;
 public class MinhasVitrinesFragment extends Fragment{
 
     private RecyclerView listVitrines;
-    private TextView txtTitulo;
-    private TextView txtSubTitulo;
     private TextView txtSemVitrines;
     private RecyclerView.LayoutManager mLayoutManager;
     private SharedPreferences prefs ;
 
     private List<Vitrine> vitrines;
+    private ProgressBar progressBar;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View fragment = inflater.inflate(R.layout.fragment_lista_vitrines,container,false);
+        View fragment = inflater.inflate(R.layout.fragment_lista_minhas_vitrines,container,false);
 
         listVitrines = (RecyclerView) fragment.findViewById(R.id.recycler_view_vitrines);
-        txtTitulo = (TextView) fragment.findViewById(R.id.txtTitulo);
-        txtSubTitulo = (TextView) fragment.findViewById(R.id.txtSubtitulo);
         txtSemVitrines = (TextView) fragment.findViewById(R.id.txtSemVitrines);
         prefs=  getActivity().getSharedPreferences("Configuracoes", Context.MODE_PRIVATE);
+        progressBar = (ProgressBar) fragment.findViewById(R.id.progress);
 
 
         return fragment;
@@ -73,10 +68,9 @@ public class MinhasVitrinesFragment extends Fragment{
 
     public void atualizaListaVitrines(List<Vitrine> vitrines){
         this.vitrines = vitrines;
-
+        progressBar.setVisibility(View.GONE);
         if(vitrines.size() > 0){
             Log.i("atualizaListaVitr","");
-            txtTitulo.setVisibility(View.VISIBLE);
             txtSemVitrines.setVisibility(View.GONE);
 
             RecyclerViewMinhasVitrinesAdapter adapter = new RecyclerViewMinhasVitrinesAdapter(getActivity(),vitrines);
@@ -84,7 +78,6 @@ public class MinhasVitrinesFragment extends Fragment{
             listVitrines.setLayoutManager(mLayoutManager);
             listVitrines.setAdapter(adapter);
         } else {
-            txtTitulo.setVisibility(View.GONE);
             txtSemVitrines.setVisibility(View.VISIBLE);
         }
 

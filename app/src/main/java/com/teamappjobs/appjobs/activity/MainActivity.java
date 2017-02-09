@@ -93,6 +93,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+        navigationView.setCheckedItem(R.id.home);
         //HomeFragment fragmentHome = new HomeFragment();
         //FragmentTransaction transactionHome = getSupportFragmentManager().beginTransaction();
         //transactionHome.replace(R.id.frameLayout, fragmentHome);
@@ -167,7 +168,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 */
                 return true;
             }
-
             @Override
             public boolean onQueryTextChange(String searchQuery) {
                 return true;
@@ -209,7 +209,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -220,15 +219,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         int id = item.getItemId();
 
         if (id == R.id.home) {
-            //HomeFragment fragmentHome = new HomeFragment();
-            //FragmentTransaction transactionHome = getSupportFragmentManager().beginTransaction();
-            //transactionHome.replace(R.id.frameLayout, fragmentHome);
-            //transactionHome.commit();
             ligaTabs(true);
-
-
             fabCadastrarVitrine.hide();
             fabExemplo.hide();
+            toolbar.setTitle(R.string.app_name);
 
         } else if (id == R.id.minhasVitrines) {
             ligaTabs(false);
@@ -238,6 +232,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             transactionMinhasVitrines.commit();
             fabCadastrarVitrine.show();
             fabExemplo.hide();
+            toolbar.setTitle(R.string.minhasVitrines);
 
         } else if (id == R.id.vitrinesQueSigo) {
             ligaTabs(false);
@@ -247,9 +242,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             transactionVitrines.commit();
             fabCadastrarVitrine.hide();
             toolbar.setKeepScreenOn(true);
-            //  fabExemplo.show();
+            toolbar.setTitle(R.string.vitrinesQueSigo);
 
         } else if (id == R.id.chat) {
+
+            toolbar.setTitle(R.string.chat);
 
 
         } else if (id == R.id.configuracoes) {
@@ -258,6 +255,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             FragmentTransaction transactionConfig = getSupportFragmentManager().beginTransaction();
             transactionConfig.replace(R.id.frameLayout, fragmentConfig);
             transactionConfig.commit();
+            toolbar.setTitle(R.string.configuracoes);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

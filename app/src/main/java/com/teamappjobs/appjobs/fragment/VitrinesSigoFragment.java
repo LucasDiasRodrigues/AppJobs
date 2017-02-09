@@ -11,24 +11,22 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.TextView;
+
 import com.teamappjobs.appjobs.R;
-import com.teamappjobs.appjobs.adapter.RecyclerViewMinhasVitrinesAdapter;
 import com.teamappjobs.appjobs.adapter.RecyclerViewPromocoesAdapter;
 import com.teamappjobs.appjobs.adapter.RecyclerViewThumbSigoAdapter;
 import com.teamappjobs.appjobs.asyncTask.ListaVitrinesSigoTask;
 import com.teamappjobs.appjobs.modelo.Promocao;
 import com.teamappjobs.appjobs.modelo.Vitrine;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by Lucas on 28/04/2016.
  */
-public class VitrinesSigoFragment extends Fragment{
+public class VitrinesSigoFragment extends Fragment {
 
     private RecyclerView listVitrines;
     private RecyclerView listThumbSigo;
@@ -36,23 +34,25 @@ public class VitrinesSigoFragment extends Fragment{
     private TextView txtSemVitrines;
     private RecyclerView.LayoutManager mLayoutManager;
     private RecyclerView.LayoutManager mLayoutManagerThumb;
-    private SharedPreferences prefs ;
+    private SharedPreferences prefs;
 
-    private List  Lpromocoes;
-    private List  Lvitrines;
+    private List Lpromocoes;
+    private List Lvitrines;
     private List<Vitrine> vitrines;
     private List<Promocao> promocoes;
+    private ProgressBar progressBar;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View fragment = inflater.inflate(R.layout.fragment_vitrines_sigo,container,false);
+        View fragment = inflater.inflate(R.layout.fragment_lista_vitrines_sigo, container, false);
 
         listVitrines = (RecyclerView) fragment.findViewById(R.id.recycler_view_vitrines);
-        listThumbSigo= (RecyclerView) fragment.findViewById(R.id.recycler_view_sigo);
+        listThumbSigo = (RecyclerView) fragment.findViewById(R.id.recycler_view_sigo);
         txtSubTitulo = (TextView) fragment.findViewById(R.id.txtSubtitulo);
         txtSemVitrines = (TextView) fragment.findViewById(R.id.txtSemVitrines);
-        prefs=  getActivity().getSharedPreferences("Configuracoes", Context.MODE_PRIVATE);
-
+        prefs = getActivity().getSharedPreferences("Configuracoes", Context.MODE_PRIVATE);
+        progressBar = (ProgressBar) fragment.findViewById(R.id.progress);
 
 
         return fragment;
@@ -70,30 +70,31 @@ public class VitrinesSigoFragment extends Fragment{
         listaVitrines();
     }
 
-    public void listaVitrines(){
+    public void listaVitrines() {
 
-        ListaVitrinesSigoTask task = new ListaVitrinesSigoTask(getActivity(),this,"vitrinesSigo",prefs.getString("email", ""));
+        ListaVitrinesSigoTask task = new ListaVitrinesSigoTask(getActivity(), this, "vitrinesSigo", prefs.getString("email", ""));
         task.execute();
     }
 
-    public void atualizaListaVitrines(List Lpromocoes, List Lvitrines ){
+    public void atualizaListaVitrines(List Lpromocoes, List Lvitrines) {
         this.Lpromocoes = Lpromocoes;
-        this.Lvitrines= Lvitrines;
+        this.Lvitrines = Lvitrines;
 
-        vitrines= Lvitrines;
-        promocoes=Lpromocoes;
+        vitrines = Lvitrines;
+        promocoes = Lpromocoes;
 
-        if(vitrines.size() > 0){
-            Log.i("atualizaListaVitr","");
+        progressBar.setVisibility(View.GONE);
+
+        if (vitrines.size() > 0) {
+            Log.i("atualizaListaVitr", "");
 
 
             txtSemVitrines.setVisibility(View.GONE);
 
-            RecyclerViewPromocoesAdapter adapter = new RecyclerViewPromocoesAdapter(getActivity(),promocoes,this);
-            RecyclerViewThumbSigoAdapter adapterThumb= new RecyclerViewThumbSigoAdapter(getActivity(),vitrines);
+            RecyclerViewPromocoesAdapter adapter = new RecyclerViewPromocoesAdapter(getActivity(), promocoes, this);
+            RecyclerViewThumbSigoAdapter adapterThumb = new RecyclerViewThumbSigoAdapter(getActivity(), vitrines);
             mLayoutManager = new LinearLayoutManager(getActivity());
-            mLayoutManagerThumb  = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
-
+            mLayoutManagerThumb = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
 
 
             listVitrines.setLayoutManager(mLayoutManager);

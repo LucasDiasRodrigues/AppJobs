@@ -48,8 +48,6 @@ public class ListaVitrinesSigoTask extends AsyncTask {
     protected void onPreExecute() {
         super.onPreExecute();
 
-        progress = ProgressDialog.show(activity, "Aguarde...", "", true, true);
-
     }
 
     @Override
@@ -94,7 +92,6 @@ public class ListaVitrinesSigoTask extends AsyncTask {
     @Override
     protected void onPostExecute(Object o) {
         super.onPostExecute(o);
-        progress.dismiss();
 
         switch (tipo) {
             case "vitrinesSigo":
