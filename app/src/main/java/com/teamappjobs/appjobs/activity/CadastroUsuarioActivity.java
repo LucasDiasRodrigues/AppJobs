@@ -21,6 +21,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.telephony.PhoneNumberFormattingTextWatcher;
 import android.util.Base64;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -33,8 +34,8 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.squareup.picasso.Picasso;
-import com.teamappjobs.appjobs.GCM.RegistrationIntentService;
 import com.teamappjobs.appjobs.R;
 import com.teamappjobs.appjobs.asyncTask.BuscaDadosPerfilTask;
 import com.teamappjobs.appjobs.asyncTask.CadastraUsuarioTask;
@@ -452,8 +453,8 @@ public class CadastroUsuarioActivity extends AppCompatActivity {
 
     // Faz o registro no GCM
     public void onRegistrar() {
-        Intent intent = new Intent(this, RegistrationIntentService.class);
-        startService(intent);
+        String token = FirebaseInstanceId.getInstance().getToken();
+        Log.i("FIREBASE TOKEN: ",token);
     }
 
 

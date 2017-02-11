@@ -5,6 +5,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -32,9 +33,9 @@ public class HomePopularesFragment extends Fragment {
     private RecyclerViewHomePopularesAdapter adapter;
     private List<Vitrine> vitrines;
     private RecyclerView listVitrines;
-   // private TextView txtTitulo;
-   // private TextView txtSubTitulo;
     private TextView txtSemVitrines;
+
+    private SwipeRefreshLayout mSwipeRefreshLayout;
 
 
     // Variaveis para o scroll listener
@@ -47,13 +48,20 @@ public class HomePopularesFragment extends Fragment {
         View fragment = inflater.inflate(R.layout.fragment_home_populares, container, false);
 
         listVitrines = (RecyclerView) fragment.findViewById(R.id.recycler_view_vitrines_populares);
-   //     txtTitulo = (TextView) fragment.findViewById(R.id.txtTitulo);
-     //   txtSubTitulo = (TextView) fragment.findViewById(R.id.txtSubtitulo);
         txtSemVitrines = (TextView) fragment.findViewById(R.id.txtSemVitrines);
 
         progressBar = (ProgressBar) fragment.findViewById(R.id.progress);
         progressBarUpdate = (ProgressBar) fragment.findViewById(R.id.progressUpdate);
         mRecyclerView = (RecyclerView) fragment.findViewById(R.id.recyclerview);
+        mSwipeRefreshLayout = (SwipeRefreshLayout) fragment.findViewById(R.id.swiperefresh);
+        mSwipeRefreshLayout.setColorSchemeResources(R.color.colorAccent,R.color.colorPrimary,R.color.colorPrimaryDark);
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                Log.i("AtualizandoLista", "onRefresh called from SwipeRefreshLayout");
+                listaNovidades();
+            }
+        });
 
         listaNovidades();
 
@@ -91,6 +99,7 @@ public class HomePopularesFragment extends Fragment {
 
     public void mostraListaNovidades(List<Vitrine> vitrines) {
         this.vitrines = vitrines;
+        mSwipeRefreshLayout.setRefreshing(false);
         if (vitrines.size() > 0) {
             Log.i("atualizaListaVitr", "");
             //txtTitulo.setVisibility(View.VISIBLE);

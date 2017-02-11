@@ -1,9 +1,16 @@
 package com.teamappjobs.appjobs.modelo;
 
+import android.app.Activity;
+import android.app.Fragment;
+import android.os.Bundle;
+
+import com.teamappjobs.appjobs.asyncTask.BuscaConversasTask;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 /**
  * Created by Lucas on 23/04/2016.
@@ -46,6 +53,12 @@ public class Usuario implements Serializable {
     }
     public void clearTelefones(){
         telefones.clear();
+    }
+
+
+    public void buscaConversas(Activity activity, android.support.v4.app.Fragment fragment) {
+        BuscaConversasTask task = new BuscaConversasTask(activity, this, fragment);
+        task.execute();
     }
 
 

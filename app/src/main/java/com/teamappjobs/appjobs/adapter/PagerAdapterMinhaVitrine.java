@@ -8,7 +8,6 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import com.teamappjobs.appjobs.R;
 import com.teamappjobs.appjobs.fragment.MinhaVitrinePortifolioFragment;
 import com.teamappjobs.appjobs.fragment.MinhaVitrinePromocoesFragment;
-import com.teamappjobs.appjobs.fragment.MinhaVitrineSobreFragment;
 import com.teamappjobs.appjobs.fragment.VitrineSobreFragment;
 
 /**

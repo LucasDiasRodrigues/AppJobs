@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -42,6 +43,8 @@ public class VitrinesSigoFragment extends Fragment {
     private List<Promocao> promocoes;
     private ProgressBar progressBar;
 
+    private SwipeRefreshLayout mSwipeRefreshLayout;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -53,6 +56,16 @@ public class VitrinesSigoFragment extends Fragment {
         txtSemVitrines = (TextView) fragment.findViewById(R.id.txtSemVitrines);
         prefs = getActivity().getSharedPreferences("Configuracoes", Context.MODE_PRIVATE);
         progressBar = (ProgressBar) fragment.findViewById(R.id.progress);
+        mSwipeRefreshLayout = (SwipeRefreshLayout) fragment.findViewById(R.id.swiperefresh);
+        mSwipeRefreshLayout.setColorSchemeResources(R.color.colorAccent,R.color.colorPrimary,R.color.colorPrimaryDark);
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                Log.i("AtualizandoLista", "onRefresh called from SwipeRefreshLayout");
+                listaVitrines();
+            }
+        });
+
 
 
         return fragment;
@@ -79,6 +92,7 @@ public class VitrinesSigoFragment extends Fragment {
     public void atualizaListaVitrines(List Lpromocoes, List Lvitrines) {
         this.Lpromocoes = Lpromocoes;
         this.Lvitrines = Lvitrines;
+        mSwipeRefreshLayout.setRefreshing(false);
 
         vitrines = Lvitrines;
         promocoes = Lpromocoes;

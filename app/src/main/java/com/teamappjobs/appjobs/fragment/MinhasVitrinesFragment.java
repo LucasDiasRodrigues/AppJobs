@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -33,6 +34,7 @@ public class MinhasVitrinesFragment extends Fragment{
 
     private List<Vitrine> vitrines;
     private ProgressBar progressBar;
+    private SwipeRefreshLayout mSwipeRefreshLayout;
 
     @Nullable
     @Override
@@ -43,8 +45,15 @@ public class MinhasVitrinesFragment extends Fragment{
         txtSemVitrines = (TextView) fragment.findViewById(R.id.txtSemVitrines);
         prefs=  getActivity().getSharedPreferences("Configuracoes", Context.MODE_PRIVATE);
         progressBar = (ProgressBar) fragment.findViewById(R.id.progress);
-
-
+        mSwipeRefreshLayout = (SwipeRefreshLayout) fragment.findViewById(R.id.swiperefresh);
+        mSwipeRefreshLayout.setColorSchemeResources(R.color.colorAccent,R.color.colorPrimary,R.color.colorPrimaryDark);
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                Log.i("AtualizandoLista", "onRefresh called from SwipeRefreshLayout");
+                listaVitrines();
+            }
+        });
         return fragment;
     }
 
@@ -68,6 +77,7 @@ public class MinhasVitrinesFragment extends Fragment{
 
     public void atualizaListaVitrines(List<Vitrine> vitrines){
         this.vitrines = vitrines;
+        mSwipeRefreshLayout.setRefreshing(false);
         progressBar.setVisibility(View.GONE);
         if(vitrines.size() > 0){
             Log.i("atualizaListaVitr","");

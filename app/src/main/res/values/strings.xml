@@ -210,6 +210,11 @@
     <string name="permissaoNegada">Permissão negada.</string>
     <string name="permissaoNegadaMsg">Essa funcionalidade só poderá ser utilizada se você permitir que acessemos sua localização.</string>
 
+    <string name="corpo_notificacao_chat1">Você tem </string>
+    <string name="corpo_notificacao_chat2_1"> mensagem</string>
+    <string name="corpo_notificacao_chat2_2"> mensagens</string>
+
+    <string name="naohaconversas">Não há conversas para exibir.</string>
 
 
     <!-- TODO: Remove or change this placeholder text -->

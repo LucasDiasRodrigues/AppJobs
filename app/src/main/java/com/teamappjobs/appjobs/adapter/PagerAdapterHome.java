@@ -9,10 +9,7 @@ import com.teamappjobs.appjobs.R;
 import com.teamappjobs.appjobs.fragment.HomeHomeFragment;
 import com.teamappjobs.appjobs.fragment.HomeMapFragment;
 import com.teamappjobs.appjobs.fragment.HomePopularesFragment;
-import com.teamappjobs.appjobs.fragment.HomeVitrinesFragment;
-import com.teamappjobs.appjobs.fragment.MinhaVitrinePortifolioFragment;
-import com.teamappjobs.appjobs.fragment.MinhaVitrinePromocoesFragment;
-import com.teamappjobs.appjobs.fragment.MinhaVitrineSobreFragment;
+
 
 /**
  * Created by Lucas on 17/05/2016.

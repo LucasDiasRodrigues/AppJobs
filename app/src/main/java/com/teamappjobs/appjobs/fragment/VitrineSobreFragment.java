@@ -1,5 +1,6 @@
 package com.teamappjobs.appjobs.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -10,6 +11,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.teamappjobs.appjobs.R;
+import com.teamappjobs.appjobs.activity.ChatActivity;
 import com.teamappjobs.appjobs.activity.MinhaVitrineActivity;
 import com.teamappjobs.appjobs.activity.VitrineActivity;
 import com.teamappjobs.appjobs.modelo.Vitrine;
@@ -69,6 +71,20 @@ public class VitrineSobreFragment extends Fragment {
         txtTelefoneAnunciante=(TextView) fragment.findViewById(R.id.txtTelefone);
         tvTelefoneAnunciante=(TextView) fragment.findViewById(R.id.tvTelefone);
         btnChat=(Button) fragment.findViewById(R.id.btnChat);
+        btnChat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent it = new Intent(getActivity(), ChatActivity.class);
+                it.putExtra("vitrine", vitrine);
+                it.putExtra("origem","faleComOAnunciante");
+                it.putExtra("fotoAnunciante",vitrine.getFoto());
+                it.putExtra("nomeAnunciante",vitrine.getNomeAnunciante());
+                startActivity(it);
+
+            }});
+        if(getActivity() instanceof MinhaVitrineActivity){
+            btnChat.setVisibility(View.GONE);
+        }
 
         return fragment;
     }

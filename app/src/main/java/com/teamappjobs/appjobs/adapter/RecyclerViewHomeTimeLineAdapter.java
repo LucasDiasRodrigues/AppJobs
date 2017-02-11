@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -15,6 +16,7 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 import com.teamappjobs.appjobs.R;
+import com.teamappjobs.appjobs.activity.MinhaVitrineActivity;
 import com.teamappjobs.appjobs.activity.VitrineActivity;
 import com.teamappjobs.appjobs.modelo.Vitrine;
 
@@ -36,6 +38,8 @@ public class RecyclerViewHomeTimeLineAdapter extends RecyclerView.Adapter<Recycl
 
     private static final int tipo_header = 0;
     private static final int tipo_item = 1;
+    private static SharedPreferences prefs;
+    private static String user;
 
     public RecyclerViewHomeTimeLineAdapter(Activity activity, List<Vitrine> vitrines, String headerTitulo, String headerSub) {
         this.activity = activity;
@@ -44,6 +48,8 @@ public class RecyclerViewHomeTimeLineAdapter extends RecyclerView.Adapter<Recycl
         this.GEO = GEO;
         this.headerTitulo = headerTitulo;
         this.headerSubtitulo = headerSub;
+        prefs = activity.getSharedPreferences("Configuracoes", Context.MODE_PRIVATE);
+        user = prefs.getString("email", "");
     }
 
 
@@ -120,15 +126,30 @@ public class RecyclerViewHomeTimeLineAdapter extends RecyclerView.Adapter<Recycl
         public void onClick(View v) {
             int currentPosition = getAdapterPosition() - 1;
             Vitrine vitrineSelecionada = vitrines.get(currentPosition);
-            Intent intent = new Intent(activity, VitrineActivity.class);
-            intent.putExtra("vitrine", vitrineSelecionada);
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                ActivityOptions options = ActivityOptions
-                        .makeSceneTransitionAnimation(activity, imageVitrine, "capaVitrine");
-                activity.startActivity(intent, options.toBundle());
+            //verifica se o usuario eh o dono da vitrine e o direciona para a activity correta
+            if(vitrineSelecionada.getEmailAnunciante().equals(user)){
+                Intent intent = new Intent(activity, MinhaVitrineActivity.class);
+                intent.putExtra("vitrine", vitrineSelecionada);
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    ActivityOptions options = ActivityOptions
+                            .makeSceneTransitionAnimation(activity, imageVitrine, "capaVitrine");
+                    activity.startActivity(intent, options.toBundle());
+                } else {
+                    activity.startActivity(intent);
+                }
             } else {
-                activity.startActivity(intent);
+                Intent intent = new Intent(activity, VitrineActivity.class);
+                intent.putExtra("vitrine", vitrineSelecionada);
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    ActivityOptions options = ActivityOptions
+                            .makeSceneTransitionAnimation(activity, imageVitrine, "capaVitrine");
+                    activity.startActivity(intent, options.toBundle());
+                } else {
+                    activity.startActivity(intent);
+                }
             }
         }
     }

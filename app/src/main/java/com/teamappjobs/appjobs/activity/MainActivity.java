@@ -29,6 +29,7 @@ import com.teamappjobs.appjobs.adapter.PagerAdapterHome;
 import com.teamappjobs.appjobs.asyncTask.LogOutTask;
 import com.teamappjobs.appjobs.fragment.BuscaFragment;
 import com.teamappjobs.appjobs.fragment.ConfiguracoesFragment;
+import com.teamappjobs.appjobs.fragment.ConversasFragment;
 import com.teamappjobs.appjobs.fragment.HomeFragment;
 import com.teamappjobs.appjobs.fragment.MinhasVitrinesFragment;
 import com.teamappjobs.appjobs.fragment.VitrinesSigoFragment;
@@ -241,13 +242,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             transactionVitrines.replace(R.id.frameLayout, fragmentVitrinesSigo);
             transactionVitrines.commit();
             fabCadastrarVitrine.hide();
-            toolbar.setKeepScreenOn(true);
             toolbar.setTitle(R.string.vitrinesQueSigo);
 
         } else if (id == R.id.chat) {
-
+            ligaTabs(false);
             toolbar.setTitle(R.string.chat);
-
+            ConversasFragment fragmentConversas = new ConversasFragment();
+            android.support.v4.app.FragmentTransaction transactionConversas = getSupportFragmentManager().beginTransaction();
+            transactionConversas.replace(R.id.frameLayout, fragmentConversas);
+            transactionConversas.commit();
+            fabCadastrarVitrine.hide();
 
         } else if (id == R.id.configuracoes) {
             ligaTabs(false);

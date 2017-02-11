@@ -12,7 +12,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.teamappjobs.appjobs.GCM.RegistrationIntentService;
+
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.teamappjobs.appjobs.R;
 import com.teamappjobs.appjobs.activity.CadastroUsuarioActivity;
 import com.teamappjobs.appjobs.activity.LoginActivity;
@@ -88,8 +89,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
 
     // Faz o registro no GCM
     public void onRegistrar() {
-        Intent intent = new Intent(getActivity(), RegistrationIntentService.class);
-        getActivity().startService(intent);
+        FirebaseInstanceId.getInstance().getToken();
     }
 
     public Boolean validarCampos() {

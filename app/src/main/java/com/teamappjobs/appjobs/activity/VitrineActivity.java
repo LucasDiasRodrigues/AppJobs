@@ -113,9 +113,6 @@ public class VitrineActivity extends AppCompatActivity implements AppBarLayout.O
             }
         });
 
-
-
-
         //Configurando as tabs e fragments
         PagerAdapterMinhaVitrine pagerAdapter = new PagerAdapterMinhaVitrine(getSupportFragmentManager(), this, numTabs);
         mViewPager = (ViewPager) findViewById(R.id.pager);

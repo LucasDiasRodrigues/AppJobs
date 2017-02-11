@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "435540487325",
+    "firebase_url": "https://appjobs-8d3fd.firebaseio.com",
+    "project_id": "appjobs-8d3fd",
+    "storage_bucket": "appjobs-8d3fd.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:435540487325:android:08f1214e4e525c55",
+        "android_client_info": {
+          "package_name": "com.teamappjobs.appjobs"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "435540487325-t2enur3v8im1q7i356bqa4vfm6snldig.apps.googleusercontent.com",
+          "client_type": 3
+        },
+        {
+          "client_id": "435540487325-phl2j733vkgrmoft1fcl9cnq9gdt6t4m.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBS9FUIBXVDckYzHaKUnbM9r0-FVh7DMvs"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -19,6 +19,8 @@ import java.text.SimpleDateFormat;
 /**
  * Created by Lucas on 03/05/2016.
  */
+
+//Não Usada
 public class MinhaVitrineSobreFragment extends Fragment {
     private Vitrine vitrine;
     private TextView txtDescricao;
