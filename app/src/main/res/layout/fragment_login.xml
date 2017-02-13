@@ -34,7 +34,7 @@
         <ImageView
             android:id="@+id/icon4Runner"
             android:layout_width="180dp"
-            android:layout_height="180dp"
+            android:layout_height="100dp"
             android:layout_gravity="center"
             android:layout_margin="28dp" />
 
@@ -108,6 +108,14 @@
             android:elevation="6dp"
             android:text="@string/cadastrese"
             android:textColor="#ffffff" />
+
+        <com.facebook.login.widget.LoginButton
+            android:id="@+id/login_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="30dp" />
 
 
     </LinearLayout>

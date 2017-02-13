@@ -5,6 +5,8 @@
     <string name="imageserver">http://4runnerapp.com.br/AppJobs/img/</string>
     <string name="imageservermini">http://4runnerapp.com.br/AppJobs/img_thumb/</string>
 
+    <string name="facebook_app_id">1211149788953534</string>
+
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 

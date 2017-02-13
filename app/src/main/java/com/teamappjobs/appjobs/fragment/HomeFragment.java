@@ -6,7 +6,6 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,11 +13,12 @@ import android.widget.TextView;
 
 import com.teamappjobs.appjobs.R;
 import com.teamappjobs.appjobs.adapter.PagerAdapterHome;
-import com.teamappjobs.appjobs.adapter.PagerAdapterMinhaVitrine;
 
 /**
  * Created by Lucas on 17/05/2016.
  */
+
+//Não usado
 public class HomeFragment extends Fragment {
 
     private ViewPager mViewPager;
@@ -32,7 +32,7 @@ public class HomeFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View fragment = inflater.inflate(R.layout.fragment_home, container, false);
+        View fragment = inflater.inflate(R.layout.fragment_home_busca, container, false);
 
         listVitrines = (RecyclerView) fragment.findViewById(R.id.recycler_view_vitrines);
         txtTitulo = (TextView) fragment.findViewById(R.id.txtTitulo);

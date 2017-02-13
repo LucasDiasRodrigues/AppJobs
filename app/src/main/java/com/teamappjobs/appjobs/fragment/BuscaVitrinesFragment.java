@@ -3,6 +3,7 @@ package com.teamappjobs.appjobs.fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -39,12 +40,11 @@ public class BuscaVitrinesFragment extends Fragment {
     private List<Vitrine> vitrines= new ArrayList<Vitrine>();
 
     private RecyclerView listVitrines;
-    private TextView txtTitulo;
-    private TextView txtSubTitulo;
     private TextView txtSemVitrines;
 
-
     private String palavras;
+
+    private SwipeRefreshLayout mSwipeRefreshLayout;
 
     // Variaveis para o scroll listener
     private boolean userScrolled = true;
@@ -54,18 +54,17 @@ public class BuscaVitrinesFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View fragment = inflater.inflate(R.layout.fragment_home_home, container, false);
-        EventBus.getDefault().register(this);
+
         listVitrines = (RecyclerView) fragment.findViewById(R.id.recycler_view_vitrines);
-        txtTitulo = (TextView) fragment.findViewById(R.id.txtTitulo);
-        txtSubTitulo = (TextView) fragment.findViewById(R.id.txtSubtitulo);
         txtSemVitrines = (TextView) fragment.findViewById(R.id.txtSemVitrines);
 
         progressBar = (ProgressBar) fragment.findViewById(R.id.progress);
         progressBarUpdate = (ProgressBar) fragment.findViewById(R.id.progressUpdate);
         mRecyclerView = (RecyclerView) fragment.findViewById(R.id.recyclerview);
 
-       // Bundle b = getArguments();
-        //Pesquisa(b.getString("palavras"));
+        mSwipeRefreshLayout = (SwipeRefreshLayout) fragment.findViewById(R.id.swiperefresh);
+        mSwipeRefreshLayout.setActivated(false);
+        mSwipeRefreshLayout.setEnabled(false);
 
         //Controle de scroll
         mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -99,14 +98,23 @@ public class BuscaVitrinesFragment extends Fragment {
                     updateRecyclerView();
 
                 }
-
-
             }
         });
 
         return fragment;
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
+    }
 
     @Subscribe
     public void onEvent(BuscarEventBus event){
@@ -114,21 +122,14 @@ public class BuscaVitrinesFragment extends Fragment {
         if(event.getVitrines().size() > 0){
             Log.i("atualizaListaVitr","");
 
-            txtTitulo.setVisibility(View.VISIBLE);
-            txtSemVitrines.setVisibility(View.GONE);
-
-            RecyclerViewHomeTimeLineAdapter adapter = new RecyclerViewHomeTimeLineAdapter(getActivity(),event.getVitrines(),"Vitrines","");
+            adapter = new RecyclerViewHomeTimeLineAdapter(getActivity(),event.getVitrines(),"Vitrines encontradas","");
             mLayoutManager = new LinearLayoutManager(getActivity());
             mRecyclerView.setLayoutManager(mLayoutManager);
             mRecyclerView.setAdapter(adapter);
         } else {
-            txtTitulo.setVisibility(View.GONE);
             txtSemVitrines.setText("Nenhum resultado encontrado");
             txtSemVitrines.setVisibility(View.VISIBLE);
-
         }
-
-
     }
 
     public void updateRecyclerView() {
@@ -137,8 +138,5 @@ public class BuscaVitrinesFragment extends Fragment {
         //Task para baixar mais itens
         adapter.notifyDataSetChanged();
         progressBarUpdate.setVisibility(View.GONE);
-
     }
-
-
 }

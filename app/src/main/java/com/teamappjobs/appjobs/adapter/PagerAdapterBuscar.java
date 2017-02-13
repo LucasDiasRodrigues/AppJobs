@@ -1,17 +1,11 @@
 package com.teamappjobs.appjobs.adapter;
 
 import android.content.Context;
-import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
-
-import com.teamappjobs.appjobs.R;
-import com.teamappjobs.appjobs.fragment.BuscaFragment;
 import com.teamappjobs.appjobs.fragment.BuscaVitrinesFragment;
-import com.teamappjobs.appjobs.fragment.HomeHomeFragment;
-import com.teamappjobs.appjobs.fragment.HomeMapFragment;
-import com.teamappjobs.appjobs.fragment.HomePopularesFragment;
+import com.teamappjobs.appjobs.fragment.BuscaMapFragment;
 import com.teamappjobs.appjobs.modelo.Vitrine;
 
 import java.util.List;
@@ -19,17 +13,13 @@ import java.util.List;
 public class PagerAdapterBuscar extends FragmentStatePagerAdapter{
     private Context context;
     private int numTabs;
-    private String palavras;
     private FragmentManager fm;
-    private BuscaFragment fragment;
-    private List<Vitrine> vitrines;
 
-    public PagerAdapterBuscar(FragmentManager fm, Context context, int numTabs,BuscaFragment fragment) {
+    public PagerAdapterBuscar(FragmentManager fm, Context context, int numTabs) {
         super(fm);
         this.fm = fm;
         this.context = context;
         this.numTabs = numTabs;
-        this.fragment=fragment;
     }
 
     @Override
@@ -40,7 +30,7 @@ public class PagerAdapterBuscar extends FragmentStatePagerAdapter{
 
             return fragment;
         }  else {
-            HomeMapFragment fragment = new HomeMapFragment();
+            BuscaMapFragment fragment = new BuscaMapFragment();
             return fragment;
         }
 
@@ -49,7 +39,7 @@ public class PagerAdapterBuscar extends FragmentStatePagerAdapter{
     @Override
     public CharSequence getPageTitle(int position) {
         if (position == 0) {
-            return context.getResources().getString(R.string.home);
+            return "Vitrines";
         } else {
             return "Mapa";
         }

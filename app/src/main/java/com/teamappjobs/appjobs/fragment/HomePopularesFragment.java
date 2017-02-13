@@ -100,6 +100,7 @@ public class HomePopularesFragment extends Fragment {
     public void mostraListaNovidades(List<Vitrine> vitrines) {
         this.vitrines = vitrines;
         mSwipeRefreshLayout.setRefreshing(false);
+        progressBar.setVisibility(View.GONE);
         if (vitrines.size() > 0) {
             Log.i("atualizaListaVitr", "");
             //txtTitulo.setVisibility(View.VISIBLE);

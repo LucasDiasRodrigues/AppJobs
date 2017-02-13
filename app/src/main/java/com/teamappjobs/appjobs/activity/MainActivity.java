@@ -19,20 +19,27 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.FrameLayout;
 
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.teamappjobs.appjobs.R;
+import com.teamappjobs.appjobs.adapter.PagerAdapterBuscar;
 import com.teamappjobs.appjobs.adapter.PagerAdapterHome;
+import com.teamappjobs.appjobs.asyncTask.ListaResultadoBuscaTask;
 import com.teamappjobs.appjobs.asyncTask.LogOutTask;
-import com.teamappjobs.appjobs.fragment.BuscaFragment;
 import com.teamappjobs.appjobs.fragment.ConfiguracoesFragment;
 import com.teamappjobs.appjobs.fragment.ConversasFragment;
-import com.teamappjobs.appjobs.fragment.HomeFragment;
 import com.teamappjobs.appjobs.fragment.MinhasVitrinesFragment;
 import com.teamappjobs.appjobs.fragment.VitrinesSigoFragment;
+import com.teamappjobs.appjobs.modelo.Vitrine;
+import com.teamappjobs.appjobs.util.BuscarEventBus;
+
+import org.greenrobot.eventbus.EventBus;
+
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -48,6 +55,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private TabLayout mTabLayout;
 
     private View frameLayout;
+    private NavigationView navigationView;
+
+    //PagerAdapterMain
+    PagerAdapterHome pagerAdapterMain;
+
+    //PagerAdapterBusca
+    PagerAdapterBuscar pagerAdapterBusca;
+    private boolean isBuscaActive = false;
+
+    //Firebase
+    private FirebaseAnalytics mFirebaseAnalytics;
 
 
     @Override
@@ -57,12 +75,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        //Firebase
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
+
+
         //Tratar usuario previamente logado
         Boolean logado = EstaLogado();
         if (!logado) {
-                Intent it = new Intent(this, LoginActivity.class);
-                startActivity(it);
-                finish();
+            Intent it = new Intent(this, LoginActivity.class);
+            startActivity(it);
+            finish();
         }
 
         frameLayout = findViewById(R.id.frameLayout);
@@ -76,7 +98,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(MainActivity.this, CadastroVitrineActivity.class);
-                intent.putExtra("editar",false);
+                intent.putExtra("editar", false);
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     startActivity(intent,
                             ActivityOptions.makeSceneTransitionAnimation(MainActivity.this).toBundle());
@@ -92,13 +114,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         navigationView.setCheckedItem(R.id.home);
-        //HomeFragment fragmentHome = new HomeFragment();
-        //FragmentTransaction transactionHome = getSupportFragmentManager().beginTransaction();
-        //transactionHome.replace(R.id.frameLayout, fragmentHome);
-        //transactionHome.commit();
 
         //Para as tabs
         //Configurando as tabs e fragments
@@ -122,7 +140,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         });
 
         mTabLayout = (TabLayout) findViewById(R.id.tabs);
-        ligaTabs(true);
+        ligaTabsMain(true);
 
     }
 
@@ -131,6 +149,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
+        } else if(isBuscaActive){
+            ligaTabsBusca(false);
+            ligaTabsMain(true);
+            navigationView.setCheckedItem(R.id.home);
+            toolbar.setTitle(R.string.app_name);
         } else {
             super.onBackPressed();
         }
@@ -145,30 +168,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                Bundle args = new Bundle();
-                args.putString("palavras",query);
-
-                BuscaFragment fragmentHome = new BuscaFragment();
-                fragmentHome.setArguments(args);
-                FragmentTransaction transactionHome = getSupportFragmentManager().beginTransaction();
-                transactionHome.replace(R.id.frameLayout, fragmentHome);
-                transactionHome.commit();
-
-                searchView.clearFocus();
-                searchItem.collapseActionView();
-                //Open and close the  keyboard
-                // Hide the keyboard and give focus to the list
-
-                /*
-                InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.hideSoftInputFromWindow(searchView.getWindowToken(), 0);
-                imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
-                imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
-
-                searchView.onActionViewCollapsed();
-*/
+                ligaTabsMain(false);
+                ligaTabsBusca(true);
+                Pesquisa(query);
+                fabCadastrarVitrine.hide();
+                fabExemplo.hide();
+                fabCadastrarVitrine.hide();
+                toolbar.setTitle(query);
                 return true;
             }
+
             @Override
             public boolean onQueryTextChange(String searchQuery) {
                 return true;
@@ -177,7 +186,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return true;
     }
 
-     @Override
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
@@ -213,6 +222,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return super.onOptionsItemSelected(item);
     }
 
+
+
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
@@ -220,13 +231,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         int id = item.getItemId();
 
         if (id == R.id.home) {
-            ligaTabs(true);
+            ligaTabsBusca(false);
+            ligaTabsMain(true);
             fabCadastrarVitrine.hide();
             fabExemplo.hide();
             toolbar.setTitle(R.string.app_name);
 
+
         } else if (id == R.id.minhasVitrines) {
-            ligaTabs(false);
+            ligaTabsBusca(false);
+            ligaTabsMain(false);
             MinhasVitrinesFragment fragmentMinhasVitrines = new MinhasVitrinesFragment();
             android.support.v4.app.FragmentTransaction transactionMinhasVitrines = getSupportFragmentManager().beginTransaction();
             transactionMinhasVitrines.replace(R.id.frameLayout, fragmentMinhasVitrines);
@@ -236,7 +250,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             toolbar.setTitle(R.string.minhasVitrines);
 
         } else if (id == R.id.vitrinesQueSigo) {
-            ligaTabs(false);
+            ligaTabsBusca(false);
+            ligaTabsMain(false);
             VitrinesSigoFragment fragmentVitrinesSigo = new VitrinesSigoFragment();
             android.support.v4.app.FragmentTransaction transactionVitrines = getSupportFragmentManager().beginTransaction();
             transactionVitrines.replace(R.id.frameLayout, fragmentVitrinesSigo);
@@ -245,7 +260,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             toolbar.setTitle(R.string.vitrinesQueSigo);
 
         } else if (id == R.id.chat) {
-            ligaTabs(false);
+            ligaTabsBusca(false);
+            ligaTabsMain(false);
             toolbar.setTitle(R.string.chat);
             ConversasFragment fragmentConversas = new ConversasFragment();
             android.support.v4.app.FragmentTransaction transactionConversas = getSupportFragmentManager().beginTransaction();
@@ -254,12 +270,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             fabCadastrarVitrine.hide();
 
         } else if (id == R.id.configuracoes) {
-            ligaTabs(false);
+            ligaTabsMain(false);
             ConfiguracoesFragment fragmentConfig = new ConfiguracoesFragment();
             FragmentTransaction transactionConfig = getSupportFragmentManager().beginTransaction();
             transactionConfig.replace(R.id.frameLayout, fragmentConfig);
             transactionConfig.commit();
             toolbar.setTitle(R.string.configuracoes);
+            fabCadastrarVitrine.hide();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -291,13 +308,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     }
 
-    public void ligaTabs(boolean liga){
-        if(liga){
+    public void ligaTabsMain(boolean liga) {
+        if (liga) {
             frameLayout.setVisibility(View.GONE);
             mTabLayout.setVisibility(View.VISIBLE);
             mViewPager.setVisibility(View.VISIBLE);
-            PagerAdapterHome pagerAdapter = new PagerAdapterHome(getSupportFragmentManager(), this, numTabs);
-            mViewPager.setAdapter(pagerAdapter);
+            pagerAdapterMain = new PagerAdapterHome(getSupportFragmentManager(), this, numTabs);
+            mViewPager.setAdapter(pagerAdapterMain);
             mTabLayout.setupWithViewPager(mViewPager);
         } else {
             frameLayout.setVisibility(View.VISIBLE);
@@ -306,4 +323,38 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             mViewPager.setAdapter(null);
         }
     }
+
+    public void ligaTabsBusca(boolean liga) {
+        if (liga) {
+            //Configurando as tabs e fragments
+            frameLayout.setVisibility(View.GONE);
+            mTabLayout.setVisibility(View.VISIBLE);
+            mViewPager.setVisibility(View.VISIBLE);
+            pagerAdapterBusca = new PagerAdapterBuscar(getSupportFragmentManager(), this, numTabs);
+            mViewPager.setAdapter(pagerAdapterBusca);
+            mTabLayout.setupWithViewPager(mViewPager);
+            isBuscaActive = true;
+        } else {
+            frameLayout.setVisibility(View.VISIBLE);
+            mTabLayout.setVisibility(View.GONE);
+            mViewPager.setVisibility(View.GONE);
+            mViewPager.setAdapter(null);
+            isBuscaActive = false;
+        }
+    }
+
+    //Metodo para a busca
+    public void Pesquisa(String query) {
+        ListaResultadoBuscaTask task = new ListaResultadoBuscaTask(this, query);
+        task.execute();
+
+    }
+
+    //Metodo para a busca
+    public void RecebeLista(List<Vitrine> vitrines) {
+        BuscarEventBus event = new BuscarEventBus();
+        event.setVitrines(vitrines);
+        EventBus.getDefault().post(event);
+    }
+
 }

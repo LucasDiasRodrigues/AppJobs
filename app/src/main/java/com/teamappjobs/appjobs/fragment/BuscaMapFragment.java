@@ -13,22 +13,17 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AlertDialog;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -60,10 +55,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static android.R.attr.format;
-
-public class HomeMapFragment extends Fragment implements OnMapReadyCallback,GoogleApiClient.ConnectionCallbacks,
-        GoogleApiClient.OnConnectionFailedListener, LocationListener  {
+public class BuscaMapFragment extends Fragment implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks,
+        GoogleApiClient.OnConnectionFailedListener, LocationListener {
 
     protected GoogleMap mGoogleMap;
     private SupportMapFragment mapFragment;
@@ -84,7 +77,7 @@ public class HomeMapFragment extends Fragment implements OnMapReadyCallback,Goog
     Vitrine vitrineClicada;
     private DateFormat format = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
 
-    private List<Vitrine> vitrines= new ArrayList<Vitrine>();
+    private List<Vitrine> vitrines = new ArrayList<Vitrine>();
 
 
     //Componentes do fragment
@@ -97,9 +90,9 @@ public class HomeMapFragment extends Fragment implements OnMapReadyCallback,Goog
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View fragment = inflater.inflate(R.layout.fragment_home_map, container, false);
+        View fragment = inflater.inflate(R.layout.fragment_busca_map, container, false);
         EventBus.getDefault().register(this);
-        progressBar = (ProgressBar) fragment.findViewById(R.id.progress);
+        progressBar = (ProgressBar) fragment.findViewById(R.id.progressBar);
 
         //Conexao com a API de Localizacao do PlayServices
         mGoogleApiClient = new GoogleApiClient.Builder(getActivity())
@@ -149,13 +142,13 @@ public class HomeMapFragment extends Fragment implements OnMapReadyCallback,Goog
         mGoogleMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker marker) {
-            //    Toast.makeText(getActivity(), "Marker Clicked", Toast.LENGTH_SHORT).show();
+                //    Toast.makeText(getActivity(), "Marker Clicked", Toast.LENGTH_SHORT).show();
                 vitrineClicada = allMarkersMap.get(marker);
                 abreDialog();
                 return false;
             }
         });
-        mapReady=true;
+        mapReady = true;
     }
 
     @Override
@@ -180,15 +173,15 @@ public class HomeMapFragment extends Fragment implements OnMapReadyCallback,Goog
     @Override
     public void onConnected(@Nullable Bundle bundle) {
         apiConnect = true;
-        if(apiConnect){
+        if (apiConnect) {
 
-            if (GPSLigado){
+            if (GPSLigado) {
                 configureMap();
                 startLocationUpdates();
-                progress = ProgressDialog.show(getActivity(), "Aguarde...",getResources().getString(R.string.obtendoLocalizacao), true, true);
-                progress.setCancelable(false);
+                //progress = ProgressDialog.show(getActivity(), "Aguarde...", getResources().getString(R.string.obtendoLocalizacao), true, true);
+                //progress.setCancelable(false);
             }
-        } else{
+        } else {
         }
     }
 
@@ -205,9 +198,9 @@ public class HomeMapFragment extends Fragment implements OnMapReadyCallback,Goog
     @Override
     public void onLocationChanged(Location location) {
         mLatLng = new LatLng(location.getLatitude(), location.getLongitude());
-        if(location.getAccuracy() <= 100){
+        if (location.getAccuracy() <= 100) {
             stopLocationUpdates();
-            progress.dismiss();
+           progressBar.setVisibility(View.GONE);
             atualizarMapa();
             adicionaMarkers();
         }
@@ -297,10 +290,10 @@ public class HomeMapFragment extends Fragment implements OnMapReadyCallback,Goog
 
     }
 
-    private void atualizarMapa(){
-            mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(mLatLng, 10.0f));
-                 mGoogleMap.addMarker(new MarkerOptions()
-                .position(new LatLng(mLatLng.latitude,mLatLng.longitude))
+    private void atualizarMapa() {
+        mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(mLatLng, 10.0f));
+        mGoogleMap.addMarker(new MarkerOptions()
+                .position(new LatLng(mLatLng.latitude, mLatLng.longitude))
                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))
                 .zIndex(0)
                 .title("Você está aqui"));
@@ -308,43 +301,45 @@ public class HomeMapFragment extends Fragment implements OnMapReadyCallback,Goog
 
     }
 
-    protected  void startLocationUpdates(){
-        LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient,mLocationRequest,this);
+    protected void startLocationUpdates() {
+        if (ContextCompat.checkSelfPermission(getActivity(), android.Manifest.permission.ACCESS_FINE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED) {
+            LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
+        }
     }
 
-    protected void stopLocationUpdates(){
+    protected void stopLocationUpdates() {
         LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
     }
 
-    private void verificaGPS(){
-            LocationManager locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
-            if (!locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
-                // Solicita ao usuario para ligar o GPS
-                android.app.AlertDialog.Builder alertDialogBuilder = new android.app.AlertDialog.Builder(getActivity());
-                alertDialogBuilder.setMessage(R.string.gpsDesligado)
-                        .setCancelable(false).setPositiveButton(
-                        R.string.sim,
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                // Intent para entrar nas configuracoes de localizacao
-                                Intent callGPSSettingIntent = new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-                                startActivity(callGPSSettingIntent);
-                            }
-                        });
-                alertDialogBuilder.setNegativeButton(R.string.nao,
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                dialog.cancel();
-                            }
-                        });
-                android.app.AlertDialog alert = alertDialogBuilder.create();
-                alert.show();
-            }
-            else {
-                GPSLigado=true;
-            }
-
+    private void verificaGPS() {
+        LocationManager locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
+        if (!locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
+            // Solicita ao usuario para ligar o GPS
+            android.app.AlertDialog.Builder alertDialogBuilder = new android.app.AlertDialog.Builder(getActivity());
+            alertDialogBuilder.setMessage(R.string.gpsDesligado)
+                    .setCancelable(false).setPositiveButton(
+                    R.string.sim,
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            // Intent para entrar nas configuracoes de localizacao
+                            Intent callGPSSettingIntent = new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                            startActivity(callGPSSettingIntent);
+                        }
+                    });
+            alertDialogBuilder.setNegativeButton(R.string.nao,
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            dialog.cancel();
+                        }
+                    });
+            android.app.AlertDialog alert = alertDialogBuilder.create();
+            alert.show();
+        } else {
+            GPSLigado = true;
         }
+
+    }
 
     @Override
     public void onResume() {
@@ -361,44 +356,44 @@ public class HomeMapFragment extends Fragment implements OnMapReadyCallback,Goog
 
     //EventBus recebe as vitrines
     @Subscribe
-    public void onEvent(BuscarEventBus event){
-        if(event.getVitrines().size()>0){
-            vitrines=event.getVitrines();
+    public void onEvent(BuscarEventBus event) {
+        if (event.getVitrines().size() > 0) {
+            vitrines = event.getVitrines();
             adicionaMarkers();
         }
     }
 
-        public void adicionaMarkers(){
-                    if(mapReady && (!vitrines.isEmpty())){
-                        mapReady=false;
-                        for (Vitrine vitrine : vitrines){
-                            if(!vitrine.getLocalizacao().isEmpty()){
-                                String[] latLng = vitrine.getLocalizacao().split(",");
-                                double latitude = Double.parseDouble(latLng[0]);
-                                double longitude = Double.parseDouble(latLng[1]);
-                                LatLng mCustomerLatLng = new LatLng(latitude, longitude);
+    public void adicionaMarkers() {
+        if (mapReady && (!vitrines.isEmpty())) {
+            mapReady = false;
+            for (Vitrine vitrine : vitrines) {
+                if (!vitrine.getLocalizacao().isEmpty()) {
+                    String[] latLng = vitrine.getLocalizacao().split(",");
+                    double latitude = Double.parseDouble(latLng[0]);
+                    double longitude = Double.parseDouble(latLng[1]);
+                    LatLng mCustomerLatLng = new LatLng(latitude, longitude);
 
-                                 marker = mGoogleMap.addMarker(new MarkerOptions()
-                                        .position(new LatLng(latitude,longitude)));
-                                allMarkersMap.put(marker, vitrine);
-                            }
-                        }
-
-                    }
+                    marker = mGoogleMap.addMarker(new MarkerOptions()
+                            .position(new LatLng(latitude, longitude)));
+                    allMarkersMap.put(marker, vitrine);
+                }
+            }
 
         }
 
-    private void abreDialog(){
+    }
+
+    private void abreDialog() {
         try {
             final Dialog dialog = new Dialog(getActivity());
-            dialog.setContentView(R.layout.item_list_todas_vitrines);
+            dialog.setContentView(R.layout.item_dialog_vitrine_map);
             dialog.setTitle("Detalhes");
 
             imageVitrine = (ImageView) dialog.findViewById(R.id.imageViewCapa);
             txtNomeVitrine = (TextView) dialog.findViewById(R.id.txtNomeVitrine);
             txtCategoriaVitrine = (TextView) dialog.findViewById(R.id.categoriaVitrine);
             txtDtCriacao = (TextView) dialog.findViewById(R.id.dtCriacaoVitrine);
-            layoutButton=(LinearLayout)dialog.findViewById(R.id.layVitrine);
+            layoutButton = (LinearLayout) dialog.findViewById(R.id.layVitrine);
 
 
             layoutButton.setVisibility(View.VISIBLE);
@@ -406,7 +401,7 @@ public class HomeMapFragment extends Fragment implements OnMapReadyCallback,Goog
             txtNomeVitrine.setText(vitrineClicada.getNome());
             txtCategoriaVitrine.setText(vitrineClicada.getDescCategoria());
             txtDtCriacao.setText(format.format(vitrineClicada.getDataCriacao()));
-            Button btnVerVitrine= (Button) dialog.findViewById(R.id.btnVerMais);
+            Button btnVerVitrine = (Button) dialog.findViewById(R.id.btnVerMais);
 
             btnVerVitrine.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -428,9 +423,10 @@ public class HomeMapFragment extends Fragment implements OnMapReadyCallback,Goog
 
             dialog.show();
 
-    }catch (Exception ex) {
+        } catch (Exception ex) {
 
         }
 
 
-}}
+    }
+}

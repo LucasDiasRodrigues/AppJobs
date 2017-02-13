@@ -37,28 +37,25 @@ public class ListaPopularesTask extends AsyncTask {
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
-        progress = ProgressDialog.show(activity, "Carregando...", "", true, true);
     }
-
 
 
     @Override
     protected Object doInBackground(Object[] objects) {
         String answer = "";
 
-                method = "lista_todas_vitrines_populares-json";
+        method = "lista_todas_vitrines_populares-json";
 
-                Usuario usuario = new Usuario();
-                UsuarioJson json = new UsuarioJson();
-                String data = json.UsuarioToJson(usuario);
+        Usuario usuario = new Usuario();
+        UsuarioJson json = new UsuarioJson();
+        String data = json.UsuarioToJson(usuario);
 
-                answer = HttpConnection.getSetDataWeb(this.url, this.method, data);
-                Log.i("RespostaPopulares", answer);
+        answer = HttpConnection.getSetDataWeb(this.url, this.method, data);
+        Log.i("RespostaPopulares", answer);
 
 
-
-          VitrineJson vitrineJson = new VitrineJson();
-          List<Vitrine> vitrines = vitrineJson.JsonArrayToListaVitrines(answer);
+        VitrineJson vitrineJson = new VitrineJson();
+        List<Vitrine> vitrines = vitrineJson.JsonArrayToListaVitrines(answer);
 
         return vitrines;
     }
@@ -66,10 +63,8 @@ public class ListaPopularesTask extends AsyncTask {
     @Override
     protected void onPostExecute(Object o) {
         super.onPostExecute(o);
-        progress.dismiss();
 
-                fragment.mostraListaNovidades((List<Vitrine>) o);
-
+        fragment.mostraListaNovidades((List<Vitrine>) o);
 
 
     }

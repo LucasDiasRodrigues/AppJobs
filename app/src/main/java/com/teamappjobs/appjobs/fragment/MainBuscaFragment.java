@@ -6,7 +6,6 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,18 +13,16 @@ import android.widget.TextView;
 
 import com.teamappjobs.appjobs.R;
 import com.teamappjobs.appjobs.adapter.PagerAdapterBuscar;
-import com.teamappjobs.appjobs.adapter.PagerAdapterHome;
 import com.teamappjobs.appjobs.asyncTask.ListaResultadoBuscaTask;
 import com.teamappjobs.appjobs.modelo.Vitrine;
 import com.teamappjobs.appjobs.util.BuscarEventBus;
 
 import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
 
 import java.util.List;
 
-
-public class BuscaFragment extends Fragment {
+//NãoUsado
+public class MainBuscaFragment extends Fragment {
 
     private ViewPager mViewPager;
     private int numTabs = 2;
@@ -40,7 +37,7 @@ public class BuscaFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View fragment = inflater.inflate(R.layout.fragment_home, container, false);
+        View fragment = inflater.inflate(R.layout.fragment_home_busca, container, false);
 
 
         listVitrines = (RecyclerView) fragment.findViewById(R.id.recycler_view_vitrines);
@@ -52,26 +49,10 @@ public class BuscaFragment extends Fragment {
 
 
         //Configurando as tabs e fragments
-        PagerAdapterBuscar pagerAdapter = new PagerAdapterBuscar(getChildFragmentManager(), getActivity(), numTabs,this);
+      //  PagerAdapterBuscar pagerAdapter = new PagerAdapterBuscar(getChildFragmentManager(), getActivity(), numTabs,this);
         mViewPager = (ViewPager) fragment.findViewById(R.id.pager);
-        mViewPager.setAdapter(pagerAdapter);
-        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+      //  mViewPager.setAdapter(pagerAdapter);
 
-            }
-
-            @Override
-            public void onPageSelected(int position) {
-
-
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-
-            }
-        });
 
         mTabLayout = (TabLayout) fragment.findViewById(R.id.tabs);
         mTabLayout.setupWithViewPager(mViewPager);
@@ -81,13 +62,13 @@ public class BuscaFragment extends Fragment {
     }
 
     public void Pesquisa(String query){
-        ListaResultadoBuscaTask task = new ListaResultadoBuscaTask(getActivity(),this, query);
-        task.execute();
+        //ListaResultadoBuscaTask task = new ListaResultadoBuscaTask(getActivity(),this, query);
+        //task.execute();
 
     }
 
     public void RecebeLista(List<Vitrine> vitrines){
-        this.vitrines=vitrines;
+        this.vitrines = vitrines;
             BuscarEventBus event = new BuscarEventBus();
             event.setVitrines(vitrines);
             EventBus.getDefault().post(event);

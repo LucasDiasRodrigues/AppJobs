@@ -36,28 +36,25 @@ public class ListaNovidadesTask extends AsyncTask {
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
-        progress = ProgressDialog.show(activity, "Carregando...", "", true, true);
     }
-
 
 
     @Override
     protected Object doInBackground(Object[] objects) {
         String answer = "";
 
-                method = "lista_todas_vitrines-json";
+        method = "lista_todas_vitrines-json";
 
-                Usuario usuario = new Usuario();
-                UsuarioJson json = new UsuarioJson();
-                String data = json.UsuarioToJson(usuario);
+        Usuario usuario = new Usuario();
+        UsuarioJson json = new UsuarioJson();
+        String data = json.UsuarioToJson(usuario);
 
-                answer = HttpConnection.getSetDataWeb(this.url, this.method, data);
-                Log.i("RespostaNovidades", answer);
+        answer = HttpConnection.getSetDataWeb(this.url, this.method, data);
+        Log.i("RespostaNovidades", answer);
 
 
-
-          VitrineJson vitrineJson = new VitrineJson();
-          List<Vitrine> vitrines = vitrineJson.JsonArrayToListaVitrines(answer);
+        VitrineJson vitrineJson = new VitrineJson();
+        List<Vitrine> vitrines = vitrineJson.JsonArrayToListaVitrines(answer);
 
         return vitrines;
     }
@@ -65,10 +62,8 @@ public class ListaNovidadesTask extends AsyncTask {
     @Override
     protected void onPostExecute(Object o) {
         super.onPostExecute(o);
-        progress.dismiss();
 
-                fragment.mostraListaNovidades((List<Vitrine>) o);
-
+        fragment.mostraListaNovidades((List<Vitrine>) o);
 
 
     }

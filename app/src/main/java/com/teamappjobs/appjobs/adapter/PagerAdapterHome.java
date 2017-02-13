@@ -7,7 +7,6 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 
 import com.teamappjobs.appjobs.R;
 import com.teamappjobs.appjobs.fragment.HomeHomeFragment;
-import com.teamappjobs.appjobs.fragment.HomeMapFragment;
 import com.teamappjobs.appjobs.fragment.HomePopularesFragment;
 
 

@@ -366,7 +366,7 @@ public class CadastroVitrineActivity extends AppCompatActivity implements
         descricaoVitrine.setText(vitrine.getDescricao());
         String[] auxFaixaPreco = vitrine.getFaixaPreco().split("-");
         txtValorInicial.setText(auxFaixaPreco[0]); //Fazer split
-        if(auxFaixaPreco.length > 1)
+        if (auxFaixaPreco.length > 1)
             txtValorFinal.setText(auxFaixaPreco[1]);
 
         if (vitrine.getParametroPreco().equals("hora")) {
@@ -415,9 +415,9 @@ public class CadastroVitrineActivity extends AppCompatActivity implements
         if (requestCode == IMG_CAM && resultCode == RESULT_OK) {
             imagemfoto = BitmapFactory.decodeFile(localArquivoFoto);
             //Reduz o tamanho do foto
-            if(imagemfoto.getHeight() > 3000 || imagemfoto.getWidth() > 3000){
-                imagemfoto = Bitmap.createScaledBitmap(imagemfoto, imagemfoto.getWidth()/2,
-                        imagemfoto.getHeight()/2,true);
+            if (imagemfoto.getHeight() > 3000 || imagemfoto.getWidth() > 3000) {
+                imagemfoto = Bitmap.createScaledBitmap(imagemfoto, imagemfoto.getWidth() / 2,
+                        imagemfoto.getHeight() / 2, true);
 
                 //Reduz again (no caso de cameras muuuuito sensacionais)
                 if (imagemfoto.getHeight() > 3000 || imagemfoto.getWidth() > 3000) {
@@ -426,10 +426,10 @@ public class CadastroVitrineActivity extends AppCompatActivity implements
                 }
             }
             //Diminuir foto proporcionalmente para o view
-            int scaleFactor = Math.min(imagemfoto.getWidth() /imagemPerfil.getWidth(),
+            int scaleFactor = Math.min(imagemfoto.getWidth() / imagemPerfil.getWidth(),
                     imagemfoto.getHeight() / imagemPerfil.getHeight());
-            imagemfotoReduzida = Bitmap.createScaledBitmap(imagemfoto, imagemfoto.getWidth()/scaleFactor,
-                    imagemfoto.getHeight()/scaleFactor, true);
+            imagemfotoReduzida = Bitmap.createScaledBitmap(imagemfoto, imagemfoto.getWidth() / scaleFactor,
+                    imagemfoto.getHeight() / scaleFactor, true);
             imagemPerfil.setImageBitmap(imagemfotoReduzida);
             imagemPerfil.setTag(localArquivoFoto);
         } else if (data != null && requestCode == IMG_SDCARD && resultCode == RESULT_OK) {
@@ -455,10 +455,10 @@ public class CadastroVitrineActivity extends AppCompatActivity implements
                 }
 
                 //Diminuir foto proporcionalmente para o view
-                int scaleFactor = Math.min(imagemfoto.getWidth() /imagemPerfil.getWidth(),
+                int scaleFactor = Math.min(imagemfoto.getWidth() / imagemPerfil.getWidth(),
                         imagemfoto.getHeight() / imagemPerfil.getHeight());
-                imagemfotoReduzida = Bitmap.createScaledBitmap(imagemfoto, imagemfoto.getWidth()/scaleFactor,
-                        imagemfoto.getHeight()/scaleFactor, true);
+                imagemfotoReduzida = Bitmap.createScaledBitmap(imagemfoto, imagemfoto.getWidth() / scaleFactor,
+                        imagemfoto.getHeight() / scaleFactor, true);
                 imagemPerfil.setImageBitmap(imagemfotoReduzida);
                 imagemPerfil.setScaleType(ImageView.ScaleType.CENTER_CROP);
                 imagemPerfil.setTag(localArquivoFoto);
@@ -614,7 +614,8 @@ public class CadastroVitrineActivity extends AppCompatActivity implements
                     vitrine.setTags(mListTags);
                     vitrine.setLinks(mListLinks);
                     vitrine.setEmailAnunciante(prefs.getString("email", ""));
-                    vitrine.setLocalizacao(mLatLng.toString());
+                    String localizacao = mLatLng.latitude + "," + mLatLng.longitude;
+                    vitrine.setLocalizacao(localizacao);
 
                     if (editar) {
                         vitrine.setCodVitrine(cod_vitrine);

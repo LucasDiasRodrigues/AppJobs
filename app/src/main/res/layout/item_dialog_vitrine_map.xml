@@ -1,20 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
+    android:layout_width="360dp"
     android:layout_height="wrap_content"
     android:layout_gravity="center"
-    android:layout_marginBottom="6dp"
-    android:layout_marginTop="6dp"
-    android:minHeight="270dp"
     app:cardBackgroundColor="@android:color/white"
-    app:cardCornerRadius="1dp"
-    app:cardElevation="3dp">
+    app:cardCornerRadius="6dp"
+    app:cardElevation="6dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="6dp"
         android:orientation="vertical">
 
         <ImageView
@@ -30,9 +26,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="16dp"
+            android:layout_marginStart="16dp"
             android:layout_marginTop="10dp"
             android:text="NomeVitrine"
-            android:textSize="20dp"
+            android:textSize="20sp"
             android:textStyle="bold" />
 
 
@@ -40,8 +37,9 @@
             android:id="@+id/txtDistancia"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="right"
+            android:layout_gravity="end"
             android:layout_marginRight="16dp"
+            android:layout_marginEnd="16dp"
             android:gravity="right"
             android:text="A XX Km"
             android:textSize="@dimen/abc_text_size_small_material"
@@ -57,6 +55,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_marginLeft="16dp"
+                android:layout_marginStart="16dp"
                 android:layout_marginTop="06dp"
                 android:text="@string/categoria"
                 android:textSize="16dp" />
@@ -73,6 +72,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="16dp"
+                android:layout_marginStart="16dp"
                 android:layout_marginTop="6dp"
                 android:gravity="right"
                 android:text="@string/anunciadaEm"
@@ -97,6 +97,28 @@
                 android:textSize="16dp" />
 
         </LinearLayout>
+
+
+        <LinearLayout
+
+            android:id="@+id/layVitrine"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="6dp"
+            android:gravity="left"
+            android:visibility="visible">
+
+            <Button
+                android:id="@+id/btnVerMais"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/colorPrimaryDark"
+                android:text="Ver vitrine"
+                android:textColor="#ffffff"
+
+                />
+        </LinearLayout>
+
 
     </LinearLayout>
 

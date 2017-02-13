@@ -92,6 +92,9 @@
         </service>
         <!-- [END firebase_iid_service] -->
 
+        <!-- [Facebook Meta-Data] -->
+        <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="@string/facebook_app_id"/>
+
 
     </application>
 
