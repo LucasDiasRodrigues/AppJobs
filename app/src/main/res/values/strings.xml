@@ -218,6 +218,13 @@
 
     <string name="naohaconversas">Não há conversas para exibir.</string>
 
+    <string name="bemVindo_">Bem vindo </string>
+
+    <string name="cadastroConcluido">Cadastro Concluído.</string>
+    <string name="alteracaoConcluida">Alteração concluída.</string>
+
+    <string name="entre_ou_cadastrese">Entre com sua conta ou cadastre-se para utilizar todas as funcionalidades.</string>
+
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

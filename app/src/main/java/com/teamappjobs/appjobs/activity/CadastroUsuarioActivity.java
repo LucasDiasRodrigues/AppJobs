@@ -122,7 +122,7 @@ public class CadastroUsuarioActivity extends AppCompatActivity {
         //ColapsingToolbar com imagem e nome
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
-      //  collapsingToolbarLayout.setTitle(prefs.getString("nome", "nome"));
+        //  collapsingToolbarLayout.setTitle(prefs.getString("nome", "nome"));
         //imagemPerfil = (ImageView) findViewById(R.id.toolbarFotoPerfil);
 
         setSupportActionBar(toolbar);
@@ -130,21 +130,19 @@ public class CadastroUsuarioActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
 
-
-
         onRegistrar();
 
         //Verifica se está entrando no modo Edição!
         Intent intent = getIntent();
-        editar = intent.getBooleanExtra("editar",false);
+        editar = intent.getBooleanExtra("editar", false);
 
         nome = (EditText) findViewById(R.id.editTextNome);
         sobreNome = (EditText) findViewById(R.id.editTextSobreNome);
         email = (EditText) findViewById(R.id.editTextEmail);
-        rbFem=(RadioButton) findViewById(R.id.radiobuttonfem);
-        rbMasc=(RadioButton) findViewById(R.id.radiobuttonmasc);
+        rbFem = (RadioButton) findViewById(R.id.radiobuttonfem);
+        rbMasc = (RadioButton) findViewById(R.id.radiobuttonmasc);
 
-        fabFoto= (FloatingActionButton) findViewById(R.id.fabButton);
+        fabFoto = (FloatingActionButton) findViewById(R.id.fabButton);
         //Telefones
         telefone = (EditText) findViewById(R.id.editTextTelefone);
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -199,7 +197,6 @@ public class CadastroUsuarioActivity extends AppCompatActivity {
         });
 
 
-
         dataNasc = (EditText) findViewById(R.id.editTextDataNasc);
         dataNasc.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -213,7 +210,7 @@ public class CadastroUsuarioActivity extends AppCompatActivity {
         rbSexo = (RadioGroup) findViewById(R.id.radiogroupsex);
 
         fotoPerfil = (ImageView) findViewById(R.id.fotoPerfil);
-        btAvancar=(Button) findViewById(R.id.btAvancar);
+        btAvancar = (Button) findViewById(R.id.btAvancar);
 
         fabFoto.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -228,10 +225,10 @@ public class CadastroUsuarioActivity extends AppCompatActivity {
                 btAvancarOnClick();
             }
         });
-        if(editar){
+        if (editar) {
 
             BuscaDadosPerfil();
-            LaySenha=(LinearLayout) findViewById(R.id.LaySenha);
+            LaySenha = (LinearLayout) findViewById(R.id.LaySenha);
             LaySenha.setVisibility(View.GONE);
             email.setVisibility(View.GONE);
         }
@@ -454,7 +451,7 @@ public class CadastroUsuarioActivity extends AppCompatActivity {
     // Faz o registro no GCM
     public void onRegistrar() {
         String token = FirebaseInstanceId.getInstance().getToken();
-        Log.i("FIREBASE TOKEN: ",token);
+        Log.i("FIREBASE TOKEN: ", token);
     }
 
 
@@ -463,17 +460,16 @@ public class CadastroUsuarioActivity extends AppCompatActivity {
     }
 
 
-
-    public void BuscaDadosPerfil(){
+    public void BuscaDadosPerfil() {
         usuario = new Usuario();
         SharedPreferences prefs = getSharedPreferences("Configuracoes", Context.MODE_PRIVATE);
-        usuario.setEmail(prefs.getString("email",""));
+        usuario.setEmail(prefs.getString("email", ""));
         BuscaDadosPerfilTask taskDados = new BuscaDadosPerfilTask(CadastroUsuarioActivity.this, usuario);
         taskDados.execute();
 
     }
 
-    public void PreencheCampos(Usuario usuario){
+    public void PreencheCampos(Usuario usuario) {
 
         nome.setText(usuario.getNome());
         sobreNome.setText(usuario.getSobreNome());
@@ -482,102 +478,113 @@ public class CadastroUsuarioActivity extends AppCompatActivity {
         senha.setText(usuario.getSenha());
         confirmaSenha.setText(usuario.getSenha());
 
-       auxFoto=usuario.getImagemPerfil();
+        auxFoto = usuario.getImagemPerfil();
 
 
-        if(!usuario.getTelefones().isEmpty()){
+        if (!usuario.getTelefones().isEmpty()) {
             telefone.setText(usuario.getTelefones().get(0));
         }
 //
-        if(usuario.getSexo().equals("feminino")){
+        if (usuario.getSexo().equals("feminino")) {
             rbFem.setChecked(true);
-        }else{
+        } else {
             rbMasc.setChecked(true);
         }
 
-        if(!usuario.getImagemPerfil().equals("")){
+        if (!usuario.getImagemPerfil().equals("")) {
             Picasso.with(this).load(getResources().getString(R.string.imageserver) + usuario.getImagemPerfil()).into(fotoPerfil);
         }
-    }
 
-public void btAvancarOnClick(){
-    if (validaCampos()) {
+        //AtualizaPrefs
+        SharedPreferences prefs = getSharedPreferences("Configuracoes", MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putBoolean("logado", true);
+        editor.putString("nome", usuario.getNome());
+        editor.putString("email", usuario.getEmail());
+        editor.putString("imagemperfil", usuario.getImagemPerfil());
 
-        //Tratar RadioButton
-        switch (rbSexo.getCheckedRadioButtonId()) {
-            case R.id.radiobuttonmasc:
-                sexo = "masculino";
-                break;
-            case R.id.radiobuttonfem:
-                sexo = "feminino";
-                break;
-        }
-
-        //Tratar Telefones
-        List<String> telefones = new ArrayList<>();
-        if (!telefone.getText().toString().equals("")) {
-            telefones.add(telefone.getText().toString());
-        }
-        else{ telefones.add("");}
-        if (!telefone2.getText().toString().equals("")) {
-            telefones.add(telefone2.getText().toString());
-        }
-        if (!telefone3.getText().toString().equals("")) {
-            telefones.add(telefone3.getText().toString());
-        }
-
-        //Tratar ImageViwew
-        //localiza e transforma em um array de bytes
-        if (imagemfoto != null) {
-
-            ByteArrayOutputStream bAOS = new ByteArrayOutputStream();
-            imagemfotoReduzida.compress(Bitmap.CompressFormat.JPEG, 20, bAOS);
-            byte[] imagemArrayBytes = bAOS.toByteArray();
-            //decodifica com a classe BASE64 e transforma em string
-            imagemDecodificada = Base64.encodeToString(imagemArrayBytes, Base64.DEFAULT);
-        }
-
-        SharedPreferences prefs = getSharedPreferences("Configuracoes", Context.MODE_PRIVATE);
-
-        if (!prefs.getString("gcmId", "").equals("")) {
-
-            regId = prefs.getString("gcmId", "");
-            //Salvar as informacoes aqui!!!
-            usuario = new Usuario();
-            usuario.addGcmId(regId);
-            usuario.setNome(nome.getText().toString());
-            usuario.setSobreNome(sobreNome.getText().toString());
-            usuario.setEmail(email.getText().toString().toLowerCase());
-            usuario.setTelefone(telefones);
-            try {
-                usuario.setDataNasc(brDateFormat.parse(dataNasc.getText().toString()));
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-            usuario.setSenha(senha.getText().toString());
-            usuario.setSexo(sexo);
-            usuario.setDataCadastro(Calendar.getInstance().getTime());
-
-
-            if(!editar){
-                CadastraUsuarioTask taskCadastro = new CadastraUsuarioTask(CadastroUsuarioActivity.this, usuario, imagemfoto);
-                taskCadastro.execute();
-            }
-            else{
-                //Task editar
-                usuario.setImagemPerfil(auxFoto);
-                EditaUsuarioTask task = new EditaUsuarioTask(CadastroUsuarioActivity.this,usuario,imagemfoto);
-                task.execute();
-            }
-
-
-        } else {
-
-            Toast.makeText(this, "Erro nas Preferencias", Toast.LENGTH_LONG).show();
-        }
-
+        editor.commit();
 
     }
-}
+
+    public void btAvancarOnClick() {
+        if (validaCampos()) {
+
+            //Tratar RadioButton
+            switch (rbSexo.getCheckedRadioButtonId()) {
+                case R.id.radiobuttonmasc:
+                    sexo = "masculino";
+                    break;
+                case R.id.radiobuttonfem:
+                    sexo = "feminino";
+                    break;
+            }
+
+            //Tratar Telefones
+            List<String> telefones = new ArrayList<>();
+            if (!telefone.getText().toString().equals("")) {
+                telefones.add(telefone.getText().toString());
+            } else {
+                telefones.add("");
+            }
+            if (!telefone2.getText().toString().equals("")) {
+                telefones.add(telefone2.getText().toString());
+            }
+            if (!telefone3.getText().toString().equals("")) {
+                telefones.add(telefone3.getText().toString());
+            }
+
+            //Tratar ImageViwew
+            //localiza e transforma em um array de bytes
+            if (imagemfoto != null) {
+
+                ByteArrayOutputStream bAOS = new ByteArrayOutputStream();
+                imagemfotoReduzida.compress(Bitmap.CompressFormat.JPEG, 20, bAOS);
+                byte[] imagemArrayBytes = bAOS.toByteArray();
+                //decodifica com a classe BASE64 e transforma em string
+                imagemDecodificada = Base64.encodeToString(imagemArrayBytes, Base64.DEFAULT);
+            }
+
+            SharedPreferences prefs = getSharedPreferences("Configuracoes", Context.MODE_PRIVATE);
+
+            if (!prefs.getString("gcmId", "").equals("")) {
+
+                regId = prefs.getString("gcmId", "");
+                //Salvar as informacoes aqui!!!
+                usuario = new Usuario();
+                usuario.addGcmId(regId);
+                usuario.setNome(nome.getText().toString());
+                usuario.setSobreNome(sobreNome.getText().toString());
+                usuario.setEmail(email.getText().toString().toLowerCase());
+                usuario.setTelefone(telefones);
+                try {
+                    usuario.setDataNasc(brDateFormat.parse(dataNasc.getText().toString()));
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                usuario.setSenha(senha.getText().toString());
+                usuario.setSexo(sexo);
+                usuario.setDataCadastro(Calendar.getInstance().getTime());
+
+
+                if (!editar) {
+                    CadastraUsuarioTask taskCadastro = new CadastraUsuarioTask(CadastroUsuarioActivity.this, usuario, imagemfoto);
+                    taskCadastro.execute();
+                } else {
+                    //Task editar
+                    usuario.setImagemPerfil(auxFoto);
+                    EditaUsuarioTask task = new EditaUsuarioTask(CadastroUsuarioActivity.this, usuario, imagemfoto);
+                    task.execute();
+                }
+
+
+            } else {
+
+                Toast.makeText(this, "Erro nas Preferencias", Toast.LENGTH_LONG).show();
+            }
+
+
+        }
+    }
 
 }

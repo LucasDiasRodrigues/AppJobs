@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.teamappjobs.appjobs.activity.CadastroUsuarioActivity;
+import com.teamappjobs.appjobs.activity.MainActivity;
 import com.teamappjobs.appjobs.activity.MinhaVitrineActivity;
 import com.teamappjobs.appjobs.activity.VitrineActivity;
 import com.teamappjobs.appjobs.modelo.Usuario;
@@ -24,11 +25,16 @@ public class BuscaDadosPerfilTask extends AsyncTask {
     private String tipo = "minhaVitrine";
 
 
-
-    public BuscaDadosPerfilTask(CadastroUsuarioActivity activity, Usuario usuario){
+    public BuscaDadosPerfilTask(CadastroUsuarioActivity activity, Usuario usuario) {
         this.usuario = usuario;
         this.activity = activity;
     }
+
+    public BuscaDadosPerfilTask(MainActivity activity, Usuario usuario) {
+        this.usuario = usuario;
+        this.activity = activity;
+    }
+
     @Override
     protected Object doInBackground(Object[] params) {
 
@@ -50,10 +56,11 @@ public class BuscaDadosPerfilTask extends AsyncTask {
     protected void onPostExecute(Object o) {
         super.onPostExecute(o);
 
-        Usuario usuarioresp = (Usuario)o;
-            ((CadastroUsuarioActivity)activity).PreencheCampos(usuarioresp);
-
-
-
+        Usuario usuarioresp = (Usuario) o;
+        if (activity instanceof CadastroUsuarioActivity) {
+            ((CadastroUsuarioActivity) activity).PreencheCampos(usuarioresp);
+        } else if (activity instanceof MainActivity) {
+            ((MainActivity) activity).recebeDadosPerfil(usuarioresp);
+        }
     }
 }

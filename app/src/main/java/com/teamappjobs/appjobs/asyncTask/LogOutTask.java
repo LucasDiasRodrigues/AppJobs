@@ -9,6 +9,10 @@ import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.facebook.login.LoginManager;
+import com.google.firebase.auth.FacebookAuthCredential;
+import com.google.firebase.auth.FacebookAuthProvider;
+import com.google.firebase.auth.FirebaseAuth;
 import com.teamappjobs.appjobs.R;
 import com.teamappjobs.appjobs.activity.MainActivity;
 import com.teamappjobs.appjobs.web.HttpConnection;
@@ -65,6 +69,9 @@ public class LogOutTask extends AsyncTask {
             SharedPreferences.Editor editor = prefs.edit();
             editor.clear();
             editor.commit();
+
+            FirebaseAuth.getInstance().signOut();
+            LoginManager.getInstance().logOut();
 
             Intent intent = new Intent(context, MainActivity.class);
             context.startActivity(intent);

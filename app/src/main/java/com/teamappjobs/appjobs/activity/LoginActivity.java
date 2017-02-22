@@ -11,10 +11,14 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 
 import com.teamappjobs.appjobs.R;
+import com.teamappjobs.appjobs.fragment.CadastroComplementarFirebase;
 import com.teamappjobs.appjobs.fragment.LoginFragment;
 import com.teamappjobs.appjobs.fragment.RecuperarSenhaFragment;
+import com.teamappjobs.appjobs.modelo.Usuario;
 
 public class LoginActivity extends AppCompatActivity {
+
+    private Usuario usuarioLogado;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,5 +53,15 @@ public class LoginActivity extends AppCompatActivity {
         transaction.commit();
     }
 
+    public void CadastroComplementarFirebase(Usuario usuario) {
+        this.usuarioLogado = usuario;
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.frame_main, new CadastroComplementarFirebase());
+        transaction.addToBackStack(null);
+        transaction.commit();
+    }
 
+    public Usuario getUsuarioLogado() {
+        return usuarioLogado;
+    }
 }

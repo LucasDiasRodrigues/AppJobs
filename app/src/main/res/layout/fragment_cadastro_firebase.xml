@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/coordinator"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:gravity="center_horizontal"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_horizontal"
+        android:background="@color/colorPrimary"
+        android:orientation="vertical">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/imagePerfil"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="40dp"
+            android:src="@drawable/contact" />
+
+        <TextView
+            android:id="@+id/txtBemVindoXX"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:gravity="center"
+            android:textColor="@color/colorWhite"
+            android:text="Bem vindo fulano!"
+            android:textSize="22dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:textColor="@color/colorWhite"
+            android:text="Para finalizar seu cadastro insira as informações solicitadas abaixo:"
+            android:textSize="16dp" />
+
+        <android.support.design.widget.TextInputEditText
+            android:id="@+id/txtDataNasc"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorWhite"
+            android:textColorHint="@color/colorWhite"
+            android:layout_margin="10dp"
+            android:focusable="false"
+            android:hint="@string/datanasc"
+            android:imeOptions="actionNext"
+            android:inputType="none" />
+
+        <android.support.design.widget.TextInputEditText
+            android:id="@+id/txtTelefone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorWhite"
+            android:textColorHint="@color/colorWhite"
+            android:layout_margin="10dp"
+            android:hint="@string/telefone"
+            android:imeOptions="actionDone" />
+
+        <RadioGroup
+            android:id="@+id/radiogroupsex"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_margin="10dp"
+            android:baselineAligned="false"
+            android:clickable="true"
+            android:theme="@style/Base.Theme.AppCompat"
+            android:focusable="true"
+            android:measureWithLargestChild="false"
+            android:orientation="horizontal"
+            android:transitionGroup="true">
+
+
+            <RadioButton
+                android:id="@+id/radiobuttonmasc"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:theme="@style/ThemeOverlay.AppCompat.Dark"
+                android:checked="false"
+                android:text="@string/masculino"
+                android:textSize="12dp" />
+
+            <RadioButton
+                android:id="@+id/radiobuttonfem"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:checked="false"
+                android:text="@string/feminino"
+                android:textSize="12dp" />
+        </RadioGroup>
+
+
+    </LinearLayout>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fabCadastrar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:fabSize="normal"
+        android:layout_gravity="bottom|end"
+        android:src="@drawable/ic_check_grey"
+        android:layout_margin="16dp"/>
+
+
+</android.support.design.widget.CoordinatorLayout>

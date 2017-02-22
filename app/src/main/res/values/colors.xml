@@ -4,6 +4,7 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#ff4081</color>
     <color name="colorRed">#ce0101</color>
+    <color name="colorWhite">#ffffff</color>
 
     <color name="bg_msg_you">#e5e7eb</color>
     <color name="bg_msg_from">#5eb964</color>

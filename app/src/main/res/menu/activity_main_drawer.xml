@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <group android:checkableBehavior="single">
+    <group android:checkableBehavior="single"
+        android:id="@+id/group_logado"
+        android:visible="true">
         <item
             android:id="@+id/home"
             android:icon="@drawable/ic_home"
@@ -23,6 +25,16 @@
             android:id="@+id/configuracoes"
             android:icon="@drawable/ic_menu_manage"
             android:title="@string/configuracoes" />
+
+    </group>
+
+    <group android:checkableBehavior="single"
+        android:id="@+id/group_nao_logado"
+        android:visible="false">
+        <item
+            android:id="@+id/entrar"
+            android:icon="@drawable/account_plus"
+            android:title="@string/entrar" />
 
     </group>
 

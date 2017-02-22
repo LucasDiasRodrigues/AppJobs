@@ -11,7 +11,7 @@ import com.google.firebase.iid.FirebaseInstanceIdService;
 
 public class MyFirebaseInstanceIDService extends FirebaseInstanceIdService {
 
-    private static final String TAG = "appjobs";
+    private static final String TAG = "appjobsFCM";
 
     /**
      * Called if InstanceID token is updated. This may occur if the security of

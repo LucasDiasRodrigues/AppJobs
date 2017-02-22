@@ -25,6 +25,8 @@ public class LoginJson {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+
+        Log.i("Json = ", jo.toString());
         return jo.toString();
     }
 
@@ -35,11 +37,11 @@ public class LoginJson {
         try {
             JSONObject jo = new JSONObject(data);
 
-
             usuario.setEmail(jo.getString("email"));
             usuario.setNome(jo.getString("nome"));
             usuario.setImagemPerfil(jo.getString("foto"));
-
+            usuario.setSobreNome(jo.getString("sobrenome"));
+            usuario.setSexo(jo.getString("sexo"));
 
         } catch (JSONException e) {
             e.printStackTrace();

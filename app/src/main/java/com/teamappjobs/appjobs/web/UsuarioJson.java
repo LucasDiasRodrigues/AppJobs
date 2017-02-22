@@ -37,6 +37,7 @@ public class UsuarioJson {
                     .key("sobrenome").value(usuario.getSobreNome())
                     .key("email").value(usuario.getEmail())
                     .key("gcmIdAtual").value(usuario.getGcmIdAtual())
+                    .key("firebaseUID").value(usuario.getFirebaseUID())
                     .key("senha").value(usuario.getSenha())
                     .key("dataNasc").value(sqlDateFormat.format(usuario.getDataNasc()))
                     .key("sexo").value(usuario.getSexo())
@@ -54,8 +55,7 @@ public class UsuarioJson {
                         .endObject();
             }
 
-            jsonStringer.endArray()
-                    .key("gcmId").array();
+            jsonStringer.endArray().key("gcmId").array();
 
 
             List<String> gcmIds = usuario.getGcmIds();
@@ -89,13 +89,16 @@ public class UsuarioJson {
 
             usuario.setNome(jo.getString("nome"));
             usuario.setSobreNome(jo.getString("sobrenome"));
-            usuario.setDataNasc(sqlDateFormat.parse(jo.getString("dataNasc")));
             usuario.setEmail(jo.getString("email"));
             usuario.setSexo(jo.getString("sexo"));
             usuario.setImagemPerfil(jo.getString("foto"));
-            usuario.setSenha(jo.getString("senha"));
+            if(jo.has("firebasUID")){
+                usuario.setFirebaseUID(jo.getString("firebasUID"));
+            }
             usuario.setSituacao(jo.getString("situacao"));
 
+            usuario.setSenha(jo.getString("senha"));
+            usuario.setDataNasc(sqlDateFormat.parse(jo.getString("dataNasc")));
             ArrayList<String> telefones = new ArrayList<String>();
             JSONObject jsonData = new JSONObject();
             jsonData = jo.optJSONObject("telefone");
@@ -116,8 +119,6 @@ public class UsuarioJson {
         } catch (ParseException e) {
             e.printStackTrace();
         }
-
-
         return usuario;
     }
 
@@ -129,7 +130,7 @@ public class UsuarioJson {
             for (int i = 0; i < json.length(); i++) {
                 Usuario corredor = JsonToUsuario(json.getJSONObject(i).toString());
                 list.add(corredor);
-                Log.i("Corredor" + i + " ", corredor.getNome());
+                Log.i("User" + i + " ", corredor.getNome());
             }
 
 

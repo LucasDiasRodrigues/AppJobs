@@ -1,8 +1,11 @@
 package com.teamappjobs.appjobs.fragment;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -14,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,22 +26,37 @@ import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
+import com.facebook.Profile;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FacebookAuthCredential;
 import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.iid.FirebaseInstanceId;
+import com.squareup.picasso.Picasso;
 import com.teamappjobs.appjobs.R;
 import com.teamappjobs.appjobs.activity.CadastroUsuarioActivity;
 import com.teamappjobs.appjobs.activity.LoginActivity;
+import com.teamappjobs.appjobs.asyncTask.FirebaseLoginTask;
 import com.teamappjobs.appjobs.asyncTask.LoginTask;
+import com.teamappjobs.appjobs.modelo.Usuario;
+import com.teamappjobs.appjobs.web.FacebookJson;
 import com.teamappjobs.appjobs.web.LoginJson;
+import com.teamappjobs.appjobs.web.UsuarioJson;
 
+import org.json.JSONObject;
+
+import java.io.FileNotFoundException;
+import java.io.InputStream;
+import java.util.Arrays;
+import java.util.Calendar;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -56,6 +75,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
     private String TAG = "FirebaseAuth";
+    ProgressDialog progress;
 
     //Facebook
     private LoginButton loginButton;
@@ -105,7 +125,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
         //Facebook
         callbackManager = CallbackManager.Factory.create();
         loginButton = (LoginButton) cardLogin.findViewById(R.id.login_button);
-        loginButton.setReadPermissions("email");
+        loginButton.setReadPermissions("email", "public_profile");
         // If using in a fragment
         loginButton.setFragment(this);
         // Other app specific specialization
@@ -116,6 +136,13 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
             public void onSuccess(LoginResult loginResult) {
                 // Enviando ao Firebase
                 handleFacebookAccessToken(loginResult.getAccessToken());
+
+                String userId = loginResult.getAccessToken().getUserId();
+                String accessToken = loginResult.getAccessToken().getToken();
+
+                // save accessToken to SharedPreference
+                //preferencias.saveFacebookAccessToken(accessToken);
+                //preferencias.saveFacebookUserId(userId);
             }
 
             @Override
@@ -175,9 +202,14 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
 
     }
 
-    // Faz o registro no GCM
+    // Faz o registro no FCM
     public void onRegistrar() {
-        FirebaseInstanceId.getInstance().getToken();
+        String token = FirebaseInstanceId.getInstance().getToken();
+        Log.i("FIREBASE TOKEN: ",token);
+        SharedPreferences prefs = getActivity().getSharedPreferences("Configuracoes", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putString("gcmId", token);
+        editor.commit();
     }
 
     public Boolean validarCampos() {
@@ -265,7 +297,6 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
             // FirebaseUser.getToken() instead.
             String uid = user.getUid();
         }
-
     }
 
     //Tratando login do facebook com Firebase
@@ -281,6 +312,8 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
                         // If sign in fails, display a message to the user. If sign in succeeds
                         // the auth state listener will be notified and logic to handle the
                         // signed in user can be handled in the listener.
+                        progress.dismiss();
+
                         if (!task.isSuccessful()) {
                             Log.w(TAG, "signInWithCredential", task.getException());
                             Toast.makeText(getActivity(), "Authentication failed.",
@@ -289,20 +322,97 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
 
                             //Tudo certo... lidar com o server aqui
 
+                            SharedPreferences prefs = getActivity().getSharedPreferences("Configuracoes", Context.MODE_PRIVATE);
+                            Profile faceProfile = Profile.getCurrentProfile();
+                            FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+                            String email = firebaseUser.getEmail().toLowerCase();
+                            String nome = firebaseUser.getDisplayName();
+                            String uid = firebaseUser.getUid();
 
+                            Log.i("FaceFireLogin", email+"--"+nome+"--"+uid);
 
+                            Usuario usuario = new Usuario();
+                            usuario.setNome(faceProfile.getFirstName());
+                            usuario.setSobreNome(faceProfile.getLastName());
+                            usuario.setEmail(firebaseUser.getEmail());
+                            usuario.setGcmIdAtual(prefs.getString("gcmId", ""));
+                            usuario.setFirebaseUID(firebaseUser.getUid());
+                            usuario.setDataCadastro(Calendar.getInstance().getTime());
+                           // Bitmap profilePic = convertFacebookProfileImage(faceProfile.getProfilePictureUri(1,1));
 
-
+                            FirebaseLoginTask fireLoginTask = new FirebaseLoginTask(usuario, (LoginActivity) getActivity(),
+                                    faceProfile.getProfilePictureUri(1000,1000));
+                            fireLoginTask.execute();
                         }
-
                     }
                 });
+        progress = ProgressDialog.show(getActivity(), "Aguarde...", "Conectando", true, true);
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         callbackManager.onActivityResult(requestCode, resultCode, data);
+    }
+
+    //Utiliza o GraphRequest do Facebook pra pegar dados adicionais
+    private void getFacebookData() {
+        GraphRequest request = GraphRequest.newMeRequest(
+                AccessToken.getCurrentAccessToken(),
+                new GraphRequest.GraphJSONObjectCallback() {
+                    @Override
+                    public void onCompleted(JSONObject object, GraphResponse response) {
+                        Log.v("LoginActivity", response.toString());
+                        //     Log.v("LoginActivityRaw", response.getRawResponse());
+                        Log.v("LoginActJsontoString", response.getJSONObject().toString());
+
+                        FacebookJson faceJson = new FacebookJson();
+                      //  usuario = faceJson.jsonToUsuario(response.getRawResponse());
+                      //  coverUrl = faceJson.jsonToCoverPic(response.getRawResponse());
+
+                        //Mostra a coverPic
+                        // if(!coverUrl.equals("") && !prefs.getToken().equals(null))
+                        //  Picasso.with(MainActivity.this).load(coverUrl).into(coverProfile);
+
+                    }
+                });
+        Bundle parameters = new Bundle();
+        parameters.putString("fields", "age_range,birthday,bio,cover,first_name,gender,last_name,education,likes,name");
+        request.setParameters(parameters);
+        request.executeAsync();
+
+    }
+
+    //Transforma a foto do facebook em Bitmap
+    public Bitmap convertFacebookProfileImage(Uri uri){
+        InputStream inputStream;
+        Bitmap bitmap;
+        try {
+            //inputStream = getActivity().getContentResolver().openInputStream(uri);
+            //Imagem original
+            bitmap = Picasso.with(getActivity()).load(uri).get();
+
+            Log.i("tamanho original", String.valueOf(bitmap.getHeight()) + String.valueOf(bitmap.getWidth()));
+
+            //Reduz o tamanho do foto
+            if (bitmap.getHeight() > 3000 || bitmap.getWidth() > 3000) {
+                bitmap = Bitmap.createScaledBitmap(bitmap, bitmap.getWidth() / 2,
+                        bitmap.getHeight() / 2, true);
+
+                //Reduz again (no caso de cameras muuuuito sensacionais)
+                if (bitmap.getHeight() > 3000 || bitmap.getWidth() > 3000) {
+                    bitmap = Bitmap.createScaledBitmap(bitmap, bitmap.getWidth() / 2,
+                            bitmap.getHeight() / 2, true);
+                }
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            Toast.makeText(getActivity(), "Erro ao carregar a imagem do face", Toast.LENGTH_LONG).show();
+
+            return null;
+        }
+        return bitmap;
     }
 
     //LogOut = FirebaseAuth.getInstance().signOut();

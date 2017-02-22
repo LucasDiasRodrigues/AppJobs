@@ -19,7 +19,7 @@ public class Usuario implements Serializable {
 
     private String nome;
     private String sobreNome;
-
+    private String firebaseUID;
     private String email;
     private String sexo;
     private String imagemPerfil;
@@ -158,5 +158,13 @@ public class Usuario implements Serializable {
 
     public void setGcmIdAtual(String gcmIdAtual) {
         this.gcmIdAtual = gcmIdAtual;
+    }
+
+    public String getFirebaseUID() {
+        return firebaseUID;
+    }
+
+    public void setFirebaseUID(String firebaseUID) {
+        this.firebaseUID = firebaseUID;
     }
 }

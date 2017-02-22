@@ -3,6 +3,8 @@ package com.teamappjobs.appjobs.asyncTask;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.support.v7.app.AlertDialog;
@@ -10,6 +12,7 @@ import android.util.Base64;
 import android.util.Log;
 import com.teamappjobs.appjobs.R;
 import com.teamappjobs.appjobs.activity.CadastroUsuarioActivity;
+import com.teamappjobs.appjobs.activity.MainActivity;
 import com.teamappjobs.appjobs.modelo.Usuario;
 import com.teamappjobs.appjobs.web.HttpConnection;
 import com.teamappjobs.appjobs.web.UsuarioJson;
@@ -30,11 +33,19 @@ public class EditaUsuarioTask extends AsyncTask {
     private Usuario usuario;
     private Bitmap imagem;
     private String imagemDecodificada = "";
+    private Boolean cadastroFirebase = false;
 
     public EditaUsuarioTask(Activity activity, Usuario usuario, Bitmap imagem) {
         this.activity = activity;
         this.usuario = usuario;
         this.imagem = imagem;
+    }
+
+    public EditaUsuarioTask(Activity activity, Usuario usuario, Bitmap imagem, Boolean cadastroFirebase) {
+        this.activity = activity;
+        this.usuario = usuario;
+        this.imagem = imagem;
+        this.cadastroFirebase = cadastroFirebase;
     }
 
     @Override
@@ -81,16 +92,35 @@ public class EditaUsuarioTask extends AsyncTask {
 
         if (o.toString().equals("Sucesso")) {
 
-            new AlertDialog.Builder(activity).setTitle(R.string.sucesso)
-                    .setMessage("Alteração concluída")
-                    .setCancelable(false)
-                    .setPositiveButton(R.string.continuar, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            activity.finish();
-                        }
-                    })
-                    .show();
+            if(!cadastroFirebase) {
+                new AlertDialog.Builder(activity).setTitle(R.string.sucesso)
+                        .setMessage(R.string.alteracaoConcluida)
+                        .setCancelable(false)
+                        .setPositiveButton(R.string.continuar, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                activity.finish();
+                            }
+                        })
+                        .show();
+            } else {
+                SharedPreferences prefs = activity.getSharedPreferences("Configuracoes", activity.MODE_PRIVATE);
+                SharedPreferences.Editor editor = prefs.edit();
+                editor.putBoolean("logado", true);
+                editor.commit();
+                new AlertDialog.Builder(activity).setTitle(R.string.sucesso)
+                        .setMessage(R.string.cadastroConcluido)
+                        .setCancelable(false)
+                        .setPositiveButton(R.string.continuar, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Intent mainIntent = new Intent(activity, MainActivity.class);
+                                activity.startActivity(mainIntent);
+                                activity.finish();
+                            }
+                        })
+                        .show();
+            }
         } else {
             ((CadastroUsuarioActivity)activity).onErroCadastro();
         }
