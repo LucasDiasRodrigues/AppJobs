@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">AppJobs</string>
+    <string name="app_name">Freela</string>
     <string name="GCMSenderId">435540487325</string>
     <string name="GCMServerAPIKey">AIzaSyBhGCg7gA2yxYltjxjyRDDy6Pzb8Uu1AmA</string>
     <string name="imageserver">http://4runnerapp.com.br/AppJobs/img/</string>
@@ -112,10 +112,10 @@
 
     <string name="confirmarSenha">Confirmar senha</string>
 
-    <string name="cadastroVitrine">Cadastro de vitrine</string>
-    <string name="nomedaVitrine">Nome da vitrine</string>
-    <string name="minhasVitrines">Minhas vitrines</string>
-    <string name="vitrinesQueSigo">Vitrines que sigo</string>
+    <string name="cadastroVitrine">Anúncio de serviço</string>
+    <string name="nomedaVitrine">Nome do serviço</string>
+    <string name="minhasVitrines">Meus anúncios</string>
+    <string name="vitrinesQueSigo">Favoritos</string>
     <string name="novosAnuncios">Novos anúncios</string>
 
     <string name="criadaEm">Criada em</string>
@@ -127,15 +127,15 @@
     <string name="tags">#Tags:</string>
     <string name="links">Links:</string>
 
-    <string name="ativarVitrine">Ativar vitrine</string>
-    <string name="desejaAtivarVitrine">Deseja inativar essa vitrine? Ela ficará visivel para todos os usuários.</string>
-    <string name="vitrineAtivada">Vitrine ativada.</string>
+    <string name="ativarVitrine">Ativar anúncio</string>
+    <string name="desejaAtivarVitrine">Deseja inativar esse anúncio? Ele ficará visivel para todos os usuários.</string>
+    <string name="vitrineAtivada">Anúncio ativado.</string>
 
     <string name="promocaoReativada">Promoção reativada.</string>
 
-    <string name="inativarVitrine">Inativar vitrine</string>
-    <string name="desejaInativarVitrine">Tem certeza que deseja inativar essa vitrine?</string>
-    <string name="vitrineInativada">Vitrine inativada.</string>
+    <string name="inativarVitrine">Inativar anúncio</string>
+    <string name="desejaInativarVitrine">Tem certeza que deseja inativar esse anúncio?</string>
+    <string name="vitrineInativada">Anúncio inativado.</string>
 
     <string name="emailInvalido">E-mail inválido</string>
     <string name="dadosInvalidos">Dados inválidos</string>

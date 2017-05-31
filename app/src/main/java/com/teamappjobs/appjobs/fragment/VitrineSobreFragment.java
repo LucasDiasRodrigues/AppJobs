@@ -1,7 +1,10 @@
 package com.teamappjobs.appjobs.fragment;
 
 import android.content.Intent;
+import android.location.Address;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.ResultReceiver;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -10,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.teamappjobs.appjobs.R;
 import com.teamappjobs.appjobs.activity.ChatActivity;
@@ -18,6 +22,7 @@ import com.teamappjobs.appjobs.activity.MainActivity;
 import com.teamappjobs.appjobs.activity.MinhaVitrineActivity;
 import com.teamappjobs.appjobs.activity.VitrineActivity;
 import com.teamappjobs.appjobs.modelo.Vitrine;
+import com.teamappjobs.appjobs.util.GeocodeAddressIntentService;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -40,6 +45,7 @@ public class VitrineSobreFragment extends Fragment {
     private TextView tvTelefoneAnunciante;
     private Button btnChat;
 
+    AddressResultReceiver mResultReceiver;
 
     private DateFormat dateFormat =  new SimpleDateFormat("dd/MM/yyyy");
 
@@ -47,9 +53,6 @@ public class VitrineSobreFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //getVitrine
-
-
         try {
             vitrine = ((MinhaVitrineActivity) getActivity()).getVitrine();
         } catch (Throwable e) {
@@ -73,6 +76,33 @@ public class VitrineSobreFragment extends Fragment {
         txtEmailAnunciante=(TextView)fragment.findViewById(R.id.txtEmailAnunciante);
         txtTelefoneAnunciante=(TextView) fragment.findViewById(R.id.txtTelefone);
         tvTelefoneAnunciante=(TextView) fragment.findViewById(R.id.tvTelefone);
+        txtLocalizacao.setText("Localização indisponível");
+        //mONICA
+        mResultReceiver = new AddressResultReceiver(null);
+        Intent intent = new Intent(getActivity(), GeocodeAddressIntentService.class);
+        intent.putExtra(GeocodeAddressIntentService.RECEIVER, mResultReceiver);
+        intent.putExtra(GeocodeAddressIntentService.FETCH_TYPE_EXTRA, GeocodeAddressIntentService.USE_ADDRESS_LOCATION);
+
+            try {
+                if (vitrine.getLocalizacao().equals("") || vitrine.getLocalizacao().isEmpty()) {
+                    txtLocalizacao.setText("Localização indisponível");
+                } else {
+                    String auxlocalizacao[] = vitrine.getLocalizacao().split(",");
+                    String auxLat = auxlocalizacao[0];
+                    String auxLon = auxlocalizacao[1];
+
+                    intent.putExtra(GeocodeAddressIntentService.LOCATION_LATITUDE_DATA_EXTRA,
+                            Double.parseDouble(auxLat));
+                    intent.putExtra(GeocodeAddressIntentService.LOCATION_LONGITUDE_DATA_EXTRA,
+                            Double.parseDouble(auxLon));
+                    getActivity().startService(intent);
+                    //FIM MONICA
+                }
+            }
+            catch (Exception e){
+                Log.i("Erro:", e.toString());
+            };
+
         btnChat=(Button) fragment.findViewById(R.id.btnChat);
         btnChat.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -137,4 +167,28 @@ public class VitrineSobreFragment extends Fragment {
         txtLinks.setText(auxLinks);
 
     }
+    //Obviamente COPIEI E COLEI. PEGA EU HOTARIO!!!!!!!!!!!!!!
+    class AddressResultReceiver extends ResultReceiver {
+        public AddressResultReceiver(Handler handler) {
+            super(handler);
+        }
+    @Override
+    protected void onReceiveResult(int resultCode, final Bundle resultData) {
+        if (resultCode == GeocodeAddressIntentService.SUCCESS_RESULT) {
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    txtLocalizacao.setText(resultData.getString(GeocodeAddressIntentService.RESULT_DATA_KEY));
+                }
+            });
+        }
+        else {
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    txtLocalizacao.setText("Localização indisponível");
+                }
+            });
+        }
+    }}
 }

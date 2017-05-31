@@ -74,8 +74,6 @@ public class RecyclerViewPromocoesAdapter extends RecyclerView.Adapter<RecyclerV
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, final int position) {
-
-
         holder.txtNome.setText(promocoes.get(position).getNome());
         holder.txtDescricao.setText(promocoes.get(position).getDescricao());
         holder.txtRegras.setText(promocoes.get(position).getRegras());

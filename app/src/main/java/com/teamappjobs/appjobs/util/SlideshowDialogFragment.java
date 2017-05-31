@@ -73,15 +73,15 @@ public class SlideshowDialogFragment extends DialogFragment {
         Log.e(TAG, "position: " + selectedPosition);
         Log.e(TAG, "images size: " + portifolio.size());
 
-        //Verifica se o usuário logado é o dono da vitrine
+        //Verifica se o usuario logado eh o dono da vitrine
         try {
             SharedPreferences prefs = getActivity().getSharedPreferences("Configuracoes", getActivity().MODE_PRIVATE);
             if (!prefs.getString("email", "").equals(vitrine.getEmailAnunciante())) {
-                //Oculta o botão de excluir
+                //Oculta o botï¿½o de excluir
                 btnDelete.setVisibility(View.INVISIBLE);
             }
         }catch (NullPointerException exception){
-            //Oculta o botão de excluir
+            //Oculta o botï¿½o de excluir
             btnDelete.setVisibility(View.INVISIBLE);
         }
 

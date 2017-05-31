@@ -11,11 +11,11 @@
         <item
             android:id="@+id/minhasVitrines"
             android:icon="@drawable/ic_menu_gallery"
-            android:title="Minhas vitrines" />
+            android:title="Meus anúncios" />
         <item
             android:id="@+id/vitrinesQueSigo"
             android:icon="@drawable/ic_heart"
-            android:title="Vitrines que eu sigo" />
+            android:title="Profissionais que eu sigo" />
         <item
             android:id="@+id/chat"
             android:icon="@drawable/ic_comment_multiple_outline"
