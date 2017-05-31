@@ -84,7 +84,7 @@ public class MinhaVitrinePortifolioFragment extends Fragment {
 
         if(portifolio.size() > 0){
             txtSemPortifolio.setVisibility(View.GONE);
-            RecyclerViewPortifolioAdapter adapter = new RecyclerViewPortifolioAdapter(getActivity(), portifolio);
+            RecyclerViewPortifolioAdapter adapter = new RecyclerViewPortifolioAdapter(getActivity(), portifolio,vitrine);
             recyclerView.setAdapter(adapter);
         } else {
             txtSemPortifolio.setVisibility(View.VISIBLE);

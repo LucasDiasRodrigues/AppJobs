@@ -1,5 +1,6 @@
 package com.teamappjobs.appjobs.activity;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -15,11 +16,13 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 import com.teamappjobs.appjobs.R;
@@ -107,9 +110,20 @@ public class VitrineActivity extends AppCompatActivity implements AppBarLayout.O
         btnCurtir.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(verificaUsuarioLogado()){
                 VarOnOpenCurtir=true;
                 controlaBotaoCurtida();
                 buscaDetalhesVitrine();
+            }
+                else
+                {
+                    // Mandar usuário para a tela de login/Cadastro
+                    Intent it = new Intent(VitrineActivity.this,LoginActivity.class);
+                    startActivity(it);
+
+
+                }
+
             }
         });
 
@@ -306,9 +320,20 @@ public class VitrineActivity extends AppCompatActivity implements AppBarLayout.O
         }
     }
 
-
-
-
+    public boolean verificaUsuarioLogado(){
+        try {
+        SharedPreferences prefs = this.getSharedPreferences("Configuracoes", this.MODE_PRIVATE);
+        if (prefs.getBoolean("logado", false)) {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+        } catch (NullPointerException exception) {
+        }
+        return false;
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -353,9 +378,17 @@ public class VitrineActivity extends AppCompatActivity implements AppBarLayout.O
     private View.OnClickListener btnSeguirOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
+         if(verificaUsuarioLogado()){
             VarOnOpenSeguir=true;
             controlaBotaoSeguir();
             buscaDetalhesVitrine();
+        }
+         else{
+             // Mandar para a tela de login/Cadastro
+             Intent it = new Intent(VitrineActivity.this,LoginActivity.class);
+             startActivity(it);
+         }
+
         }
     };
 }

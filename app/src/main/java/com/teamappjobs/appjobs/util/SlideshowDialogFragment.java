@@ -1,7 +1,9 @@
 package com.teamappjobs.appjobs.util;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
@@ -19,6 +21,7 @@ import com.squareup.picasso.Picasso;
 import com.teamappjobs.appjobs.R;
 import com.teamappjobs.appjobs.asyncTask.DeletaPortifolioTask;
 import com.teamappjobs.appjobs.modelo.Portifolio;
+import com.teamappjobs.appjobs.modelo.Vitrine;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -31,6 +34,7 @@ import java.util.List;
 public class SlideshowDialogFragment extends DialogFragment {
     private String TAG = SlideshowDialogFragment.class.getSimpleName();
     private ArrayList<Portifolio> portifolio;
+    private Vitrine vitrine;
     private ViewPager viewPager;
     //private MyViewPagerAdapter myViewPagerAdapter;
     private TextView lblCount, lblTitle, lblDate;
@@ -63,10 +67,25 @@ public class SlideshowDialogFragment extends DialogFragment {
 
 
         portifolio = (ArrayList<Portifolio>) getArguments().getSerializable("portifolio");
+        vitrine = (Vitrine)getArguments().getSerializable("vitrine");
         selectedPosition = getArguments().getInt("position");
 
         Log.e(TAG, "position: " + selectedPosition);
         Log.e(TAG, "images size: " + portifolio.size());
+
+        //Verifica se o usuário logado é o dono da vitrine
+        try {
+            SharedPreferences prefs = getActivity().getSharedPreferences("Configuracoes", getActivity().MODE_PRIVATE);
+            if (!prefs.getString("email", "").equals(vitrine.getEmailAnunciante())) {
+                //Oculta o botão de excluir
+                btnDelete.setVisibility(View.INVISIBLE);
+            }
+        }catch (NullPointerException exception){
+            //Oculta o botão de excluir
+            btnDelete.setVisibility(View.INVISIBLE);
+        }
+
+
 
         myViewPagerAdapter = new MyViewPagerAdapter(this);
         viewPager.setAdapter(myViewPagerAdapter);

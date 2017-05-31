@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,8 @@ import android.widget.TextView;
 
 import com.teamappjobs.appjobs.R;
 import com.teamappjobs.appjobs.activity.ChatActivity;
+import com.teamappjobs.appjobs.activity.LoginActivity;
+import com.teamappjobs.appjobs.activity.MainActivity;
 import com.teamappjobs.appjobs.activity.MinhaVitrineActivity;
 import com.teamappjobs.appjobs.activity.VitrineActivity;
 import com.teamappjobs.appjobs.modelo.Vitrine;
@@ -74,12 +77,20 @@ public class VitrineSobreFragment extends Fragment {
         btnChat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(((VitrineActivity)getActivity()).verificaUsuarioLogado()){
                 Intent it = new Intent(getActivity(), ChatActivity.class);
                 it.putExtra("vitrine", vitrine);
                 it.putExtra("origem","faleComOAnunciante");
                 it.putExtra("fotoAnunciante",vitrine.getFoto());
                 it.putExtra("nomeAnunciante",vitrine.getNomeAnunciante());
                 startActivity(it);
+                }
+                else{
+                    // Mandar para a tela de login/Cadastro
+                    Intent it = new Intent(getActivity(), LoginActivity.class);
+                    startActivity(it);
+                }
+
 
             }});
         if(getActivity() instanceof MinhaVitrineActivity){
