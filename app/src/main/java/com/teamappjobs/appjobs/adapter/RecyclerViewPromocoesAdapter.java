@@ -36,6 +36,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class RecyclerViewPromocoesAdapter extends RecyclerView.Adapter<RecyclerViewPromocoesAdapter.MyViewHolder> {
     private Context context;
     private List<Promocao> promocoes;
+    private List<Vitrine> vitrines;
     private LayoutInflater layoutInflater;
     private boolean criador=false;
     private Fragment fragment;
@@ -45,9 +46,10 @@ public class RecyclerViewPromocoesAdapter extends RecyclerView.Adapter<RecyclerV
     private SharedPreferences prefs ;
 
 
-    public RecyclerViewPromocoesAdapter(Context context, List<Promocao> promocoes, Fragment fragment) {
+    public RecyclerViewPromocoesAdapter(Context context, List<Promocao> promocoes, List<Vitrine> vitrines, Fragment fragment) {
         this.context = context;
         this.promocoes = promocoes;
+        this.vitrines=vitrines;
         this.fragment = fragment;
         this.layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 

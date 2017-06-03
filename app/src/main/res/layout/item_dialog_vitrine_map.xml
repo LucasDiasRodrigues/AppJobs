@@ -21,6 +21,14 @@
             android:src="@drawable/image_back_4runner"
             android:transitionName="capaVitrine" />
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:gravity="left"
+        android:orientation="vertical">
+
         <TextView
             android:id="@+id/txtNomeVitrine"
             android:layout_width="wrap_content"
@@ -98,7 +106,7 @@
 
         </LinearLayout>
 
-
+</LinearLayout>
         <LinearLayout
 
             android:id="@+id/layVitrine"

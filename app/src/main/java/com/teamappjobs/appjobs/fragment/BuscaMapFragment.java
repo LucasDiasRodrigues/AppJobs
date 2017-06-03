@@ -40,6 +40,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.squareup.picasso.Picasso;
 import com.teamappjobs.appjobs.R;
+import com.teamappjobs.appjobs.activity.CadastroVitrineActivity;
 import com.teamappjobs.appjobs.activity.MainActivity;
 import com.teamappjobs.appjobs.activity.VitrineActivity;
 import com.teamappjobs.appjobs.modelo.Vitrine;
@@ -86,6 +87,7 @@ public class BuscaMapFragment extends Fragment implements OnMapReadyCallback, Go
     private TextView txtCategoriaVitrine;
     private TextView txtDtCriacao;
     private LinearLayout layoutButton;
+    private TextView txtDistancia;
 
     @Nullable
     @Override
@@ -94,6 +96,12 @@ public class BuscaMapFragment extends Fragment implements OnMapReadyCallback, Go
         EventBus.getDefault().register(this);
         progressBar = (ProgressBar) fragment.findViewById(R.id.progressBar);
 
+        Bundle bundle = this.getArguments();
+        if (bundle != null) {
+            mLatLng = bundle.getParcelable("mLatLng");
+        }
+
+       // verificaGPS();
         //Conexao com a API de Localizacao do PlayServices
         mGoogleApiClient = new GoogleApiClient.Builder(getActivity())
                 .addConnectionCallbacks(this)
@@ -331,6 +339,8 @@ public class BuscaMapFragment extends Fragment implements OnMapReadyCallback, Go
                     new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
                             dialog.cancel();
+                            Intent intent = new Intent(getActivity(), MainActivity.class);
+                            getActivity().startActivity(intent);
                         }
                     });
             android.app.AlertDialog alert = alertDialogBuilder.create();
@@ -350,7 +360,7 @@ public class BuscaMapFragment extends Fragment implements OnMapReadyCallback, Go
     @Override
     public void onPause() {
         super.onPause();
-        verificaGPS();
+        //verificaGPS();
     }
 
 
@@ -393,6 +403,7 @@ public class BuscaMapFragment extends Fragment implements OnMapReadyCallback, Go
             txtNomeVitrine = (TextView) dialog.findViewById(R.id.txtNomeVitrine);
             txtCategoriaVitrine = (TextView) dialog.findViewById(R.id.categoriaVitrine);
             txtDtCriacao = (TextView) dialog.findViewById(R.id.dtCriacaoVitrine);
+            txtDistancia = (TextView) dialog.findViewById(R.id.txtDistancia);
             layoutButton = (LinearLayout) dialog.findViewById(R.id.layVitrine);
 
 
@@ -402,6 +413,30 @@ public class BuscaMapFragment extends Fragment implements OnMapReadyCallback, Go
             txtCategoriaVitrine.setText(vitrineClicada.getDescCategoria());
             txtDtCriacao.setText(format.format(vitrineClicada.getDataCriacao()));
             Button btnVerVitrine = (Button) dialog.findViewById(R.id.btnVerMais);
+
+            try {
+                //Trata a distancia do usuario
+                LatLng auxLoc = mLatLng;
+                Location locUsuario = new Location("");
+                locUsuario.setLatitude(auxLoc.latitude);
+                locUsuario.setLongitude(auxLoc.longitude);
+                //Distancia da vitrine
+
+                String LatLngVitrine[] = vitrineClicada.getLocalizacao().split(",");
+                String LatVitrine = LatLngVitrine[0];
+                String LngVitrine = LatLngVitrine[1];
+                Location locVitrine = new Location("");
+                locVitrine.setLatitude(Location.convert(LatVitrine));
+                locVitrine.setLongitude(Location.convert(LngVitrine));
+                String strDouble = String.format("%.2f", 1.9999);
+                txtDistancia.setText(String.format("%.0f", locUsuario.distanceTo(locVitrine) / 1000) + " Km");
+            }
+            catch (Exception ex)
+            {
+                txtDistancia.setVisibility(View.INVISIBLE);
+            }
+
+
 
             btnVerVitrine.setOnClickListener(new View.OnClickListener() {
                 @Override

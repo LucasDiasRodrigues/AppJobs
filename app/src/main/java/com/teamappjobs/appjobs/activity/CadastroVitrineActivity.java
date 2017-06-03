@@ -153,7 +153,6 @@ public class CadastroVitrineActivity extends AppCompatActivity implements
 
         //Checa a permissão para location
         checkPermission();
-
         VerificaGPS();
         //Pega Localização
         if (mGoogleApiClient == null) {
