@@ -19,7 +19,9 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 import com.teamappjobs.appjobs.R;
+import com.teamappjobs.appjobs.activity.MinhaVitrineActivity;
 import com.teamappjobs.appjobs.activity.PublicarPromocaoActivity;
+import com.teamappjobs.appjobs.activity.VitrineActivity;
 import com.teamappjobs.appjobs.asyncTask.AtivaPromocaoTask;
 import com.teamappjobs.appjobs.asyncTask.CancelaPromocaoTask;
 import com.teamappjobs.appjobs.modelo.Promocao;
@@ -36,18 +38,25 @@ import de.hdodenhof.circleimageview.CircleImageView;
  */
 public class RecyclerViewPromocoesAdapter extends RecyclerView.Adapter<RecyclerViewPromocoesAdapter.MyViewHolder> {
     private Context context;
+<<<<<<< HEAD
     private List<Promocao> promocoes;
+=======
+    private static List<Promocao> promocoes;
+    private  List<Vitrine> vitrines;
+    private LayoutInflater layoutInflater;
+>>>>>>> GitHub/Monica
     private boolean criador=false;
-    private Fragment fragment;
+    private static Fragment fragment;
     private DateFormat dtFormat = new SimpleDateFormat("dd/MM/yyyy");
     private DateFormat dthrFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
     private Vitrine vitrine;
     private SharedPreferences prefs ;
 
 
-    public RecyclerViewPromocoesAdapter(Context context, List<Promocao> promocoes, Fragment fragment) {
+    public RecyclerViewPromocoesAdapter(Context context, List<Promocao> promocoes, List<Vitrine> vitrines, Fragment fragment) {
         this.context = context;
         this.promocoes = promocoes;
+        this.vitrines=vitrines;
         this.fragment = fragment;
 
     }
@@ -71,14 +80,12 @@ public class RecyclerViewPromocoesAdapter extends RecyclerView.Adapter<RecyclerV
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, final int position) {
-
-
         holder.txtNome.setText(promocoes.get(position).getNome());
         holder.txtDescricao.setText(promocoes.get(position).getDescricao());
         holder.txtRegras.setText(promocoes.get(position).getRegras());
         holder.txtDataInicio.setText(dtFormat.format(promocoes.get(position).getDataInicio()));
         holder.txtDataFim.setText(dtFormat.format(promocoes.get(position).getDataFim()));
-
+        holder.txtNomeVitrine.setText(promocoes.get(position).getVitrine().getNome());
 
         //Gambis!!!!!!!!!!!!!!!!!
         try {
@@ -196,6 +203,10 @@ public class RecyclerViewPromocoesAdapter extends RecyclerView.Adapter<RecyclerV
             Picasso.with(context).load(context.getResources().getString(R.string.imageservermini) + promocoes.get(position).getFotoVitrine())
                     .into(holder.imageViewThumb);
         }
+
+
+
+
     }
 
 
@@ -204,7 +215,7 @@ public class RecyclerViewPromocoesAdapter extends RecyclerView.Adapter<RecyclerV
         return promocoes.size();
     }
 
-    public static class MyViewHolder extends RecyclerView.ViewHolder  {
+    public static class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private TextView txtNome;
         private TextView txtDescricao;
         private TextView txtRegras;
@@ -215,19 +226,18 @@ public class RecyclerViewPromocoesAdapter extends RecyclerView.Adapter<RecyclerV
         private TextView txtSituacao;
         private ImageView imageViewCapaVitrine;
         private Toolbar toolbar;
-
-
         private CircleImageView imageViewThumb;
-
+        private TextView txtNomeVitrine;
 
         public MyViewHolder(View itemView) {
             super(itemView);
-
+            itemView.setOnClickListener(this);
             txtNome=(TextView) itemView.findViewById(R.id.txtNome);
             txtDescricao = (TextView) itemView.findViewById(R.id.txtDescricao);
             txtRegras = (TextView) itemView.findViewById(R.id.txtRegras);
             txtDataInicio = (TextView) itemView.findViewById(R.id.txtDataInicio);
             txtDataFim = (TextView) itemView.findViewById(R.id.txtDataFim);
+            txtNomeVitrine=(TextView) itemView.findViewById(R.id.txtNomeVitrine);
 
             //Imagem
             imageViewThumb = (CircleImageView) itemView.findViewById(R.id.imageViewThumb);
@@ -238,13 +248,15 @@ public class RecyclerViewPromocoesAdapter extends RecyclerView.Adapter<RecyclerV
             txtDataCriacao = (TextView) itemView.findViewById(R.id.txtDataCriacao);
             txtSituacao = (TextView) itemView.findViewById(R.id.txtSituacao);
             toolbar = (Toolbar) itemView.findViewById(R.id.toolbar);
-
-
-
-
         }
 
 
-
+        @Override
+        public void onClick(View view) {
+            Vitrine vitrineSelecionada = promocoes.get(getPosition()).getVitrine();
+            Intent intent = new Intent(fragment.getActivity(), VitrineActivity.class);
+            intent.putExtra("vitrine", vitrineSelecionada);
+            fragment.getActivity().startActivity(intent);
+        }
     }
 }

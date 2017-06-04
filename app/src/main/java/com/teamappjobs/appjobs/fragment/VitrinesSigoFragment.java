@@ -105,7 +105,7 @@ public class VitrinesSigoFragment extends Fragment {
 
             txtSemVitrines.setVisibility(View.GONE);
 
-            RecyclerViewPromocoesAdapter adapter = new RecyclerViewPromocoesAdapter(getActivity(), promocoes, this);
+            RecyclerViewPromocoesAdapter adapter = new RecyclerViewPromocoesAdapter(getActivity(), promocoes, vitrines,this);
             RecyclerViewThumbSigoAdapter adapterThumb = new RecyclerViewThumbSigoAdapter(getActivity(), vitrines);
             mLayoutManager = new LinearLayoutManager(getActivity());
             mLayoutManagerThumb = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);

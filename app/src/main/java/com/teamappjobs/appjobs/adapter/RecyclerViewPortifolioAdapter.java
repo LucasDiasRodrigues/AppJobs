@@ -18,6 +18,7 @@ import android.widget.ImageView;
 import com.squareup.picasso.Picasso;
 import com.teamappjobs.appjobs.R;
 import com.teamappjobs.appjobs.modelo.Portifolio;
+import com.teamappjobs.appjobs.modelo.Vitrine;
 import com.teamappjobs.appjobs.util.SlideshowDialogFragment;
 
 import java.util.ArrayList;
@@ -29,11 +30,21 @@ import java.util.List;
 public class RecyclerViewPortifolioAdapter extends RecyclerView.Adapter<RecyclerViewPortifolioAdapter.MyViewHolder>{
     static FragmentActivity activity;
     static ArrayList<Portifolio> portifolio;
+<<<<<<< HEAD
+=======
+    static Vitrine vitrine;
+    LayoutInflater layoutInflater;
+>>>>>>> GitHub/Monica
 
 
-    public RecyclerViewPortifolioAdapter(FragmentActivity activity, ArrayList<Portifolio> portifolio) {
+    public RecyclerViewPortifolioAdapter(FragmentActivity activity, ArrayList<Portifolio> portifolio, Vitrine vitrine) {
         this.activity = activity;
         this.portifolio = portifolio;
+<<<<<<< HEAD
+=======
+        this.vitrine = vitrine;
+        this.layoutInflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+>>>>>>> GitHub/Monica
     }
 
 
@@ -73,6 +84,7 @@ public class RecyclerViewPortifolioAdapter extends RecyclerView.Adapter<Recycler
 
             Bundle bundle = new Bundle();
             bundle.putSerializable("portifolio", portifolio);
+            bundle.putSerializable("vitrine", vitrine);
             bundle.putInt("position", getPosition());
 
             FragmentTransaction ft = activity.getSupportFragmentManager().beginTransaction();

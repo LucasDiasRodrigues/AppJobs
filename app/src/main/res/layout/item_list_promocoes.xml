@@ -20,7 +20,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
@@ -38,10 +38,9 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingLeft="5dp"
+                android:layout_marginBottom="10dp"
                 android:layout_marginTop="4dp"
-                android:layout_marginBottom="4dp"
-                >
+                android:paddingLeft="5dp">
 
 
                 <de.hdodenhof.circleimageview.CircleImageView
@@ -51,16 +50,36 @@
                     android:layout_marginTop="4dp"
                     android:src="@android:drawable/sym_def_app_icon" />
 
-                <TextView
-                    android:id="@+id/txtNome"
-                    android:layout_width="0dp"
+                <LinearLayout
+                    android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_weight="4.78"
-                    android:gravity="center_vertical"
-                    android:paddingLeft="10dp"
-                    android:text="Promoção"
-                    android:textColor="#000000"
-                    android:textSize="18dp" />
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/txtNome"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="4.78"
+                        android:gravity="center_vertical"
+                        android:paddingLeft="10dp"
+                        android:text="Promoção"
+                        android:textColor="#000000"
+                        android:textSize="18dp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/txtNomeVitrine"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="4.78"
+                        android:gravity="center_vertical"
+                        android:paddingLeft="10dp"
+                        android:text="Promoção"
+                        android:textSize="16dp" />
+
+                </LinearLayout>
+
 
                 <android.support.v7.widget.Toolbar
                     android:id="@+id/toolbar"
@@ -77,6 +96,7 @@
                 android:layout_height="match_parent"
                 android:layout_marginLeft="13dp"
                 android:paddingLeft="53dp"
+
                 android:text="@string/descricao.."
                 android:textSize="16dp"
                 android:textStyle="bold" />
@@ -131,11 +151,11 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_marginLeft="13dp"
-                android:layout_marginStart="13dp"
-                android:layout_marginRight="16dp"
-                android:layout_marginEnd="16dp"
                 android:layout_marginBottom="10dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginLeft="13dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginStart="13dp"
                 android:paddingLeft="53dp"
                 android:paddingStart="53dp">
 

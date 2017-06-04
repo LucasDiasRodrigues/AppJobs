@@ -1,16 +1,26 @@
 package com.teamappjobs.appjobs.activity;
 
 import android.app.ActivityOptions;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.ViewPager;
@@ -25,7 +35,14 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationListener;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.squareup.picasso.Picasso;
 import com.teamappjobs.appjobs.R;
@@ -44,11 +61,21 @@ import com.teamappjobs.appjobs.util.BuscarEventBus;
 
 import org.greenrobot.eventbus.EventBus;
 
+import java.io.IOException;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
+
+    //Variaveis para obter Localização
+    public LatLng mLatLng;
+    Boolean apiConnect;
+    Boolean GPSConnect = false;
+    GoogleApiClient mGoogleApiClient;
+    LocationRequest mLocationRequest;
+    private ProgressDialog progress;
+    private final int MY_PERMISSIONS_REQUEST_FINE_LOCATION = 123;
 
     //Fabs
     private FloatingActionButton fabCadastrarVitrine;
@@ -82,7 +109,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     //Firebase
     private FirebaseAnalytics mFirebaseAnalytics;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -96,6 +122,27 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         //Navigation
         frameLayout = findViewById(R.id.frameLayout);
         configuraNavigationView();
+
+            //Checa a permissão para location
+            checkPermission();
+            VerificaGPS();
+
+        //Pega Localização
+        if (mGoogleApiClient == null) {
+            mGoogleApiClient = new GoogleApiClient.Builder(this)
+                    .addConnectionCallbacks((GoogleApiClient.ConnectionCallbacks) this)
+                    .addOnConnectionFailedListener((GoogleApiClient.OnConnectionFailedListener) this)
+                    .addApi(LocationServices.API)
+                    .build();
+        }
+
+        //Configuracao do objeto de monitoramento de localizacao
+        mLocationRequest = new LocationRequest();
+        mLocationRequest.setInterval(1000); //1 segundo
+        mLocationRequest.setFastestInterval(500);
+        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+
+
 
         //Fabs
         fabExemplo = (FloatingActionButton) findViewById(R.id.fab);
@@ -222,7 +269,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return super.onOptionsItemSelected(item);
     }
 
-
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
@@ -341,7 +387,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             frameLayout.setVisibility(View.GONE);
             mTabLayout.setVisibility(View.VISIBLE);
             mViewPager.setVisibility(View.VISIBLE);
-            pagerAdapterBusca = new PagerAdapterBuscar(getSupportFragmentManager(), this, numTabs);
+            pagerAdapterBusca = new PagerAdapterBuscar(getSupportFragmentManager(), this, numTabs,mLatLng);
             mViewPager.setAdapter(pagerAdapterBusca);
             mTabLayout.setupWithViewPager(mViewPager);
             isBuscaActive = true;
@@ -404,6 +450,137 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public void recebeDadosPerfil(Usuario usuario) {
         this.usuario = usuario;
         Picasso.with(this).load(getResources().getString(R.string.imageservermini) + usuario.getImagemPerfil()).into(imagemPerfil);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        mGoogleApiClient.connect();
+    }
+
+    @Override
+    protected void onPause(){
+        super.onPause();
+        GPSConnect=false;
+        VerificaGPS();
+    }
+    @Override
+    protected void onStop() {
+        mGoogleApiClient.disconnect();
+        super.onStop();
+    }
+
+    @Override
+    public void onConnected(Bundle bundle) {
+        apiConnect = true;
+
+        if (mGoogleApiClient.isConnected() && GPSConnect) {
+            startLocationUpdates();
+            progress = ProgressDialog.show(this, "Aguarde...", getResources().getString(R.string.obtendoLocalizacao), true, true);
+            progress.setCancelable(false);
+        }
+        else {
+
+    }
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+        apiConnect = false;
+    }
+
+    @Override
+    public void onConnectionFailed(ConnectionResult connectionResult) {
+        apiConnect = false;
+    }
+
+    protected void startLocationUpdates() {
+        if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED) {
+            LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
+        }
+    }
+
+    protected void stopLocationUpdates() {
+        LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+
+        if (location.getAccuracy() <= 500) {
+            mLatLng = new LatLng(location.getLatitude(), location.getLongitude());
+            stopLocationUpdates();
+            progress.dismiss();
+
+
+                }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+
+        switch (requestCode) {
+            case MY_PERMISSIONS_REQUEST_FINE_LOCATION: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    startLocationUpdates();
+                } else {
+                    new android.app.AlertDialog.Builder(this).setTitle(getResources().getString(R.string.permissaoNegada))
+                            .setMessage(getString(R.string.permissaoNegadaMsg))
+                            .setPositiveButton(getString(R.string.permitir), new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    checkPermission();
+                                }
+                            })
+                            .setNegativeButton(getString(R.string.negar), new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    mLatLng = null;
+                                }
+                            })
+                            .setCancelable(false)
+                            .show();
+                }
+            }
+        }
+    }
+
+    public void checkPermission() {
+        // Here, thisActivity is the current activity
+        if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},
+                    MY_PERMISSIONS_REQUEST_FINE_LOCATION);
+        }
+    }
+    public void VerificaGPS() {
+        LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        if (!locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
+            /* Solicita ao usu�rio para ligar o GPS
+            android.app.AlertDialog.Builder alertDialogBuilder = new android.app.AlertDialog.Builder(this);
+            alertDialogBuilder.setMessage(R.string.gpsDesligado)
+                    .setCancelable(false).setPositiveButton(
+                    "Sim",
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            // Intent para entrar nas configura��es de localiza��o
+                            Intent callGPSSettingIntent = new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                            startActivity(callGPSSettingIntent);
+                        }
+                    });
+            alertDialogBuilder.setNegativeButton("Não",
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            dialog.cancel();
+                        }
+                    });
+                */
+        }
+        else {
+            GPSConnect = true;
+        }
     }
 
 }

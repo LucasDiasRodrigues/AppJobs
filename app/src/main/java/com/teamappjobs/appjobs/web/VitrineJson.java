@@ -5,7 +5,6 @@ import android.util.Log;
 
 import com.teamappjobs.appjobs.modelo.Portifolio;
 import com.teamappjobs.appjobs.modelo.Promocao;
-import com.teamappjobs.appjobs.modelo.Usuario;
 import com.teamappjobs.appjobs.modelo.Vitrine;
 
 import org.json.JSONArray;
@@ -17,7 +16,6 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -99,11 +97,6 @@ public class VitrineJson {
         Log.i("JsonCurtirVitrine = ", jsonStringer.toString());
         return jsonStringer.toString();
     }
-
-
-
-
-
 
     public Bundle DetalhesVitrineJsonToDetalhesVitrine(String data) {
         Bundle bundle = new Bundle();
@@ -346,7 +339,6 @@ public class VitrineJson {
         return jsonStringer.toString();
     }
 
-
     public Promocao JsonToPromocao(String data) {
         Promocao promocao = new Promocao();
         try {
@@ -377,6 +369,12 @@ public class VitrineJson {
             if (!(jo.getString("dthr_criacao")).equals("null")) {
                 promocao.setDataHrCriacao(sqlDateHrFormat.parse(jo.getString("dthr_criacao")));
             }
+            // Monica
+            Vitrine vitrine=  JsonToVitrine(jo.getString("vitrine"));
+            promocao.setVitrine(vitrine);
+            // Fim - Monica
+
+
 
         } catch (JSONException e) {
             e.printStackTrace();

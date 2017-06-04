@@ -112,9 +112,13 @@ public class HomePopularesFragment extends Fragment {
             //txtTitulo.setVisibility(View.VISIBLE);
             txtSemVitrines.setVisibility(View.GONE);
 
+<<<<<<< HEAD
 
 
             adapter = new RecyclerViewHomePopularesAdapter(getActivity(), user,  vitrines, "Melhor avaliados", "Veja quais são as vitrines mais curtidas");
+=======
+            adapter = new RecyclerViewHomePopularesAdapter(getActivity(), vitrines, "Melhor avaliados", "Veja quais são os profissionais mais curtidos");
+>>>>>>> GitHub/Monica
             mLayoutManager = new LinearLayoutManager(getActivity());
             mRecyclerView.setLayoutManager(mLayoutManager);
             mRecyclerView.setAdapter(adapter);

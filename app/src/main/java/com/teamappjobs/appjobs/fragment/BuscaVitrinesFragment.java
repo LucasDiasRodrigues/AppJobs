@@ -16,7 +16,9 @@ import android.widget.AbsListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.teamappjobs.appjobs.R;
+import com.teamappjobs.appjobs.activity.MainActivity;
 import com.teamappjobs.appjobs.adapter.RecyclerViewHomeTimeLineAdapter;
 import com.teamappjobs.appjobs.asyncTask.ListaNovidadesTask;
 import com.teamappjobs.appjobs.asyncTask.ListaResultadoBuscaTask;
@@ -40,7 +42,6 @@ public class BuscaVitrinesFragment extends Fragment {
     private ProgressBar progressBarUpdate;
     private RecyclerViewHomeTimeLineAdapter adapter;
     private List<Vitrine> vitrines= new ArrayList<Vitrine>();
-
     private RecyclerView listVitrines;
     private TextView txtSemVitrines;
 

@@ -83,13 +83,9 @@ public class RecyclerViewMinhasVitrinesAdapter extends RecyclerView.Adapter<Recy
             imageVitrine = (ImageView) itemView.findViewById(R.id.imageViewCapa);
             txtNomeVitrine = (TextView) itemView.findViewById(R.id.txtNomeVitrine);
             txtCategoriaVitrine = (TextView) itemView.findViewById(R.id.categoriaVitrine);
-
             txtDtCriacao = (TextView) itemView.findViewById(R.id.dtCriacaoVitrine);
             txtSituacao = (TextView) itemView.findViewById(R.id.txtSituacao);
-
         }
-
-
         @Override
         public void onClick(View v) {
             Vitrine vitrineSelecionada = vitrines.get(getPosition());

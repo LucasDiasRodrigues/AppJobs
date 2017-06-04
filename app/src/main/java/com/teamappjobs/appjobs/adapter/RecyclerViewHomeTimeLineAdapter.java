@@ -2,11 +2,14 @@ package com.teamappjobs.appjobs.adapter;
 
 import android.app.Activity;
 import android.app.ActivityOptions;
+import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.location.Location;
 import android.os.Build;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,10 +17,14 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.android.gms.ads.internal.request.StringParcel;
+import com.google.android.gms.maps.model.LatLng;
 import com.squareup.picasso.Picasso;
 import com.teamappjobs.appjobs.R;
+import com.teamappjobs.appjobs.activity.MainActivity;
 import com.teamappjobs.appjobs.activity.MinhaVitrineActivity;
 import com.teamappjobs.appjobs.activity.VitrineActivity;
+import com.teamappjobs.appjobs.fragment.BuscaVitrinesFragment;
 import com.teamappjobs.appjobs.modelo.Vitrine;
 
 import java.text.DateFormat;
@@ -39,13 +46,26 @@ public class RecyclerViewHomeTimeLineAdapter extends RecyclerView.Adapter<Recycl
     private static final int tipo_item = 1;
     private static String user;
 
+<<<<<<< HEAD
     public RecyclerViewHomeTimeLineAdapter(Activity activity ,String user, List<Vitrine> vitrines, String headerTitulo, String headerSub) {
+=======
+
+    public RecyclerViewHomeTimeLineAdapter(Activity activity, List<Vitrine> vitrines, String headerTitulo, String headerSub) {
+
+>>>>>>> GitHub/Monica
         this.activity = activity;
         this.vitrines = vitrines;
         this.GEO = GEO;
         this.headerTitulo = headerTitulo;
         this.headerSubtitulo = headerSub;
+<<<<<<< HEAD
         this.user = user;
+=======
+        prefs = activity.getSharedPreferences("Configuracoes", Context.MODE_PRIVATE);
+        user = prefs.getString("email", "");
+
+
+>>>>>>> GitHub/Monica
     }
 
 
@@ -81,6 +101,28 @@ public class RecyclerViewHomeTimeLineAdapter extends RecyclerView.Adapter<Recycl
             itemViewHolder.txtNomeVitrine.setText(vitrines.get(currentPosition).getNome());
             itemViewHolder.txtCategoriaVitrine.setText(vitrines.get(currentPosition).getDescCategoria());
             itemViewHolder.txtDtCriacao.setText(format.format(vitrines.get(currentPosition).getDataCriacao()));
+
+            try {
+                //Trata a distancia do usuario
+                LatLng auxLoc = ((MainActivity) activity).mLatLng;
+                Location locUsuario = new Location("");
+                locUsuario.setLatitude(auxLoc.latitude);
+                locUsuario.setLongitude(auxLoc.longitude);
+                //Distancia da vitrine
+
+                String LatLngVitrine[] = vitrines.get(currentPosition).getLocalizacao().split(",");
+                String LatVitrine = LatLngVitrine[0];
+                String LngVitrine = LatLngVitrine[1];
+                Location locVitrine = new Location("");
+                locVitrine.setLatitude(Location.convert(LatVitrine));
+                locVitrine.setLongitude(Location.convert(LngVitrine));
+                String strDouble = String.format("%.2f", 1.9999);
+                itemViewHolder.txtDistancia.setText(String.format("%.0f", locUsuario.distanceTo(locVitrine) / 1000) + " Km");
+                }
+                catch (Exception ex)
+                {
+                    itemViewHolder.txtDistancia.setVisibility(View.INVISIBLE);
+                }
         }
 
     }
@@ -105,6 +147,7 @@ public class RecyclerViewHomeTimeLineAdapter extends RecyclerView.Adapter<Recycl
         private TextView txtSubcatVitrine;
         private TextView txtDtCriacao;
         private Button btnVerVitrine;
+        private  TextView txtDistancia;
 
         public ItemViewHolder(View itemView) {
             super(itemView);
@@ -115,6 +158,7 @@ public class RecyclerViewHomeTimeLineAdapter extends RecyclerView.Adapter<Recycl
             //  txtSubcatVitrine = (TextView) itemView.findViewById(R.id.subcategoriaVitrine);
             txtDtCriacao = (TextView) itemView.findViewById(R.id.dtCriacaoVitrine);
             btnVerVitrine = (Button) itemView.findViewById(R.id.btnVerMais);
+            txtDistancia =(TextView) itemView.findViewById(R.id.txtDistancia);
         }
 
 
