@@ -1,6 +1,7 @@
 package com.teamappjobs.appjobs.fragment;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -37,6 +38,8 @@ public class HomePopularesFragment extends Fragment {
 
     private SwipeRefreshLayout mSwipeRefreshLayout;
 
+    SharedPreferences prefs;
+    String user;
 
     // Variaveis para o scroll listener
     private boolean userScrolled = true;
@@ -46,6 +49,9 @@ public class HomePopularesFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View fragment = inflater.inflate(R.layout.fragment_home_populares, container, false);
+
+        prefs = getActivity().getSharedPreferences("Configuracoes", Context.MODE_PRIVATE);
+        user = prefs.getString("email", "");
 
         listVitrines = (RecyclerView) fragment.findViewById(R.id.recycler_view_vitrines_populares);
         txtSemVitrines = (TextView) fragment.findViewById(R.id.txtSemVitrines);
@@ -106,7 +112,9 @@ public class HomePopularesFragment extends Fragment {
             //txtTitulo.setVisibility(View.VISIBLE);
             txtSemVitrines.setVisibility(View.GONE);
 
-            adapter = new RecyclerViewHomePopularesAdapter(getActivity(), vitrines, "Melhor avaliados", "Veja quais são as vitrines mais curtidas");
+
+
+            adapter = new RecyclerViewHomePopularesAdapter(getActivity(), user,  vitrines, "Melhor avaliados", "Veja quais são as vitrines mais curtidas");
             mLayoutManager = new LinearLayoutManager(getActivity());
             mRecyclerView.setLayoutManager(mLayoutManager);
             mRecyclerView.setAdapter(adapter);

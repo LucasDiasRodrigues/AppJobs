@@ -29,20 +29,18 @@ import java.util.List;
 public class RecyclerViewMinhasVitrinesAdapter extends RecyclerView.Adapter<RecyclerViewMinhasVitrinesAdapter.MyViewHolder> {
     private static Activity activity;
     private static List<Vitrine> vitrines;
-    private LayoutInflater layoutInflater;
 
     private DateFormat format = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
 
     public RecyclerViewMinhasVitrinesAdapter(Activity activity, List<Vitrine> vitrines) {
         this.activity = activity;
         this.vitrines = vitrines;
-        this.layoutInflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
 
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = layoutInflater.inflate(R.layout.item_list_minhas_vitrines, parent, false);
+        View view = activity.getLayoutInflater().inflate(R.layout.item_list_minhas_vitrines, parent, false);
         MyViewHolder myViewHolder = new MyViewHolder(view);
         return myViewHolder;
     }

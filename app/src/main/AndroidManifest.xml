@@ -16,8 +16,8 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
-
     <application
+        android:name=".Applicaton"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -27,9 +27,7 @@
             android:name=".activity.MainActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="adjustPan|adjustNothing"
-
-            >
+            android:windowSoftInputMode="adjustPan|adjustNothing">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -39,7 +37,6 @@
         <activity
             android:name=".activity.CadastroUsuarioActivity"
             android:label="@string/title_activity_cadastro_usuario" />
-
         <activity
             android:name=".activity.CadastroVitrineActivity"
             android:theme="@style/AppTheme.NoActionBar" />
@@ -52,30 +49,24 @@
             android:label="@string/title_activity_minha_vitrine"
             android:theme="@style/AppTheme" />
         <activity android:name=".activity.CadastroPortifolioActivity" />
-
         <activity
             android:name=".activity.ConfiguracaoContaActivity"
             android:configChanges="orientation"
             android:label="@string/title_activity_configuracao_conta"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
-
         <activity
             android:name=".activity.VitrineActivity"
             android:label="@string/title_activity_vitrine"
             android:theme="@style/AppTheme" />
-
         <activity
             android:name=".activity.ChatActivity"
             android:theme="@style/AppTheme.NoActionBar" />
-
-
-        <activity android:name=".activity.PublicarPromocaoActivity"></activity>
+        <activity android:name=".activity.PublicarPromocaoActivity" />
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyBS9FUIBXVDckYzHaKUnbM9r0-FVh7DMvs" />
-
 
         <!-- [START firebase_service] -->
         <service android:name=".FCM.MyFirebaseMessagingService">
@@ -92,10 +83,13 @@
         </service>
         <!-- [END firebase_iid_service] -->
 
+
         <!-- [Facebook Meta-Data] -->
-        <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="@string/facebook_app_id"/>
+        <meta-data
+            android:name="com.facebook.sdk.ApplicationId"
+            android:value="@string/facebook_app_id" />
 
-
+        <activity android:name=".activity.BuscaActivity"></activity>
     </application>
 
 </manifest>

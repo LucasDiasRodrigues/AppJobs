@@ -7,6 +7,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.teamappjobs.appjobs.activity.BuscaActivity;
 import com.teamappjobs.appjobs.activity.CadastroVitrineActivity;
 import com.teamappjobs.appjobs.modelo.Categoria;
 import com.teamappjobs.appjobs.web.CategoriaJson;
@@ -54,14 +55,17 @@ public class ListaCategoriasTask extends AsyncTask {
         super.onPostExecute(o);
         progress.dismiss();
 
-        try {
-            List<Categoria> categorias = (List<Categoria>) o;
-            ((CadastroVitrineActivity) context).AtualizaListaCategoria(categorias);
+        if(context instanceof CadastroVitrineActivity){
+            try {
+                List<Categoria> categorias = (List<Categoria>) o;
+                ((CadastroVitrineActivity) context).AtualizaListaCategoria(categorias);
+            } catch (Exception ex) {Log.i("erro", ex.toString());}
+        } else if (context instanceof BuscaActivity){
+            try {
+                List<Categoria> categorias = (List<Categoria>) o;
+                ((BuscaActivity) context).AtualizaListaCategoria(categorias);
 
-        } catch (Exception ex) {
-            Log.i("erro", ex.toString());
+            } catch (Exception ex) {Log.i("erro", ex.toString());}
         }
-
-
     }
 }

@@ -1,5 +1,6 @@
 package com.teamappjobs.appjobs.adapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -36,7 +37,6 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class RecyclerViewPromocoesAdapter extends RecyclerView.Adapter<RecyclerViewPromocoesAdapter.MyViewHolder> {
     private Context context;
     private List<Promocao> promocoes;
-    private LayoutInflater layoutInflater;
     private boolean criador=false;
     private Fragment fragment;
     private DateFormat dtFormat = new SimpleDateFormat("dd/MM/yyyy");
@@ -49,8 +49,6 @@ public class RecyclerViewPromocoesAdapter extends RecyclerView.Adapter<RecyclerV
         this.context = context;
         this.promocoes = promocoes;
         this.fragment = fragment;
-        this.layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
 
     }
 
@@ -59,13 +57,12 @@ public class RecyclerViewPromocoesAdapter extends RecyclerView.Adapter<RecyclerV
         this.promocoes = promocoes;
         this.vitrine=vitrine;
         this.fragment = fragment;
-        this.layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
 
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = layoutInflater.inflate(R.layout.item_list_promocoes, parent, false);
+        View view = ((Activity)context).getLayoutInflater().inflate(R.layout.item_list_promocoes, parent, false);
         MyViewHolder viewHolder = new MyViewHolder(view);
         prefs=  context.getSharedPreferences("Configuracoes", Context.MODE_PRIVATE);
 

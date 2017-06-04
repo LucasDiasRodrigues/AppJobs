@@ -1,5 +1,7 @@
 package com.teamappjobs.appjobs.fragment;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -39,6 +41,9 @@ public class HomeHomeFragment extends Fragment {
     private RecyclerView listVitrines;
     private TextView txtSemVitrines;
 
+    private SharedPreferences prefs;
+    private String user;
+
 
     // Variaveis para o scroll listener
     private boolean userScrolled = true;
@@ -49,6 +54,9 @@ public class HomeHomeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View fragment = inflater.inflate(R.layout.fragment_home_home, container, false);
 
+        prefs = getActivity().getSharedPreferences("Configuracoes", Context.MODE_PRIVATE);
+        user = prefs.getString("email", "");
+
         listVitrines = (RecyclerView) fragment.findViewById(R.id.recycler_view_vitrines);
         txtSemVitrines = (TextView) fragment.findViewById(R.id.txtSemVitrines);
 
@@ -57,7 +65,7 @@ public class HomeHomeFragment extends Fragment {
         mRecyclerView = (RecyclerView) fragment.findViewById(R.id.recyclerview);
 
         mSwipeRefreshLayout = (SwipeRefreshLayout) fragment.findViewById(R.id.swiperefresh);
-        mSwipeRefreshLayout.setColorSchemeResources(R.color.colorAccent,R.color.colorPrimary,R.color.colorPrimaryDark);
+        mSwipeRefreshLayout.setColorSchemeResources(R.color.colorAccent, R.color.colorPrimary, R.color.colorPrimaryDark);
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -109,7 +117,7 @@ public class HomeHomeFragment extends Fragment {
         if (vitrines.size() > 0) {
             Log.i("atualizaListaVitr", "");
             txtSemVitrines.setVisibility(View.GONE);
-            adapter = new RecyclerViewHomeTimeLineAdapter(getActivity(), vitrines, "Novos anúncios","");
+            adapter = new RecyclerViewHomeTimeLineAdapter(getActivity(), user, vitrines, "Novos anúncios", "");
             mLayoutManager = new LinearLayoutManager(getActivity());
             mRecyclerView.setLayoutManager(mLayoutManager);
             mRecyclerView.setAdapter(adapter);

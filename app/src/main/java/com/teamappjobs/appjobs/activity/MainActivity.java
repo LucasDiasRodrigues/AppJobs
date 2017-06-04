@@ -61,7 +61,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private int numTabs = 2;
     private TabLayout mTabLayout;
 
-    //Naavigation
+    //Navigation
     private NavigationView navigationView;
     private View frameLayout;
     private CircleImageView imagemPerfil;
@@ -149,27 +149,27 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             menu.findItem(R.id.sair).setVisible(false);
         }
 
-        // Barra de perquisa
-        final MenuItem searchItem = menu.findItem(R.id.action_search);
-        searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                ligaTabsMain(false);
-                ligaTabsBusca(true);
-                Pesquisa(query);
-                fabCadastrarVitrine.hide();
-                fabExemplo.hide();
-                fabCadastrarVitrine.hide();
-                toolbar.setTitle(query);
-                return true;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String searchQuery) {
-                return true;
-            }
-        });
+//        // Barra de perquisa
+//        final MenuItem searchItem = menu.findItem(R.id.action_search);
+//        searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+//        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+//            @Override
+//            public boolean onQueryTextSubmit(String query) {
+//                ligaTabsMain(false);
+//                ligaTabsBusca(true);
+//                Pesquisa(query);
+//                fabCadastrarVitrine.hide();
+//                fabExemplo.hide();
+//                fabCadastrarVitrine.hide();
+//                toolbar.setTitle(query);
+//                return true;
+//            }
+//
+//            @Override
+//            public boolean onQueryTextChange(String searchQuery) {
+//                return true;
+//            }
+//        });
         return true;
     }
 
@@ -208,7 +208,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         } else if (id == android.R.id.home) {
             onBackPressed();
             return true;
-        }
+        } else if (id == R.id.action_search) {
+            Intent intent = new Intent(this, BuscaActivity.class);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+
+                startActivity(intent,
+                        ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
+            } else {
+                startActivity(intent);
+            }
+            return true;
+    }
         return super.onOptionsItemSelected(item);
     }
 

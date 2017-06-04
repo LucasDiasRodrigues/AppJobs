@@ -138,27 +138,25 @@ public class VitrineActivity extends AppCompatActivity implements AppBarLayout.O
 
         mTabLayout = (TabLayout) findViewById(R.id.tabs);
         mTabLayout.setupWithViewPager(mViewPager);
+
+        mProfileImage.setAlpha(0f);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-
         buscaDetalhesVitrine();
-
+        mProfileImage.animate().setStartDelay(800).alpha(1);
     }
 
     @Override
     public void onBackPressed() {
         mIsAvatarShown = false;
-        mProfileImage.animate().scaleY(0).scaleX(0).setDuration(50).start();
+        mProfileImage.animate().setStartDelay(0).alpha(0);
         super.onBackPressed();
     }
 
     @Override
-
-
-
     public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
         if (mMaxScrollSize == 0)
             mMaxScrollSize = appBarLayout.getTotalScrollRange();
@@ -167,18 +165,17 @@ public class VitrineActivity extends AppCompatActivity implements AppBarLayout.O
 
         if (percentage >= PERCENTAGE_TO_ANIMATE_AVATAR && mIsAvatarShown) {
             mIsAvatarShown = false;
-            mProfileImage.animate().scaleY(0).scaleX(0).setDuration(200).start();
+            mProfileImage.animate().setStartDelay(0).scaleY(0).scaleX(0).setDuration(200).start();
         }
 
         if (percentage <= PERCENTAGE_TO_ANIMATE_AVATAR && !mIsAvatarShown) {
             mIsAvatarShown = true;
 
-            mProfileImage.animate()
+            mProfileImage.animate().setStartDelay(0)
                     .scaleY(1).scaleX(1)
                     .start();
         }
     }
-
 
     public void buscaDetalhesVitrine() {
         BuscaDetalhesVitrineTask task = new BuscaDetalhesVitrineTask(this, vitrine);

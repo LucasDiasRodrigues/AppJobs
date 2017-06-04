@@ -5,6 +5,7 @@ import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.teamappjobs.appjobs.activity.BuscaActivity;
 import com.teamappjobs.appjobs.activity.MainActivity;
 import com.teamappjobs.appjobs.modelo.Vitrine;
 import com.teamappjobs.appjobs.web.HttpConnection;
@@ -26,11 +27,20 @@ public class ListaResultadoBuscaTask extends AsyncTask {
     private Activity activity;
     private String palavras;
 
+    private int codCategoria = 0;
+    private boolean isByCategoria;
+
     public ListaResultadoBuscaTask(Activity activity, String palavras) {
         this.activity = activity;
         this.palavras = palavras;
     }
 
+    //Por Categoria
+    public ListaResultadoBuscaTask(Activity activity, int codCategoria) {
+        this.activity = activity;
+        this.codCategoria = codCategoria;
+        this.isByCategoria = true;
+    }
 
     @Override
     protected void onPreExecute() {
@@ -38,17 +48,20 @@ public class ListaResultadoBuscaTask extends AsyncTask {
         progress = ProgressDialog.show(activity, "Pesquisando...", "", true, true);
     }
 
-
     @Override
     protected Object doInBackground(Object[] objects) {
         String answer;
 
-        method = "lista_resultado_pesquisa-json";
-
-
-        PesquisaJson json = new PesquisaJson();
-        String data = json.PesquisaToJson(palavras.trim());
-
+        String data;
+        if (!isByCategoria) {
+            method = "lista_resultado_pesquisa-json";
+            PesquisaJson json = new PesquisaJson();
+            data = json.PesquisaToJson(palavras.trim());
+        } else {
+            method = "lista_resultado_pesquisa_categoria-json";
+            PesquisaJson json = new PesquisaJson();
+            data = json.PesquisaCatToJson(codCategoria);
+        }
 
         answer = HttpConnection.getSetDataWeb(this.url, this.method, data);
         Log.i("RespostaPopulares", answer);
@@ -69,8 +82,8 @@ public class ListaResultadoBuscaTask extends AsyncTask {
             ((MainActivity) activity).RecebeLista((List<Vitrine>) o);
         }
 
-
+        if (activity instanceof BuscaActivity) {
+            ((BuscaActivity) activity).RecebeLista((List<Vitrine>) o);
+        }
     }
-
-
 }

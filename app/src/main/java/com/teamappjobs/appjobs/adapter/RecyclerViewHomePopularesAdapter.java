@@ -29,7 +29,6 @@ public class RecyclerViewHomePopularesAdapter extends RecyclerView.Adapter<Recyc
 
     private static Activity activity;
     private static List<Vitrine> vitrines;
-    private LayoutInflater layoutInflater;
     private DateFormat format = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
     private boolean GEO;
     private String headerTitulo;
@@ -40,28 +39,25 @@ public class RecyclerViewHomePopularesAdapter extends RecyclerView.Adapter<Recyc
     private static SharedPreferences prefs;
     private static String user;
 
-    public RecyclerViewHomePopularesAdapter(Activity activity, List<Vitrine> vitrines, String headerTitulo, String headerSub) {
+    public RecyclerViewHomePopularesAdapter(Activity activity, String user, List<Vitrine> vitrines, String headerTitulo, String headerSub) {
         this.activity = activity;
         this.vitrines = vitrines;
-        this.layoutInflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         this.GEO = GEO;
         this.headerTitulo = headerTitulo;
         this.headerSubtitulo = headerSub;
-
-        prefs = activity.getSharedPreferences("Configuracoes", Context.MODE_PRIVATE);
-        user = prefs.getString("email", "");
+        this.user = user;
     }
 
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         if (viewType == tipo_header) {
-            View view = layoutInflater.inflate(R.layout.item_header_recyclerview, parent, false);
+            View view = activity.getLayoutInflater().inflate(R.layout.item_header_recyclerview, parent, false);
             HeaderViewHolder headerViewHolder = new HeaderViewHolder(view);
             return headerViewHolder;
 
         } else {
-            View view = layoutInflater.inflate(R.layout.item_list_vitrines_populares, parent, false);
+            View view = activity.getLayoutInflater().inflate(R.layout.item_list_vitrines_populares, parent, false);
             ItemViewHolder itemViewHolder = new ItemViewHolder(view);
             return itemViewHolder;
         }

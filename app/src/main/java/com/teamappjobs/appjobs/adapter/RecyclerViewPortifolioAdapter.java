@@ -29,20 +29,18 @@ import java.util.List;
 public class RecyclerViewPortifolioAdapter extends RecyclerView.Adapter<RecyclerViewPortifolioAdapter.MyViewHolder>{
     static FragmentActivity activity;
     static ArrayList<Portifolio> portifolio;
-    LayoutInflater layoutInflater;
 
 
     public RecyclerViewPortifolioAdapter(FragmentActivity activity, ArrayList<Portifolio> portifolio) {
         this.activity = activity;
         this.portifolio = portifolio;
-        this.layoutInflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
 
 
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = layoutInflater.inflate(R.layout.item_list_portifolio, parent, false);
+        View view = activity.getLayoutInflater().inflate(R.layout.item_list_portifolio, parent, false);
         MyViewHolder myViewHolder = new MyViewHolder(view);
         return myViewHolder;
     }

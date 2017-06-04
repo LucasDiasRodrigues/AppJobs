@@ -20,13 +20,25 @@ public class PesquisaJson {
     public String PesquisaToJson(String palavras) {
         // Log.i("corredor json", corredor.toString());
 
-
-
         JSONObject jo = new JSONObject();
         try {
             jo.put("palavras", palavras);
 
 
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        Log.i("Json PESQUISA= ", jo.toString());
+        return jo.toString();
+    }
+
+    public String PesquisaCatToJson(int codSubCat) {
+        // Log.i("corredor json", corredor.toString());
+
+        JSONObject jo = new JSONObject();
+        try {
+            jo.put("codSubCat", codSubCat);
         } catch (JSONException e) {
             e.printStackTrace();
         }

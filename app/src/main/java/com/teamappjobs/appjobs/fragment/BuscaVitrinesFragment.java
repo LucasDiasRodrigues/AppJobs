@@ -1,5 +1,7 @@
 package com.teamappjobs.appjobs.fragment;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -46,6 +48,9 @@ public class BuscaVitrinesFragment extends Fragment {
 
     private SwipeRefreshLayout mSwipeRefreshLayout;
 
+    private SharedPreferences prefs;
+    private String user;
+
     // Variaveis para o scroll listener
     private boolean userScrolled = true;
     int pastVisiblesItems, visibleItemCount, totalItemCount;
@@ -54,6 +59,9 @@ public class BuscaVitrinesFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View fragment = inflater.inflate(R.layout.fragment_home_home, container, false);
+
+        prefs = getActivity().getSharedPreferences("Configuracoes", Context.MODE_PRIVATE);
+        user = prefs.getString("email", "");
 
         listVitrines = (RecyclerView) fragment.findViewById(R.id.recycler_view_vitrines);
         txtSemVitrines = (TextView) fragment.findViewById(R.id.txtSemVitrines);
@@ -96,7 +104,6 @@ public class BuscaVitrinesFragment extends Fragment {
                     userScrolled = false;
 
                     updateRecyclerView();
-
                 }
             }
         });
@@ -122,13 +129,15 @@ public class BuscaVitrinesFragment extends Fragment {
         if(event.getVitrines().size() > 0){
             Log.i("atualizaListaVitr","");
 
-            adapter = new RecyclerViewHomeTimeLineAdapter(getActivity(),event.getVitrines(),"Vitrines encontradas","");
+            adapter = new RecyclerViewHomeTimeLineAdapter(getActivity(), user, event.getVitrines(),"Vitrines encontradas","");
             mLayoutManager = new LinearLayoutManager(getActivity());
             mRecyclerView.setLayoutManager(mLayoutManager);
             mRecyclerView.setAdapter(adapter);
         } else {
             txtSemVitrines.setText("Nenhum resultado encontrado");
             txtSemVitrines.setVisibility(View.VISIBLE);
+            progressBarUpdate.setVisibility(View.GONE);
+            progressBar.setVisibility(View.GONE);
         }
     }
 
@@ -138,5 +147,6 @@ public class BuscaVitrinesFragment extends Fragment {
         //Task para baixar mais itens
         adapter.notifyDataSetChanged();
         progressBarUpdate.setVisibility(View.GONE);
+        progressBar.setVisibility(View.GONE);
     }
 }
