@@ -16,15 +16,13 @@ import java.util.List;
 public class PagerAdapterBuscar extends FragmentStatePagerAdapter{
     private Context context;
     private int numTabs;
-    private LatLng mLatLng;
     private FragmentManager fm;
 
-    public PagerAdapterBuscar(FragmentManager fm, Context context, int numTabs, LatLng mLatLng) {
+    public PagerAdapterBuscar(FragmentManager fm, Context context, int numTabs) {
         super(fm);
         this.fm = fm;
         this.context = context;
         this.numTabs = numTabs;
-        this.mLatLng= mLatLng;
     }
 
     @Override
@@ -36,9 +34,6 @@ public class PagerAdapterBuscar extends FragmentStatePagerAdapter{
             return fragment;
         }  else {
            BuscaMapFragment fragment = new BuscaMapFragment();
-            Bundle bundle = new Bundle();
-            bundle.putParcelable("mLatLng", mLatLng);
-            fragment.setArguments(bundle);
 
             return fragment;
         }

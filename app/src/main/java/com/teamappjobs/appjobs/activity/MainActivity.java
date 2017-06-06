@@ -383,14 +383,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     public void ligaTabsBusca(boolean liga) {
         if (liga) {
-            //Configurando as tabs e fragments
-            frameLayout.setVisibility(View.GONE);
-            mTabLayout.setVisibility(View.VISIBLE);
-            mViewPager.setVisibility(View.VISIBLE);
-            pagerAdapterBusca = new PagerAdapterBuscar(getSupportFragmentManager(), this, numTabs,mLatLng);
-            mViewPager.setAdapter(pagerAdapterBusca);
-            mTabLayout.setupWithViewPager(mViewPager);
-            isBuscaActive = true;
+//            //Configurando as tabs e fragments
+//            frameLayout.setVisibility(View.GONE);
+//            mTabLayout.setVisibility(View.VISIBLE);
+//            mViewPager.setVisibility(View.VISIBLE);
+//            pagerAdapterBusca = new PagerAdapterBuscar(getSupportFragmentManager(), this, numTabs,mLatLng);
+//            mViewPager.setAdapter(pagerAdapterBusca);
+//            mTabLayout.setupWithViewPager(mViewPager);
+//            isBuscaActive = true;
         } else {
             frameLayout.setVisibility(View.VISIBLE);
             mTabLayout.setVisibility(View.GONE);

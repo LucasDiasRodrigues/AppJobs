@@ -38,13 +38,8 @@ import de.hdodenhof.circleimageview.CircleImageView;
  */
 public class RecyclerViewPromocoesAdapter extends RecyclerView.Adapter<RecyclerViewPromocoesAdapter.MyViewHolder> {
     private Context context;
-<<<<<<< HEAD
-    private List<Promocao> promocoes;
-=======
     private static List<Promocao> promocoes;
     private  List<Vitrine> vitrines;
-    private LayoutInflater layoutInflater;
->>>>>>> GitHub/Monica
     private boolean criador=false;
     private static Fragment fragment;
     private DateFormat dtFormat = new SimpleDateFormat("dd/MM/yyyy");

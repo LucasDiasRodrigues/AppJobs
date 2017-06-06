@@ -46,26 +46,13 @@ public class RecyclerViewHomeTimeLineAdapter extends RecyclerView.Adapter<Recycl
     private static final int tipo_item = 1;
     private static String user;
 
-<<<<<<< HEAD
     public RecyclerViewHomeTimeLineAdapter(Activity activity ,String user, List<Vitrine> vitrines, String headerTitulo, String headerSub) {
-=======
-
-    public RecyclerViewHomeTimeLineAdapter(Activity activity, List<Vitrine> vitrines, String headerTitulo, String headerSub) {
-
->>>>>>> GitHub/Monica
         this.activity = activity;
         this.vitrines = vitrines;
         this.GEO = GEO;
         this.headerTitulo = headerTitulo;
         this.headerSubtitulo = headerSub;
-<<<<<<< HEAD
         this.user = user;
-=======
-        prefs = activity.getSharedPreferences("Configuracoes", Context.MODE_PRIVATE);
-        user = prefs.getString("email", "");
-
-
->>>>>>> GitHub/Monica
     }
 
 

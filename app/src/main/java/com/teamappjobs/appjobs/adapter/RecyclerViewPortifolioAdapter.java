@@ -30,24 +30,13 @@ import java.util.List;
 public class RecyclerViewPortifolioAdapter extends RecyclerView.Adapter<RecyclerViewPortifolioAdapter.MyViewHolder>{
     static FragmentActivity activity;
     static ArrayList<Portifolio> portifolio;
-<<<<<<< HEAD
-=======
     static Vitrine vitrine;
-    LayoutInflater layoutInflater;
->>>>>>> GitHub/Monica
-
-
+    
     public RecyclerViewPortifolioAdapter(FragmentActivity activity, ArrayList<Portifolio> portifolio, Vitrine vitrine) {
         this.activity = activity;
         this.portifolio = portifolio;
-<<<<<<< HEAD
-=======
         this.vitrine = vitrine;
-        this.layoutInflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
->>>>>>> GitHub/Monica
     }
-
-
 
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
