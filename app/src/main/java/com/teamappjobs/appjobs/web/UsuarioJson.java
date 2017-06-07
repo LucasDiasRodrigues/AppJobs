@@ -25,6 +25,60 @@ public class UsuarioJson {
     DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd hh:mm:ss");
     DateFormat sqlDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
+    public String UsuarioToJson(Usuario usuario, int page) {
+        // Log.i("corredor json", corredor.toString());
+
+
+        JSONStringer jsonStringer = new JSONStringer();
+        try {
+            jsonStringer.object()
+
+                    .key("nome").value(usuario.getNome())
+                    .key("sobrenome").value(usuario.getSobreNome())
+                    .key("email").value(usuario.getEmail())
+                    .key("gcmIdAtual").value(usuario.getGcmIdAtual())
+                    .key("firebaseUID").value(usuario.getFirebaseUID())
+                    .key("senha").value(usuario.getSenha())
+                    .key("dataNasc").value(sqlDateFormat.format(usuario.getDataNasc()))
+                    .key("sexo").value(usuario.getSexo())
+                    .key("imagemPerfil").value(usuario.getImagemPerfil())
+                    .key("situacao").value(usuario.getSituacao())
+                    .key("dataCadastro").value(dateFormat.format(usuario.getDataCadastro()))
+                    .key("telefone").array();
+
+            List<String> telefones = usuario.getTelefones();
+
+            for (String item : telefones) {
+
+                jsonStringer.object()
+                        .key("numTelefone").value(item)
+                        .endObject();
+            }
+
+            jsonStringer.endArray().key("gcmId").array();
+
+
+            List<String> gcmIds = usuario.getGcmIds();
+
+            for (String item : gcmIds) {
+
+                jsonStringer.object()
+                        .key("numGcm").value(item)
+                        .endObject();
+            }
+
+            jsonStringer.endArray()
+                    .key("page").value(page)
+                    .endObject();
+
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        Log.i("Json = ", jsonStringer.toString());
+        return jsonStringer.toString();
+    }
     public String UsuarioToJson(Usuario usuario) {
         // Log.i("corredor json", corredor.toString());
 
@@ -79,7 +133,6 @@ public class UsuarioJson {
         Log.i("Json = ", jsonStringer.toString());
         return jsonStringer.toString();
     }
-
 
     public Usuario JsonToUsuario(String data) {
         Usuario usuario = new Usuario();

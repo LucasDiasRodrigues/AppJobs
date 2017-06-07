@@ -24,14 +24,15 @@ public class ListaPopularesTask extends AsyncTask {
     private final String url = "http://www.4runnerapp.com.br/AppJobs/Ctrl/lista_vitrines_populares_json.php";
     private String method = "";
     private ProgressDialog progress;
-
+    private int page = 1;
     private Activity activity;
     private HomePopularesFragment fragment;
+    List<Vitrine> vitrines;
 
-    public ListaPopularesTask(Activity activity, HomePopularesFragment fragment) {
+    public ListaPopularesTask(Activity activity, HomePopularesFragment fragment, int page) {
         this.activity = activity;
         this.fragment = fragment;
-
+        this.page=page;
     }
 
     @Override
@@ -48,14 +49,12 @@ public class ListaPopularesTask extends AsyncTask {
 
         Usuario usuario = new Usuario();
         UsuarioJson json = new UsuarioJson();
-        String data = json.UsuarioToJson(usuario);
-
+        String data = json.UsuarioToJson(usuario,page);
         answer = HttpConnection.getSetDataWeb(this.url, this.method, data);
         Log.i("RespostaPopulares", answer);
 
-
         VitrineJson vitrineJson = new VitrineJson();
-        List<Vitrine> vitrines = vitrineJson.JsonArrayToListaVitrines(answer);
+        vitrines = vitrineJson.JsonArrayToListaVitrines(answer);
 
         return vitrines;
     }
@@ -63,11 +62,10 @@ public class ListaPopularesTask extends AsyncTask {
     @Override
     protected void onPostExecute(Object o) {
         super.onPostExecute(o);
-
-        fragment.mostraListaNovidades((List<Vitrine>) o);
-
-
+        if(page>1){
+            fragment.updateRecyclerView(vitrines);
+        }else{
+            fragment.updateScreen(vitrines);
+        }
     }
-
-
 }

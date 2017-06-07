@@ -35,6 +35,8 @@ public class HomePopularesFragment extends Fragment {
     private List<Vitrine> vitrines;
     private RecyclerView listVitrines;
     private TextView txtSemVitrines;
+    private int page = 1;
+    private int pageV = 0;
 
     private SwipeRefreshLayout mSwipeRefreshLayout;
 
@@ -61,15 +63,6 @@ public class HomePopularesFragment extends Fragment {
         mRecyclerView = (RecyclerView) fragment.findViewById(R.id.recyclerview);
         mSwipeRefreshLayout = (SwipeRefreshLayout) fragment.findViewById(R.id.swiperefresh);
         mSwipeRefreshLayout.setColorSchemeResources(R.color.colorAccent,R.color.colorPrimary,R.color.colorPrimaryDark);
-        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                Log.i("AtualizandoLista", "onRefresh called from SwipeRefreshLayout");
-                listaNovidades();
-            }
-        });
-
-        listaNovidades();
 
         //Controle de scroll
         mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -91,18 +84,27 @@ public class HomePopularesFragment extends Fragment {
                 if (userScrolled
                         && (visibleItemCount + pastVisiblesItems) == totalItemCount) {
                     userScrolled = false;
-                    updateRecyclerView();
+                    progressBarUpdate.setVisibility(View.VISIBLE);
+                    page++;
+                    listaNovidades();
                 }
             }
         });
         return fragment;
     }
-    public void listaNovidades() {
-        //Task para baixar mais itens
-        ListaPopularesTask task = new ListaPopularesTask(getActivity(), this);
-        task.execute();
+    @Override
+    public void onResume(){
+        super.onResume();
+        listaNovidades();
     }
 
+    public void listaNovidades() {
+        //Task para baixar mais itens
+        ListaPopularesTask task = new ListaPopularesTask(getActivity(), this,page);
+        task.execute();
+        progressBarUpdate.setVisibility(View.GONE);
+    }
+/*
     public void mostraListaNovidades(List<Vitrine> vitrines) {
         this.vitrines = vitrines;
         mSwipeRefreshLayout.setRefreshing(false);
@@ -112,8 +114,7 @@ public class HomePopularesFragment extends Fragment {
             //txtTitulo.setVisibility(View.VISIBLE);
             txtSemVitrines.setVisibility(View.GONE);
 
-            adapter = new RecyclerViewHomePopularesAdapter(getActivity(), user,  vitrines, "Melhor avaliados", "Veja quais são os profissionais mais curtidos");
-
+            adapter = new RecyclerViewHomePopularesAdapter(getActivity(), vitrines, "Melhor avaliados", "Veja quais são os profissionais mais curtidos");
             mLayoutManager = new LinearLayoutManager(getActivity());
             mRecyclerView.setLayoutManager(mLayoutManager);
             mRecyclerView.setAdapter(adapter);
@@ -121,14 +122,26 @@ public class HomePopularesFragment extends Fragment {
             //txtTitulo.setVisibility(View.GONE);
             txtSemVitrines.setVisibility(View.VISIBLE);
         }
-    }
+    }*/
 
-    public void updateRecyclerView() {
+    public void updateRecyclerView(List<Vitrine> vitrines) {
+        if(page != pageV){
         progressBarUpdate.setVisibility(View.VISIBLE);
-        //Task para baixar mais itens
+            this.vitrines.addAll(mLayoutManager.findLastVisibleItemPosition(),vitrines);
         adapter.notifyDataSetChanged();
-        progressBarUpdate.setVisibility(View.GONE);
+            mSwipeRefreshLayout.setRefreshing(false);
+            pageV=page;
+            Log.i("PageV", String.valueOf(pageV));
+        }
     }
-
+    public void updateScreen(List<Vitrine> vitrines){
+        progressBar.setVisibility(View.GONE);
+        this.vitrines = vitrines;
+        mLayoutManager = new LinearLayoutManager(getActivity());
+        mRecyclerView.setLayoutManager(mLayoutManager);
+        adapter = new RecyclerViewHomePopularesAdapter(getActivity(),user, vitrines, "Novos anúncios","");
+        mRecyclerView.setAdapter(adapter);
+        adapter.setSelectedItem(adapter.getItemCount() - 1);
+    }
 
 }

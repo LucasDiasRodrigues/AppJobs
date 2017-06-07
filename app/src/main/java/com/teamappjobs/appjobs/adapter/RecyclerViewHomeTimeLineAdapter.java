@@ -34,6 +34,8 @@ import java.util.List;
 
 public class RecyclerViewHomeTimeLineAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
+
+    private static int selectedItem = -1;
     private static Activity activity;
     private static List<Vitrine> vitrines = new ArrayList<Vitrine>();
     private DateFormat format = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
@@ -124,7 +126,8 @@ public class RecyclerViewHomeTimeLineAdapter extends RecyclerView.Adapter<Recycl
 
     @Override
     public int getItemCount() {
-        return vitrines.size() + 1;
+
+        return vitrines == null ? 0 : vitrines.size();
     }
 
     public static class ItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -190,5 +193,10 @@ public class RecyclerViewHomeTimeLineAdapter extends RecyclerView.Adapter<Recycl
             txtTitulo = (TextView) itemView.findViewById(R.id.txtTitulo);
             txtSubtitulo = (TextView) itemView.findViewById(R.id.txtSubtitulo);
         }
+    }
+
+    public void setSelectedItem(int position)
+    {
+        selectedItem = position;
     }
 }

@@ -45,7 +45,7 @@
         android:layout_gravity="center"
         android:layout_margin="6dp"
         android:gravity="center"
-        android:text="Nenhuma vitrine"
+        android:text="@string/nenhumanuncio"
         android:textSize="@dimen/abc_text_size_large_material"
         android:visibility="gone" />
 

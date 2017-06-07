@@ -83,16 +83,20 @@ public class VitrineActivity extends AppCompatActivity implements AppBarLayout.O
         btnSeguir = (Button)findViewById(R.id.btnSeguir);
         btnSeguir.setOnClickListener(btnSeguirOnClickListener);
 
-        //Se a vitrine for de quem está acessando, oculta os botões.
-        if(vitrine.getEmailAnunciante().equals(prefs.getString("email",""))){
+        try {
+            //Se a vitrine for de quem está acessando, oculta os botões.
+            if (vitrine.getEmailAnunciante().equals(prefs.getString("email", ""))) {
+                btnSeguir.setVisibility(View.GONE);
+                btnSeguir.setVisibility(View.GONE);
+            } else {
+                verificaCurtidaVitrine();
+            }
+        }
+        catch (Exception ex){
+            Log.i("Erro emailanunc:", ex.toString());
             btnSeguir.setVisibility(View.GONE);
             btnSeguir.setVisibility(View.GONE);
         }
-
-        else{
-            verificaCurtidaVitrine();
-        }
-
         AppBarLayout appbarLayout = (AppBarLayout) findViewById(R.id.materialup_appbar);
         appbarLayout.addOnOffsetChangedListener(this);
         mMaxScrollSize = appbarLayout.getTotalScrollRange();

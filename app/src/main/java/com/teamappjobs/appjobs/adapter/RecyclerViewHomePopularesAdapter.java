@@ -36,7 +36,7 @@ public class RecyclerViewHomePopularesAdapter extends RecyclerView.Adapter<Recyc
     private boolean GEO;
     private String headerTitulo;
     private String headerSubtitulo;
-
+    private static int selectedItem = -1;
     private static final int tipo_header = 0;
     private static final int tipo_item = 1;
     private static SharedPreferences prefs;
@@ -194,5 +194,10 @@ public class RecyclerViewHomePopularesAdapter extends RecyclerView.Adapter<Recyc
             txtTitulo = (TextView) itemView.findViewById(R.id.txtTitulo);
             txtSubtitulo = (TextView) itemView.findViewById(R.id.txtSubtitulo);
         }
+    }
+
+    public void setSelectedItem(int position)
+    {
+        selectedItem = position;
     }
 }
