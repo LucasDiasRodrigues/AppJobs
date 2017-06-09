@@ -495,15 +495,6 @@ public class CadastroUsuarioActivity extends AppCompatActivity {
             Picasso.with(this).load(getResources().getString(R.string.imageserver) + usuario.getImagemPerfil()).into(fotoPerfil);
         }
 
-        //AtualizaPrefs
-        SharedPreferences prefs = getSharedPreferences("Configuracoes", MODE_PRIVATE);
-        SharedPreferences.Editor editor = prefs.edit();
-        editor.putBoolean("logado", true);
-        editor.putString("nome", usuario.getNome());
-        editor.putString("email", usuario.getEmail());
-        editor.putString("imagemperfil", usuario.getImagemPerfil());
-
-        editor.commit();
 
     }
 

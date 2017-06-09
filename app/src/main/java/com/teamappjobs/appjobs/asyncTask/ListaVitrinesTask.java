@@ -52,16 +52,11 @@ public class ListaVitrinesTask extends AsyncTask {
         switch (tipo) {
             case "minhasVitrines":
                 method = "lista_minhas_vitrines-json";
-
-
                 usuario.setEmail(email);
-
                 String data = json.UsuarioToJson(usuario);
-
                 answer = HttpConnection.getSetDataWeb(this.url, this.method, data);
                 Log.i("RespostaMinhasVitrines", answer);
                 break;
-
             default:
                 break;
         }

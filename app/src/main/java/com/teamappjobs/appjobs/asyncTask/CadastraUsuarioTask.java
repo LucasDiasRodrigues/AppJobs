@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -19,6 +20,8 @@ import com.teamappjobs.appjobs.web.HttpConnection;
 import com.teamappjobs.appjobs.web.UsuarioJson;
 
 import java.io.ByteArrayOutputStream;
+
+import static android.content.Context.MODE_PRIVATE;
 
 /**
  * Created by Lucas on 23/04/2016.
@@ -88,6 +91,16 @@ public class CadastraUsuarioTask extends AsyncTask {
 
         if (o.toString().equals("Sucesso")) {
 
+            //AtualizaPrefs
+            SharedPreferences prefs = activity.getSharedPreferences("Configuracoes", MODE_PRIVATE);
+            SharedPreferences.Editor editor = prefs.edit();
+            editor.putBoolean("logado", true);
+            editor.putString("nome", usuario.getNome());
+            editor.putString("email", usuario.getEmail());
+            editor.putString("imagemperfil", usuario.getImagemPerfil());
+
+            editor.commit();
+
             new AlertDialog.Builder(activity).setTitle(R.string.bemvindo)
                     .setMessage(R.string.cadastrado)
                     .setCancelable(false)
@@ -100,6 +113,7 @@ public class CadastraUsuarioTask extends AsyncTask {
                         }
                     })
                     .show();
+
 
 
         } else if (o.toString().equals("EmailJaCadastrado")) {

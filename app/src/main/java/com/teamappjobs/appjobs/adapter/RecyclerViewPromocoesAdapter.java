@@ -24,6 +24,7 @@ import com.teamappjobs.appjobs.activity.PublicarPromocaoActivity;
 import com.teamappjobs.appjobs.activity.VitrineActivity;
 import com.teamappjobs.appjobs.asyncTask.AtivaPromocaoTask;
 import com.teamappjobs.appjobs.asyncTask.CancelaPromocaoTask;
+import com.teamappjobs.appjobs.fragment.MinhaVitrinePromocoesFragment;
 import com.teamappjobs.appjobs.modelo.Promocao;
 import com.teamappjobs.appjobs.modelo.Vitrine;
 
@@ -125,8 +126,6 @@ public class RecyclerViewPromocoesAdapter extends RecyclerView.Adapter<RecyclerV
                                         .setNegativeButton(R.string.nao, null).show();
                                 break;
                             case R.id.editarPromocao:
-                                //TESTE
-
                                 Intent intentEditar = new Intent(context, PublicarPromocaoActivity.class);
                                 intentEditar.putExtra("vitrine",vitrine);
                                 intentEditar.putExtra("promocao", promocoes.get(position));
@@ -248,10 +247,12 @@ public class RecyclerViewPromocoesAdapter extends RecyclerView.Adapter<RecyclerV
 
         @Override
         public void onClick(View view) {
-            Vitrine vitrineSelecionada = promocoes.get(getPosition()).getVitrine();
-            Intent intent = new Intent(fragment.getActivity(), VitrineActivity.class);
-            intent.putExtra("vitrine", vitrineSelecionada);
-            fragment.getActivity().startActivity(intent);
+          if(!(fragment instanceof MinhaVitrinePromocoesFragment)){
+                Vitrine vitrineSelecionada = promocoes.get(getPosition()).getVitrine();
+                Intent intent = new Intent(fragment.getActivity(), VitrineActivity.class);
+                intent.putExtra("vitrine", vitrineSelecionada);
+                fragment.getActivity().startActivity(intent);
+            }
         }
     }
 }
