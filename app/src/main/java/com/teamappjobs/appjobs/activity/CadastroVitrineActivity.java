@@ -412,18 +412,17 @@ public class CadastroVitrineActivity extends AppCompatActivity implements
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == IMG_CAM && resultCode == RESULT_OK) {
-            imagemfoto = BitmapFactory.decodeFile(localArquivoFoto);
-            //Reduz o tamanho do foto
-            if (imagemfoto.getHeight() > 3000 || imagemfoto.getWidth() > 3000) {
-                imagemfoto = Bitmap.createScaledBitmap(imagemfoto, imagemfoto.getWidth() / 2,
-                        imagemfoto.getHeight() / 2, true);
-
-                //Reduz again (no caso de cameras muuuuito sensacionais)
-                if (imagemfoto.getHeight() > 3000 || imagemfoto.getWidth() > 3000) {
-                    imagemfoto = Bitmap.createScaledBitmap(imagemfoto, imagemfoto.getWidth() / 2,
-                            imagemfoto.getHeight() / 2, true);
-                }
+            BitmapFactory.Options options = new BitmapFactory.Options();
+            options.inJustDecodeBounds = true;
+            BitmapFactory.decodeFile(localArquivoFoto, options);
+            if (options.outHeight >= 4000 || options.outWidth >= 4000) {
+                options.inSampleSize = 4;
+            } else if (options.outHeight >= 2000 || options.outWidth >= 2000) {
+                options.inSampleSize = 2;
             }
+            options.inJustDecodeBounds = false;
+            imagemfoto = BitmapFactory.decodeFile(localArquivoFoto, options);
+
             //Diminuir foto proporcionalmente para o view
             int scaleFactor = Math.min(imagemfoto.getWidth() / imagemPerfil.getWidth(),
                     imagemfoto.getHeight() / imagemPerfil.getHeight());
@@ -431,31 +430,32 @@ public class CadastroVitrineActivity extends AppCompatActivity implements
                     imagemfoto.getHeight() / scaleFactor, true);
             imagemPerfil.setImageBitmap(imagemfotoReduzida);
             imagemPerfil.setTag(localArquivoFoto);
+
         } else if (data != null && requestCode == IMG_SDCARD && resultCode == RESULT_OK) {
             Uri img = data.getData();
 
             InputStream inputStream;
             try {
                 inputStream = getContentResolver().openInputStream(img);
+                InputStream inputStream2 = this.getContentResolver().openInputStream(img);
                 //Imagem original
-                imagemfoto = BitmapFactory.decodeStream(inputStream);
-                Log.i("tamanho original", String.valueOf(imagemfoto.getHeight()) + String.valueOf(imagemfoto.getWidth()));
-
-                //Reduz o tamanho do foto
-                if (imagemfoto.getHeight() > 3000 || imagemfoto.getWidth() > 3000) {
-                    imagemfoto = Bitmap.createScaledBitmap(imagemfoto, imagemfoto.getWidth() / 2,
-                            imagemfoto.getHeight() / 2, true);
-
-                    //Reduz again (no caso de cameras muuuuito sensacionais)
-                    if (imagemfoto.getHeight() > 3000 || imagemfoto.getWidth() > 3000) {
-                        imagemfoto = Bitmap.createScaledBitmap(imagemfoto, imagemfoto.getWidth() / 2,
-                                imagemfoto.getHeight() / 2, true);
-                    }
+                BitmapFactory.Options options = new BitmapFactory.Options();
+                options.inJustDecodeBounds = true;
+                imagemfoto = BitmapFactory.decodeStream(inputStream, null, options);
+                if (options.outHeight >= 4000 || options.outWidth >= 4000) {
+                    options.inSampleSize = 4;
+                } else if (options.outHeight >= 2000 || options.outWidth >= 2000) {
+                    options.inSampleSize = 2;
                 }
+                options.inJustDecodeBounds = false;
+                imagemfoto = BitmapFactory.decodeStream(inputStream2, null, options);
+                Log.i("tamanho original", String.valueOf(imagemfoto.getHeight()) + String.valueOf(imagemfoto.getWidth()));
 
                 //Diminuir foto proporcionalmente para o view
                 int scaleFactor = Math.min(imagemfoto.getWidth() / imagemPerfil.getWidth(),
                         imagemfoto.getHeight() / imagemPerfil.getHeight());
+                if (scaleFactor <= 0)
+                    scaleFactor = 1;
                 imagemfotoReduzida = Bitmap.createScaledBitmap(imagemfoto, imagemfoto.getWidth() / scaleFactor,
                         imagemfoto.getHeight() / scaleFactor, true);
                 imagemPerfil.setImageBitmap(imagemfotoReduzida);

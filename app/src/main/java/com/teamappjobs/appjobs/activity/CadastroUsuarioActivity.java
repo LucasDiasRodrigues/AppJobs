@@ -44,6 +44,7 @@ import com.teamappjobs.appjobs.modelo.Usuario;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.text.DateFormat;
@@ -272,13 +273,28 @@ public class CadastroUsuarioActivity extends AppCompatActivity {
 
 
         if (requestCode == IMG_CAM && resultCode == RESULT_OK) {
+            BitmapFactory.Options options = new BitmapFactory.Options();
+            options.inJustDecodeBounds = true;
+            BitmapFactory.decodeFile(localArquivoFoto, options);
+            Log.i("tamanho original", String.valueOf(options.outHeight) + " " + String.valueOf(options.outWidth));
+            if (options.outHeight >= 4000 || options.outWidth >= 4000) {
+                options.inSampleSize = 4;
+            } else if (options.outHeight >= 2000 || options.outWidth >= 2000) {
+                options.inSampleSize = 2;
+            }
+            options.inJustDecodeBounds = false;
+            imagemfoto = BitmapFactory.decodeFile(localArquivoFoto, options);
+            Log.i("tamanho carregado", String.valueOf(imagemfoto.getHeight()) + " " + String.valueOf(imagemfoto.getWidth()));
 
-            imagemfoto = BitmapFactory.decodeFile(localArquivoFoto);
-
-            imagemfotoReduzida = Bitmap.createScaledBitmap(imagemfoto, fotoPerfil.getWidth(), fotoPerfil.getHeight(), true);
+            //Diminuir foto proporcionalmente para o view
+            int scaleFactor = Math.min(imagemfoto.getWidth() / fotoPerfil.getWidth(),
+                    imagemfoto.getHeight() / fotoPerfil.getHeight());
+            if (scaleFactor <= 0)
+                scaleFactor = 1;
+            imagemfotoReduzida = Bitmap.createScaledBitmap(imagemfoto, imagemfoto.getWidth() / scaleFactor,
+                    imagemfoto.getHeight() / scaleFactor, true);
             fotoPerfil.setImageBitmap(imagemfotoReduzida);
             fotoPerfil.setTag(localArquivoFoto);
-
 
         } else if (data != null && requestCode == IMG_SDCARD && resultCode == RESULT_OK) {
             Uri img = data.getData();
@@ -286,13 +302,31 @@ public class CadastroUsuarioActivity extends AppCompatActivity {
             InputStream inputStream;
             try {
                 inputStream = this.getContentResolver().openInputStream(img);
+                InputStream inputStream2 = this.getContentResolver().openInputStream(img);
                 //Imagem original
-                imagemfoto = BitmapFactory.decodeStream(inputStream);
+                BitmapFactory.Options options = new BitmapFactory.Options();
+                options.inJustDecodeBounds = true;
+                imagemfoto = BitmapFactory.decodeStream(inputStream, null, options);
+                Log.i("tamanho original", String.valueOf(options.outHeight) + " " + String.valueOf(options.outWidth));
+                if (options.outHeight >= 4000 || options.outWidth >= 4000) {
+                    options.inSampleSize = 4;
+                } else if (options.outHeight >= 2000 || options.outWidth >= 2000) {
+                    options.inSampleSize = 2;
+                }
+                options.inJustDecodeBounds = false;
+                imagemfoto = BitmapFactory.decodeStream(inputStream2, null, options);
+                Log.i("tamanho carregado", String.valueOf(imagemfoto.getHeight()) + " " + String.valueOf(imagemfoto.getWidth()));
 
-                imagemfotoReduzida = Bitmap.createScaledBitmap(imagemfoto, fotoPerfil.getWidth(), fotoPerfil.getHeight(), true);
+                //Diminuir foto proporcionalmente para o view
+                int scaleFactor = Math.min(imagemfoto.getWidth() / fotoPerfil.getWidth(),
+                        imagemfoto.getHeight() / fotoPerfil.getHeight());
+                if (scaleFactor <= 0)
+                    scaleFactor = 1;
+                imagemfotoReduzida = Bitmap.createScaledBitmap(imagemfoto, imagemfoto.getWidth() / scaleFactor,
+                        imagemfoto.getHeight() / scaleFactor, true);
                 fotoPerfil.setImageBitmap(imagemfotoReduzida);
+                fotoPerfil.setScaleType(ImageView.ScaleType.CENTER_CROP);
                 fotoPerfil.setTag(localArquivoFoto);
-
 
             } catch (FileNotFoundException e) {
                 e.printStackTrace();

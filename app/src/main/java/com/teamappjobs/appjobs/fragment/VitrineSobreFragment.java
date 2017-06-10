@@ -47,7 +47,7 @@ public class VitrineSobreFragment extends Fragment {
 
     AddressResultReceiver mResultReceiver;
 
-    private DateFormat dateFormat =  new SimpleDateFormat("dd/MM/yyyy");
+    private DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 
 
     @Override
@@ -70,12 +70,12 @@ public class VitrineSobreFragment extends Fragment {
         txtDataCriacao = (TextView) fragment.findViewById(R.id.txtDataCriacao);
         txtLinks = (TextView) fragment.findViewById(R.id.txtLinks);
         txtTags = (TextView) fragment.findViewById(R.id.txtTags);
-        txtCategoria=(TextView) fragment.findViewById(R.id.txtCategoria);
-        txtLocalizacao=(TextView) fragment.findViewById(R.id.txtLocalizacao);
-        txtNomeAnunciante=(TextView) fragment.findViewById(R.id.txtNomeAnunciante);
-        txtEmailAnunciante=(TextView)fragment.findViewById(R.id.txtEmailAnunciante);
-        txtTelefoneAnunciante=(TextView) fragment.findViewById(R.id.txtTelefone);
-        tvTelefoneAnunciante=(TextView) fragment.findViewById(R.id.tvTelefone);
+        txtCategoria = (TextView) fragment.findViewById(R.id.txtCategoria);
+        txtLocalizacao = (TextView) fragment.findViewById(R.id.txtLocalizacao);
+        txtNomeAnunciante = (TextView) fragment.findViewById(R.id.txtNomeAnunciante);
+        txtEmailAnunciante = (TextView) fragment.findViewById(R.id.txtEmailAnunciante);
+        txtTelefoneAnunciante = (TextView) fragment.findViewById(R.id.txtTelefone);
+        tvTelefoneAnunciante = (TextView) fragment.findViewById(R.id.tvTelefone);
         txtLocalizacao.setText("Localização indisponível");
         //mONICA
         mResultReceiver = new AddressResultReceiver(null);
@@ -83,47 +83,47 @@ public class VitrineSobreFragment extends Fragment {
         intent.putExtra(GeocodeAddressIntentService.RECEIVER, mResultReceiver);
         intent.putExtra(GeocodeAddressIntentService.FETCH_TYPE_EXTRA, GeocodeAddressIntentService.USE_ADDRESS_LOCATION);
 
-            try {
-                if (vitrine.getLocalizacao().equals("") || vitrine.getLocalizacao().isEmpty()) {
-                    txtLocalizacao.setText("Localização indisponível");
-                } else {
-                    String auxlocalizacao[] = vitrine.getLocalizacao().split(",");
-                    String auxLat = auxlocalizacao[0];
-                    String auxLon = auxlocalizacao[1];
+        try {
+            if (vitrine.getLocalizacao().equals("") || vitrine.getLocalizacao().isEmpty()) {
+                txtLocalizacao.setText("Localização indisponível");
+            } else {
+                String auxlocalizacao[] = vitrine.getLocalizacao().split(",");
+                String auxLat = auxlocalizacao[0];
+                String auxLon = auxlocalizacao[1];
 
-                    intent.putExtra(GeocodeAddressIntentService.LOCATION_LATITUDE_DATA_EXTRA,
-                            Double.parseDouble(auxLat));
-                    intent.putExtra(GeocodeAddressIntentService.LOCATION_LONGITUDE_DATA_EXTRA,
-                            Double.parseDouble(auxLon));
-                    getActivity().startService(intent);
-                    //FIM MONICA
-                }
+                intent.putExtra(GeocodeAddressIntentService.LOCATION_LATITUDE_DATA_EXTRA,
+                        Double.parseDouble(auxLat));
+                intent.putExtra(GeocodeAddressIntentService.LOCATION_LONGITUDE_DATA_EXTRA,
+                        Double.parseDouble(auxLon));
+                getActivity().startService(intent);
+                //FIM MONICA
             }
-            catch (Exception e){
-                Log.i("Erro:", e.toString());
-            };
+        } catch (Exception e) {
+            Log.i("Erro:", e.toString());
+        }
+        ;
 
-        btnChat=(Button) fragment.findViewById(R.id.btnChat);
+        btnChat = (Button) fragment.findViewById(R.id.btnChat);
         btnChat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(((VitrineActivity)getActivity()).verificaUsuarioLogado()){
-                Intent it = new Intent(getActivity(), ChatActivity.class);
-                it.putExtra("vitrine", vitrine);
-                it.putExtra("origem","faleComOAnunciante");
-                it.putExtra("fotoAnunciante",vitrine.getFoto());
-                it.putExtra("nomeAnunciante",vitrine.getNomeAnunciante());
-                startActivity(it);
-                }
-                else{
+                if (((VitrineActivity) getActivity()).verificaUsuarioLogado()) {
+                    Intent it = new Intent(getActivity(), ChatActivity.class);
+                    it.putExtra("vitrine", vitrine);
+                    it.putExtra("origem", "faleComOAnunciante");
+                    it.putExtra("fotoAnunciante", vitrine.getFoto());
+                    it.putExtra("nomeAnunciante", vitrine.getNomeAnunciante());
+                    startActivity(it);
+                } else {
                     // Mandar para a tela de login/Cadastro
                     Intent it = new Intent(getActivity(), LoginActivity.class);
                     startActivity(it);
                 }
 
 
-            }});
-        if(getActivity() instanceof MinhaVitrineActivity){
+            }
+        });
+        if (getActivity() instanceof MinhaVitrineActivity) {
             btnChat.setVisibility(View.GONE);
         }
 
@@ -141,54 +141,58 @@ public class VitrineSobreFragment extends Fragment {
         txtEmailAnunciante.setText(vitrine.getEmailAnunciante());
         txtCategoria.setText(vitrine.getDescCategoria());
 
-        if(vitrine.getTelefoneAnunciante()==null){
-           // tvTelefoneAnunciante.setVisibility(View.INVISIBLE);
+        if (vitrine.getTelefoneAnunciante() == null) {
+            // tvTelefoneAnunciante.setVisibility(View.INVISIBLE);
             //txtTelefoneAnunciante.setVisibility(View.INVISIBLE);
             txtTelefoneAnunciante.setText("Não informado");
-        }
-        else{
+        } else {
             txtTelefoneAnunciante.setText(vitrine.getTelefoneAnunciante());
         }
 
 
-
         //Tags
         String auxTags = "";
-        for (String tag : vitrine.getTags()){
+        for (String tag : vitrine.getTags()) {
             auxTags = auxTags + tag + "  ";
         }
         txtTags.setText(auxTags);
 
         //Links
         String auxLinks = "";
-        for (String link : vitrine.getLinks()){
+        for (String link : vitrine.getLinks()) {
             auxLinks = auxLinks + link + "   ";
         }
         txtLinks.setText(auxLinks);
 
     }
+
     //Obviamente COPIEI E COLEI. PEGA EU HOTARIO!!!!!!!!!!!!!!
     class AddressResultReceiver extends ResultReceiver {
         public AddressResultReceiver(Handler handler) {
             super(handler);
         }
-    @Override
-    protected void onReceiveResult(int resultCode, final Bundle resultData) {
-        if (resultCode == GeocodeAddressIntentService.SUCCESS_RESULT) {
-            getActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    txtLocalizacao.setText(resultData.getString(GeocodeAddressIntentService.RESULT_DATA_KEY));
+
+        @Override
+        protected void onReceiveResult(int resultCode, final Bundle resultData) {
+            if (resultCode == GeocodeAddressIntentService.SUCCESS_RESULT) {
+                if (getActivity() != null) {
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            txtLocalizacao.setText(resultData.getString(GeocodeAddressIntentService.RESULT_DATA_KEY));
+                        }
+                    });
                 }
-            });
-        }
-        else {
-            getActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    txtLocalizacao.setText("Localização indisponível");
+            } else {
+                if (getActivity() != null) {
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            txtLocalizacao.setText("Localização indisponível");
+                        }
+                    });
                 }
-            });
+            }
         }
-    }}
+    }
 }

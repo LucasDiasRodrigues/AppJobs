@@ -81,8 +81,8 @@ public class PublicarPromocaoActivity extends AppCompatActivity {
         //Recebendo os dados da vitrine
         Intent intent = getIntent();
         vitrine = (Vitrine) intent.getSerializableExtra("vitrine");
-        promocao =(Promocao) intent.getSerializableExtra("promocao");
-        editar = intent.getBooleanExtra("editar",false);
+        promocao = (Promocao) intent.getSerializableExtra("promocao");
+        editar = intent.getBooleanExtra("editar", false);
 
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -92,7 +92,7 @@ public class PublicarPromocaoActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         coordinatorLayout = (CoordinatorLayout) findViewById(R.id.coordinator);
 
-        txtNome= (TextView) findViewById(R.id.txtNome);
+        txtNome = (TextView) findViewById(R.id.txtNome);
         txtDescricao = (TextView) findViewById(R.id.txtDescricao);
         txtRegras = (TextView) findViewById(R.id.txtRegras);
         txtDataInicio = (TextView) findViewById(R.id.txtDataInicio);
@@ -134,7 +134,7 @@ public class PublicarPromocaoActivity extends AppCompatActivity {
             }
         });
 
-        if(editar){
+        if (editar) {
             getSupportActionBar().setTitle("Editar promoção");
             PreencheCampos();
         }
@@ -181,13 +181,22 @@ public class PublicarPromocaoActivity extends AppCompatActivity {
 
 
         if (requestCode == IMG_CAM && resultCode == RESULT_OK) {
-            imagemfoto = BitmapFactory.decodeFile(localArquivoFoto);
-           // imagemfotoReduzida = Bitmap.createScaledBitmap(imagemfoto, imageView.getWidth(), imageView.getHeight(), true);
-           // imageView.setImageBitmap(imagemfotoReduzida);
+
+            BitmapFactory.Options options = new BitmapFactory.Options();
+            options.inJustDecodeBounds = true;
+            BitmapFactory.decodeFile(localArquivoFoto, options);
+            if (options.outHeight >= 4000 || options.outWidth >= 4000) {
+                options.inSampleSize = 4;
+            } else if (options.outHeight >= 2000 || options.outWidth >= 2000) {
+                options.inSampleSize = 2;
+            }
+            options.inJustDecodeBounds = false;
+            imagemfoto = BitmapFactory.decodeFile(localArquivoFoto, options);
+
             File file = new File(localArquivoFoto);
             Picasso.with(this).load(file).into(imageView);
             imageView.setTag(localArquivoFoto);
-            //imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+
             fabCloseImagem.show();
 
 
@@ -197,11 +206,30 @@ public class PublicarPromocaoActivity extends AppCompatActivity {
             InputStream inputStream;
             try {
                 inputStream = getContentResolver().openInputStream(img);
+                InputStream inputStream2 = this.getContentResolver().openInputStream(img);
                 //Imagem original
-                imagemfoto = BitmapFactory.decodeStream(inputStream);
-                //imagemfotoReduzida = Bitmap.createScaledBitmap(imagemfoto, imageView.getWidth(), imageView.getHeight(), true);
-                //imageView.setImageBitmap(imagemfotoReduzida);
-                //imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+                BitmapFactory.Options options = new BitmapFactory.Options();
+                options.inJustDecodeBounds = true;
+                imagemfoto = BitmapFactory.decodeStream(inputStream, null, options);
+                if (options.outHeight >= 4000 || options.outWidth >= 4000) {
+                    options.inSampleSize = 4;
+                } else if (options.outHeight >= 2000 || options.outWidth >= 2000) {
+                    options.inSampleSize = 2;
+                }
+                options.inJustDecodeBounds = false;
+                imagemfoto = BitmapFactory.decodeStream(inputStream2, null, options);
+
+                //Diminuir foto proporcionalmente para o view
+                int scaleFactor = Math.min(imagemfoto.getWidth() / imageView.getWidth(),
+                        imagemfoto.getHeight() / imageView.getHeight());
+                if (scaleFactor <= 0)
+                    scaleFactor = 1;
+                imagemfotoReduzida = Bitmap.createScaledBitmap(imagemfoto, imagemfoto.getWidth() / scaleFactor,
+                        imagemfoto.getHeight() / scaleFactor, true);
+                imageView.setImageBitmap(imagemfotoReduzida);
+                imageView.setTag(localArquivoFoto);
+
+
                 Picasso.with(this).load(img).into(imageView);
                 imageView.setTag(localArquivoFoto);
                 fabCloseImagem.show();
@@ -226,7 +254,7 @@ public class PublicarPromocaoActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.avancar:
 
-                if(validaCampos()){
+                if (validaCampos()) {
 
                     Promocao promocao = new Promocao();
 
@@ -241,14 +269,13 @@ public class PublicarPromocaoActivity extends AppCompatActivity {
                         e.printStackTrace();
                     }
 
-                    if(editar){
+                    if (editar) {
                         promocao.setCodPromocao(cod_promo);
                         promocao.setFoto(auxFotoPromo);
-                        EditaPromocaoTask promocaoTask = new EditaPromocaoTask(this,promocao,imagemfoto);
+                        EditaPromocaoTask promocaoTask = new EditaPromocaoTask(this, promocao, imagemfoto);
                         promocaoTask.execute();
-                    }else
-                    {
-                        PublicaPromocaoTask promocaoTask = new PublicaPromocaoTask(this,promocao,imagemfoto);
+                    } else {
+                        PublicaPromocaoTask promocaoTask = new PublicaPromocaoTask(this, promocao, imagemfoto);
                         promocaoTask.execute();
                     }
 
@@ -271,12 +298,12 @@ public class PublicarPromocaoActivity extends AppCompatActivity {
     public boolean validaCampos() {
         boolean validacaoOk = true;
 
-        if(txtNome.getText().toString().equals("")){
+        if (txtNome.getText().toString().equals("")) {
             txtNome.setError("Preencha este campo!");
             validacaoOk = false;
         }
 
-        if(txtDescricao.getText().toString().equals("")){
+        if (txtDescricao.getText().toString().equals("")) {
             txtDescricao.setError("Preencha este campo!");
             validacaoOk = false;
         }
@@ -295,7 +322,7 @@ public class PublicarPromocaoActivity extends AppCompatActivity {
             auxDate = dateFormat.parse(txtDataInicio.getText().toString());
             auxDataAgora = dateFormat.parse(dataAgoraString);
 
-            if (auxDate.before(auxDataAgora)){
+            if (auxDate.before(auxDataAgora)) {
                 validacaoOk = false;
                 txtDataInicio.setError("Data invalida!");
             }
@@ -321,11 +348,11 @@ public class PublicarPromocaoActivity extends AppCompatActivity {
             auxDate = dateFormat.parse(txtDataFim.getText().toString());
             auxDataAgora = dateFormat.parse(dataAgoraString);
 
-            if (auxDate.before(auxDataAgora)){
+            if (auxDate.before(auxDataAgora)) {
                 validacaoOk = false;
                 txtDataFim.setError("Data invalida!");
             }
-            if(auxDate.before(auxDateInicio)){
+            if (auxDate.before(auxDateInicio)) {
                 validacaoOk = false;
                 txtDataFim.setError("Data invalida!");
             }
@@ -338,7 +365,6 @@ public class PublicarPromocaoActivity extends AppCompatActivity {
 
         return validacaoOk;
     }
-
 
 
     public static class DatePickerFragment extends DialogFragment
@@ -379,16 +405,16 @@ public class PublicarPromocaoActivity extends AppCompatActivity {
             }
 
             String aux = txtdia + "/" + txtmes + "/" + year;
-            if(auxDataPicker.equals("inicio")){
+            if (auxDataPicker.equals("inicio")) {
                 txtDataInicio.setText(aux);
-            } else if(auxDataPicker.equals("fim")){
+            } else if (auxDataPicker.equals("fim")) {
                 txtDataFim.setText(aux);
             }
 
         }
     }
 
-    public void limparImagem(){
+    public void limparImagem() {
 
         fabCloseImagem.hide();
         imagemfoto = null;
@@ -396,27 +422,27 @@ public class PublicarPromocaoActivity extends AppCompatActivity {
         imageView.setImageBitmap(null);
         imageView.setVisibility(View.GONE);
         localArquivoFoto = "";
-        auxFotoPromo="";
+        auxFotoPromo = "";
 
     }
 
-            public void PreencheCampos(){
-                cod_promo= promocao.getCodPromocao();
-                auxFotoPromo=promocao.getFoto();
-                txtNome.setText(promocao.getNome());
-                txtDataInicio.setText(dateFormat.format(promocao.getDataInicio()));
-                txtDataFim.setText(dateFormat.format(promocao.getDataFim()));
-                txtDescricao.setText(promocao.getDescricao());
-                txtRegras.setText(promocao.getRegras());
+    public void PreencheCampos() {
+        cod_promo = promocao.getCodPromocao();
+        auxFotoPromo = promocao.getFoto();
+        txtNome.setText(promocao.getNome());
+        txtDataInicio.setText(dateFormat.format(promocao.getDataInicio()));
+        txtDataFim.setText(dateFormat.format(promocao.getDataFim()));
+        txtDescricao.setText(promocao.getDescricao());
+        txtRegras.setText(promocao.getRegras());
 
-                if(!promocao.getFoto().equals("")){
+        if (!promocao.getFoto().equals("")) {
 
-                    Picasso.with(this).load(getResources().getString(R.string.imageserver) + promocao.getFoto()).into(imageView);
-                    fabCloseImagem.show();
-                    imageView.setVisibility(View.VISIBLE);
-                }
+            Picasso.with(this).load(getResources().getString(R.string.imageserver) + promocao.getFoto()).into(imageView);
+            fabCloseImagem.show();
+            imageView.setVisibility(View.VISIBLE);
+        }
 
-            }
+    }
 
 
 }

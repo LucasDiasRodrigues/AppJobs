@@ -11,6 +11,7 @@ import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -63,7 +64,6 @@ public class CadastroPortifolioActivity extends AppCompatActivity {
         //Recebendo os dados da vitrine
         Intent intent = getIntent();
         vitrine = (Vitrine) intent.getSerializableExtra("vitrine");
-
 
 
         imageView = (ImageView) findViewById(R.id.imageView);
@@ -125,12 +125,26 @@ public class CadastroPortifolioActivity extends AppCompatActivity {
 
 
         if (requestCode == IMG_CAM && resultCode == RESULT_OK) {
+            BitmapFactory.Options options = new BitmapFactory.Options();
+            options.inJustDecodeBounds = true;
+            BitmapFactory.decodeFile(localArquivoFoto, options);
+            if (options.outHeight >= 4000 || options.outWidth >= 4000) {
+                options.inSampleSize = 4;
+            } else if (options.outHeight >= 2000 || options.outWidth >= 2000) {
+                options.inSampleSize = 2;
+            }
+            options.inJustDecodeBounds = false;
+            imagemfoto = BitmapFactory.decodeFile(localArquivoFoto, options);
 
-            imagemfoto = BitmapFactory.decodeFile(localArquivoFoto);
-            imagemfotoReduzida = Bitmap.createScaledBitmap(imagemfoto, imageView.getWidth(), imageView.getHeight(), true);
+            //Diminuir foto proporcionalmente para o view
+            int scaleFactor = Math.min(imagemfoto.getWidth() / imageView.getWidth(),
+                    imagemfoto.getHeight() / imageView.getHeight());
+            if (scaleFactor <= 0)
+                scaleFactor = 1;
+            imagemfotoReduzida = Bitmap.createScaledBitmap(imagemfoto, imagemfoto.getWidth() / scaleFactor,
+                    imagemfoto.getHeight() / scaleFactor, true);
             imageView.setImageBitmap(imagemfotoReduzida);
             imageView.setTag(localArquivoFoto);
-
 
         } else if (data != null && requestCode == IMG_SDCARD && resultCode == RESULT_OK) {
             Uri img = data.getData();
@@ -138,14 +152,30 @@ public class CadastroPortifolioActivity extends AppCompatActivity {
             InputStream inputStream;
             try {
                 inputStream = getContentResolver().openInputStream(img);
+                InputStream inputStream2 = this.getContentResolver().openInputStream(img);
                 //Imagem original
-                imagemfoto = BitmapFactory.decodeStream(inputStream);
+                BitmapFactory.Options options = new BitmapFactory.Options();
+                options.inJustDecodeBounds = true;
+                imagemfoto = BitmapFactory.decodeStream(inputStream, null, options);
+                if (options.outHeight >= 4000 || options.outWidth >= 4000) {
+                    options.inSampleSize = 4;
+                } else if (options.outHeight >= 2000 || options.outWidth >= 2000) {
+                    options.inSampleSize = 2;
+                }
+                options.inJustDecodeBounds = false;
+                imagemfoto = BitmapFactory.decodeStream(inputStream2, null, options);
+                Log.i("tamanho original", String.valueOf(imagemfoto.getHeight()) + String.valueOf(imagemfoto.getWidth()));
 
-                imagemfotoReduzida = Bitmap.createScaledBitmap(imagemfoto, imageView.getWidth(), imageView.getHeight(), true);
+                //Diminuir foto proporcionalmente para o view
+                int scaleFactor = Math.min(imagemfoto.getWidth() / imageView.getWidth(),
+                        imagemfoto.getHeight() / imageView.getHeight());
+                if (scaleFactor <= 0)
+                    scaleFactor = 1;
+                imagemfotoReduzida = Bitmap.createScaledBitmap(imagemfoto, imagemfoto.getWidth() / scaleFactor,
+                        imagemfoto.getHeight() / scaleFactor, true);
                 imageView.setImageBitmap(imagemfotoReduzida);
                 imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
                 imageView.setTag(localArquivoFoto);
-
 
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
@@ -179,7 +209,7 @@ public class CadastroPortifolioActivity extends AppCompatActivity {
                     portifolio.setDescricao("");
                 }
 
-                CadastraPortifolioTask task = new CadastraPortifolioTask(this,portifolio,imagemfoto);
+                CadastraPortifolioTask task = new CadastraPortifolioTask(this, portifolio, imagemfoto);
                 task.execute();
 
                 break;
