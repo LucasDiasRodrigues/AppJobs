@@ -157,7 +157,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                             PendingIntent.FLAG_UPDATE_CURRENT);
 
 
-                    sendNotificationNoSound(nomeRemetente, corpoMsg, emailRemetente, pendingIntent, this.getResources().getColor(R.color.wallet_holo_blue_light), R.drawable.ic_chat);
+                    sendNotificationNoSound(nomeRemetente, corpoMsg, emailRemetente, pendingIntent, this.getResources().getColor(R.color.colorAccent), R.drawable.ic_chat);
                 } else {
                     //Atualizar Lista
                     chatAtivo = true;
@@ -176,7 +176,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
                 PendingIntent pendingIntent = PendingIntent.getActivity(this, auxId, intent,
                         PendingIntent.FLAG_UPDATE_CURRENT);
-                sendNotification(nomeRemetente, corpoMsg, emailRemetente, pendingIntent, this.getResources().getColor(R.color.wallet_holo_blue_light), R.drawable.ic_chat);
+                sendNotification(nomeRemetente, corpoMsg, emailRemetente, pendingIntent, this.getResources().getColor(R.color.colorAccent), R.drawable.ic_chat);
             }
         }
 

@@ -143,7 +143,6 @@ public class BuscaVitrinesFragment extends Fragment {
     }
 
     public void updateRecyclerView() {
-
         progressBarUpdate.setVisibility(View.VISIBLE);
         //Task para baixar mais itens
         adapter.notifyDataSetChanged();

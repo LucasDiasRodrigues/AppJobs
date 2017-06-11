@@ -62,11 +62,19 @@ public class HomePopularesFragment extends Fragment {
         progressBarUpdate = (ProgressBar) fragment.findViewById(R.id.progressUpdate);
         mRecyclerView = (RecyclerView) fragment.findViewById(R.id.recyclerview);
         mSwipeRefreshLayout = (SwipeRefreshLayout) fragment.findViewById(R.id.swiperefresh);
-        mSwipeRefreshLayout.setColorSchemeResources(R.color.colorAccent,R.color.colorPrimary,R.color.colorPrimaryDark);
+        mSwipeRefreshLayout.setColorSchemeResources(R.color.colorAccent, R.color.colorPrimary, R.color.colorPrimaryDark);
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                page = 1;
+                listaNovidades();
+            }
+        });
 
         //Controle de scroll
         mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             boolean userScrolled;
+
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
@@ -74,6 +82,7 @@ public class HomePopularesFragment extends Fragment {
                     userScrolled = true;
                 }
             }
+
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
@@ -92,15 +101,16 @@ public class HomePopularesFragment extends Fragment {
         });
         return fragment;
     }
+
     @Override
-    public void onResume(){
+    public void onResume() {
         super.onResume();
         listaNovidades();
     }
 
     public void listaNovidades() {
         //Task para baixar mais itens
-        ListaPopularesTask task = new ListaPopularesTask(getActivity(), this,page);
+        ListaPopularesTask task = new ListaPopularesTask(getActivity(), this, page);
         task.execute();
         progressBarUpdate.setVisibility(View.GONE);
     }
@@ -125,23 +135,24 @@ public class HomePopularesFragment extends Fragment {
     }*/
 
     public void updateRecyclerView(List<Vitrine> vitrines) {
-        if(page != pageV){
-        progressBarUpdate.setVisibility(View.VISIBLE);
-            this.vitrines.addAll(mLayoutManager.findLastVisibleItemPosition(),vitrines);
-        adapter.notifyDataSetChanged();
+        if (page != pageV) {
+            progressBarUpdate.setVisibility(View.VISIBLE);
+            this.vitrines.addAll(mLayoutManager.findLastVisibleItemPosition(), vitrines);
+            adapter.notifyDataSetChanged();
             mSwipeRefreshLayout.setRefreshing(false);
-            pageV=page;
+            pageV = page;
             Log.i("PageV", String.valueOf(pageV));
         }
     }
-    public void updateScreen(List<Vitrine> vitrines){
+
+    public void updateScreen(List<Vitrine> vitrines) {
         progressBar.setVisibility(View.GONE);
         this.vitrines = vitrines;
         mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
-        adapter = new RecyclerViewHomePopularesAdapter(getActivity(),user, vitrines, "Novos anúncios","");
+        adapter = new RecyclerViewHomePopularesAdapter(getActivity(), user, vitrines, "Novos anúncios", "");
         mRecyclerView.setAdapter(adapter);
+        mSwipeRefreshLayout.setRefreshing(false);
         adapter.setSelectedItem(adapter.getItemCount() - 1);
     }
-
 }

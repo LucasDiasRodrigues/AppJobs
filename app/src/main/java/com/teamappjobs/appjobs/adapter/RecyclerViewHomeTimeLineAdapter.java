@@ -126,8 +126,7 @@ public class RecyclerViewHomeTimeLineAdapter extends RecyclerView.Adapter<Recycl
 
     @Override
     public int getItemCount() {
-
-        return vitrines == null ? 0 : vitrines.size();
+        return vitrines == null ? 0 : vitrines.size() + 1;
     }
 
     public static class ItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {

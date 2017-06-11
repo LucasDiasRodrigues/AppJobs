@@ -45,6 +45,7 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.squareup.picasso.Picasso;
+import com.teamappjobs.appjobs.Application;
 import com.teamappjobs.appjobs.R;
 import com.teamappjobs.appjobs.adapter.PagerAdapterBuscar;
 import com.teamappjobs.appjobs.adapter.PagerAdapterHome;
@@ -66,7 +67,7 @@ import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
 
     //Variaveis para obter Localização
     public LatLng mLatLng;
@@ -123,9 +124,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         frameLayout = findViewById(R.id.frameLayout);
         configuraNavigationView();
 
-            //Checa a permissão para location
-            checkPermission();
-            VerificaGPS();
+        //Checa a permissão para location
+        checkPermission();
+        VerificaGPS();
 
         //Pega Localização
         if (mGoogleApiClient == null) {
@@ -140,8 +141,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mLocationRequest = new LocationRequest();
         mLocationRequest.setInterval(1000); //1 segundo
         mLocationRequest.setFastestInterval(500);
-        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-
+        mLocationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
 
 
         //Fabs
@@ -195,28 +195,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         } else {
             menu.findItem(R.id.sair).setVisible(false);
         }
-
-//        // Barra de perquisa
-//        final MenuItem searchItem = menu.findItem(R.id.action_search);
-//        searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
-//        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-//            @Override
-//            public boolean onQueryTextSubmit(String query) {
-//                ligaTabsMain(false);
-//                ligaTabsBusca(true);
-//                Pesquisa(query);
-//                fabCadastrarVitrine.hide();
-//                fabExemplo.hide();
-//                fabCadastrarVitrine.hide();
-//                toolbar.setTitle(query);
-//                return true;
-//            }
-//
-//            @Override
-//            public boolean onQueryTextChange(String searchQuery) {
-//                return true;
-//            }
-//        });
         return true;
     }
 
@@ -265,7 +243,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 startActivity(intent);
             }
             return true;
-    }
+        }
         return super.onOptionsItemSelected(item);
     }
 
@@ -401,12 +379,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     //Metodo para a busca
-    public void Pesquisa(String query) {
-        ListaResultadoBuscaTask task = new ListaResultadoBuscaTask(this, query);
-        task.execute();
-    }
-
-    //Metodo para a busca
     public void RecebeLista(List<Vitrine> vitrines) {
         BuscarEventBus event = new BuscarEventBus();
         event.setVitrines(vitrines);
@@ -455,33 +427,34 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onStart() {
         super.onStart();
-        mGoogleApiClient.connect();
+        if(Application.getUserLastLocation() != null){
+            mLatLng = Application.getUserLastLocation();
+        } else {
+            mGoogleApiClient.connect();
+        }
     }
 
     @Override
-    protected void onPause(){
+    protected void onPause() {
         super.onPause();
-        GPSConnect=false;
+        GPSConnect = false;
         VerificaGPS();
     }
+
     @Override
     protected void onStop() {
-        mGoogleApiClient.disconnect();
+        if(mGoogleApiClient.isConnected() || mGoogleApiClient.isConnecting()){
+            mGoogleApiClient.disconnect();
+        }
         super.onStop();
     }
 
     @Override
     public void onConnected(Bundle bundle) {
         apiConnect = true;
-
         if (mGoogleApiClient.isConnected() && GPSConnect) {
             startLocationUpdates();
-            progress = ProgressDialog.show(this, "Aguarde...", getResources().getString(R.string.obtendoLocalizacao), true, true);
-            progress.setCancelable(false);
         }
-        else {
-
-    }
     }
 
     @Override
@@ -507,14 +480,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public void onLocationChanged(Location location) {
-
         if (location.getAccuracy() <= 500) {
             mLatLng = new LatLng(location.getLatitude(), location.getLongitude());
             stopLocationUpdates();
-            progress.dismiss();
 
-
-                }
+            Application.saveUserLocation(mLatLng);
+        }
     }
 
     @Override
@@ -555,6 +526,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     MY_PERMISSIONS_REQUEST_FINE_LOCATION);
         }
     }
+
     public void VerificaGPS() {
         LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         if (!locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
@@ -577,8 +549,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         }
                     });
                 */
-        }
-        else {
+        } else {
             GPSConnect = true;
         }
     }

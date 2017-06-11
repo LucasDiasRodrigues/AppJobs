@@ -67,6 +67,13 @@ public class HomeHomeFragment extends Fragment {
 
         mSwipeRefreshLayout = (SwipeRefreshLayout) fragment.findViewById(R.id.swiperefresh);
         mSwipeRefreshLayout.setColorSchemeResources(R.color.colorAccent, R.color.colorPrimary, R.color.colorPrimaryDark);
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                page = 1;
+                listaNovidades();
+            }
+        });
 
         //Controle de scroll
         mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -101,56 +108,57 @@ public class HomeHomeFragment extends Fragment {
     }
 
 
-
-
     @Override
-    public void onResume(){
+    public void onResume() {
         super.onResume();
         listaNovidades();
     }
+
     public void listaNovidades() {
         //Task para baixar mais itens
-        ListaNovidadesTask task = new ListaNovidadesTask(getActivity(), this,page);
+        ListaNovidadesTask task = new ListaNovidadesTask(getActivity(), this, page);
         task.execute();
         progressBarUpdate.setVisibility(View.GONE);
     }
-/*
-    public void mostraListaNovidades(List<Vitrine> vitrines) {
-        this.vitrines = vitrines;
-        mSwipeRefreshLayout.setRefreshing(false);
-        progressBar.setVisibility(View.GONE);
-        if (vitrines.size() > 0) {
-            Log.i("atualizaListaVitr", "");
-            txtSemVitrines.setVisibility(View.GONE);
-            adapter = new RecyclerViewHomeTimeLineAdapter(getActivity(), vitrines, "Novos anúncios","");
-            mLayoutManager = new LinearLayoutManager(getActivity());
-            mRecyclerView.setLayoutManager(mLayoutManager);
-            mRecyclerView.setAdapter(adapter);
-        } else {
-            txtSemVitrines.setVisibility(View.VISIBLE);
+
+    /*
+        public void mostraListaNovidades(List<Vitrine> vitrines) {
+            this.vitrines = vitrines;
+            mSwipeRefreshLayout.setRefreshing(false);
+            progressBar.setVisibility(View.GONE);
+            if (vitrines.size() > 0) {
+                Log.i("atualizaListaVitr", "");
+                txtSemVitrines.setVisibility(View.GONE);
+                adapter = new RecyclerViewHomeTimeLineAdapter(getActivity(), vitrines, "Novos anúncios","");
+                mLayoutManager = new LinearLayoutManager(getActivity());
+                mRecyclerView.setLayoutManager(mLayoutManager);
+                mRecyclerView.setAdapter(adapter);
+            } else {
+                txtSemVitrines.setVisibility(View.VISIBLE);
+            }
         }
-    }
-        */
+            */
     public void updateRecyclerView(List<Vitrine> vitrines) {
 
-        if(page != pageV){
-        progressBarUpdate.setVisibility(View.VISIBLE);
-              this.vitrines.addAll(mLayoutManager.findLastVisibleItemPosition(),vitrines);
-        adapter.notifyDataSetChanged();
+        if (page != pageV) {
+            progressBarUpdate.setVisibility(View.VISIBLE);
+            this.vitrines.addAll(mLayoutManager.findLastVisibleItemPosition(), vitrines);
+            adapter.notifyDataSetChanged();
             mSwipeRefreshLayout.setRefreshing(false);
-            pageV=page;
+            pageV = page;
             Log.i("PageV", String.valueOf(pageV));
         }
 
     }
 
-    public void updateScreen(List<Vitrine> vitrines){
-            progressBar.setVisibility(View.GONE);
-            this.vitrines = vitrines;
-             mLayoutManager = new LinearLayoutManager(getActivity());
-            mRecyclerView.setLayoutManager(mLayoutManager);
-            adapter = new RecyclerViewHomeTimeLineAdapter(getActivity(),user, vitrines, "Novos anúncios","");
-            mRecyclerView.setAdapter(adapter);
-            adapter.setSelectedItem(adapter.getItemCount() - 1);
+    public void updateScreen(List<Vitrine> vitrines) {
+        progressBar.setVisibility(View.GONE);
+        this.vitrines = vitrines;
+        mLayoutManager = new LinearLayoutManager(getActivity());
+        mRecyclerView.setLayoutManager(mLayoutManager);
+        adapter = new RecyclerViewHomeTimeLineAdapter(getActivity(), user, vitrines, "Novos anúncios", "");
+        mRecyclerView.setAdapter(adapter);
+        mSwipeRefreshLayout.setRefreshing(false);
+        adapter.setSelectedItem(adapter.getItemCount() - 1);
     }
 }

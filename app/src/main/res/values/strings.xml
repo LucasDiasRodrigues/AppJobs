@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Freela</string>
     <string name="GCMSenderId">435540487325</string>
-    <string name="GCMServerAPIKey">AIzaSyBhGCg7gA2yxYltjxjyRDDy6Pzb8Uu1AmA</string>
+    <string name="GCMServerAPIKey">AAAAZWg8bJ0:APA91bGDiG7xEXNIXv2wKP_XOnjG4Xtk3gpMmpPnaAnOnjQ8EvJ2qyzkCPuntodt9OWuR6f6JCII_ISKSS1JbBf4RZeSGxpNXKeXPSDXld2Ima8u1RJ4f39CQcil0m5KqqKAGuvJK3_F</string>
     <string name="imageserver">http://4runnerapp.com.br/AppJobs/img/</string>
     <string name="imageservermini">http://4runnerapp.com.br/AppJobs/img_thumb/</string>
 
