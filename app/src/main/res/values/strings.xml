@@ -21,10 +21,7 @@
     <string name="title_activity_configuracao_conta">Configuração</string>
 
 
-    <string name="email">E-mail</string>
-    <string name="senha">Senha</string>
-    <string name="esqueciSenha">Esqueci minha senha</string>
-    <string name="entrar">Entrar</string>
+
 
     <string name="descricao..">Descrição:</string>
 
@@ -37,7 +34,7 @@
     <string name="sexo">Sexo</string>
     <string name="nome">Nome</string>
     <string name="sobreNome">Sobrenome</string>
-    <string name="datanasc">Data de Nascimento</string>
+    <string name="datanasc">data de nascimento</string>
     <string name="avancar">Avançar</string>
     <string name="telefone">Telefone</string>
     <string name="escolhafoto">Escolha uma foto</string>
@@ -223,6 +220,15 @@
     <string name="alteracaoConcluida">Alteração concluída.</string>
 
     <string name="entre_ou_cadastrese">Entre com sua conta ou cadastre-se para utilizar todas as funcionalidades.</string>
+
+
+    <!--Login-->
+    <string name="aindanaotemconta">Ainda não tem conta?</string>
+    <string name="crieumaagora"><u>Crie uma agora!</u></string>
+    <string name="email">e-mail</string>
+    <string name="senha">senha</string>
+    <string name="esqueciSenha">Esqueceu a senha?</string>
+    <string name="entrar">Entrar</string>
 
 
     <!-- TODO: Remove or change this placeholder text -->

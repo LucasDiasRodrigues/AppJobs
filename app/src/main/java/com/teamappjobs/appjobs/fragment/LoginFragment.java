@@ -68,7 +68,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
     private EditText etEmail;
     private EditText etSenha;
     private Button btnEntrar;
-    private Button btnCadastrese;
+    private TextView btnCadastrese;
     private TextView esqueciSenha;
 
     //Firebase
@@ -119,12 +119,12 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View cardLogin = inflater.inflate(R.layout.fragment_login, container, false);
+        View view = inflater.inflate(R.layout.fragment_login, container, false);
         onRegistrar();
 
         //Facebook
         callbackManager = CallbackManager.Factory.create();
-        loginButton = (LoginButton) cardLogin.findViewById(R.id.login_button);
+        loginButton = (LoginButton) view.findViewById(R.id.login_button);
         loginButton.setReadPermissions("email", "public_profile");
         // If using in a fragment
         loginButton.setFragment(this);
@@ -157,11 +157,11 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
         });
 
         //Login Normal
-        this.etEmail = (EditText) cardLogin.findViewById(R.id.etEmail);
-        this.etSenha = (EditText) cardLogin.findViewById(R.id.etSenha);
-        this.btnEntrar = (Button) cardLogin.findViewById(R.id.btnEntrar);
-        this.esqueciSenha = (TextView) cardLogin.findViewById(R.id.esqueciSenha);
-        this.btnCadastrese = (Button) cardLogin.findViewById(R.id.btnCadastrese);
+        this.etEmail = (EditText) view.findViewById(R.id.etEmail);
+        this.etSenha = (EditText) view.findViewById(R.id.etSenha);
+        this.btnEntrar = (Button) view.findViewById(R.id.btnEntrar);
+        this.esqueciSenha = (TextView) view.findViewById(R.id.esqueciSenha);
+        this.btnCadastrese = (TextView) view.findViewById(R.id.btnCadastrese);
 
         esqueciSenha.setOnClickListener(this);
 
@@ -169,7 +169,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
 
         btnCadastrese.setOnClickListener(this);
 
-        return cardLogin;
+        return view;
     }
 
 
@@ -408,7 +408,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
 
         } catch (Exception e) {
             e.printStackTrace();
-            Toast.makeText(getActivity(), "Erro ao carregar a imagem do face", Toast.LENGTH_LONG).show();
+            Toast.makeText(getActivity(), "Erro ao carregar imagem do Facebook", Toast.LENGTH_LONG).show();
 
             return null;
         }

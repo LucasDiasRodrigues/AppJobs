@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -8,30 +7,26 @@
     android:layout_gravity="center"
     android:orientation="vertical">
 
-    <ImageView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scaleType="centerCrop"
-        android:src="@drawable/image_back_4runner" />
-
-
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_margin="16dp"
         android:fitsSystemWindows="true"
         android:gravity="center"
-        android:layout_margin="16dp"
         android:orientation="vertical">
 
-        <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:card_view="http://schemas.android.com/apk/res-auto"
-            android:id="@+id/card_view"
+        <LinearLayout
+            android:id="@+id/linear_login"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
             android:layout_gravity="center"
-            card_view:cardBackgroundColor="#dcffffff"
-            card_view:cardElevation="6dp">
-
+            android:orientation="vertical"
+            android:paddingBottom="10dp"
+            android:paddingLeft="50dp"
+            android:paddingRight="50dp"
+            android:paddingTop="10dp"
+            tools:context=".MainActivity">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -40,38 +35,43 @@
                 android:layout_margin="6dp"
                 android:orientation="vertical">
 
-
                 <EditText
                     android:id="@+id/etEmail"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="10dp"
+                    android:backgroundTint="#8F8F8F"
+                    android:gravity="center"
                     android:hint="@string/email"
                     android:imeOptions="actionNext"
-                    android:inputType="textEmailAddress" />
+                    android:inputType="textEmailAddress"
+                    android:textColor="@color/colorWhite"
+                    android:textColorHint="#8F8F8F" />
 
                 <EditText
                     android:id="@+id/etDataNasc"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="10dp"
+                    android:backgroundTint="#8F8F8F"
+                    android:gravity="center"
                     android:hint="@string/datanasc"
                     android:imeOptions="actionDone"
-                    android:inputType="date" />
-
+                    android:inputType="date"
+                    android:textColor="@color/colorWhite"
+                    android:textColorHint="#8F8F8F" />
             </LinearLayout>
-        </android.support.v7.widget.CardView>
 
-        <Button
-            android:id="@+id/btnRecuperar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:background="@color/colorPrimary"
-            android:elevation="2dp"
-            android:text="Recuperar senha"
-            android:textColor="#ffffff" />
-
-
+            <Button
+                android:id="@+id/btnRecuperar"
+                android:layout_width="200dp"
+                android:layout_height="40dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/login_btn"
+                android:elevation="2dp"
+                android:text="Recuperar senha"
+                android:textAllCaps="false"
+                android:textColor="#212121"
+                android:textSize="18sp" />
+        </LinearLayout>
     </LinearLayout>
 </FrameLayout>
