@@ -167,6 +167,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mViewPager = (ViewPager) findViewById(R.id.pager);
         mTabLayout = (TabLayout) findViewById(R.id.tabs);
         ligaTabsMain(true);
+
+        //Teste
+        Intent intent = new Intent(this, IntroducaoActivity.class);
+        startActivity(intent);
     }
 
     @Override

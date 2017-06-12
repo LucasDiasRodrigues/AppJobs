@@ -37,21 +37,21 @@
         </activity>
         <activity
             android:name=".activity.CadastroUsuarioActivity"
-            android:screenOrientation="portrait"
-            android:label="@string/title_activity_cadastro_usuario" />
+            android:label="@string/title_activity_cadastro_usuario"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activity.CadastroVitrineActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activity.LoginActivity"
-            android:screenOrientation="portrait"
             android:label="@string/title_activity_login"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.LoginTheme" />
         <activity
             android:name=".activity.MinhaVitrineActivity"
-            android:screenOrientation="portrait"
             android:label="@string/title_activity_minha_vitrine"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
         <activity android:name=".activity.CadastroPortifolioActivity" />
         <activity
@@ -62,8 +62,8 @@
             android:theme="@style/AppTheme" />
         <activity
             android:name=".activity.VitrineActivity"
-            android:screenOrientation="portrait"
             android:label="@string/title_activity_vitrine"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
         <activity
             android:name=".activity.ChatActivity"
@@ -92,14 +92,21 @@
 
         <service
             android:name=".util.GeocodeAddressIntentService"
-            android:exported="false"/>
+            android:exported="false" />
 
         <!-- [Facebook Meta-Data] -->
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />
 
-        <activity android:name=".activity.BuscaActivity"></activity>
+        <activity
+            android:name=".activity.BuscaActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activity.IntroducaoActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.LoginTheme" />
     </application>
 
 </manifest>
