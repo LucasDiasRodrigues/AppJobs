@@ -571,7 +571,7 @@ public class CadastroUsuarioActivity extends AppCompatActivity {
 
             } else {
 
-                Toast.makeText(this, "Erro nas Preferencias", Toast.LENGTH_LONG).show();
+
             }
 
 

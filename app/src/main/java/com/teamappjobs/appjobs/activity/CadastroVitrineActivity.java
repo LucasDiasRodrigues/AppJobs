@@ -733,11 +733,10 @@ public class CadastroVitrineActivity extends AppCompatActivity implements
                     // Use the address as needed
                     String message = String.format("Latitude: %f, Longitude: %f",
                             address.getLatitude(), address.getLongitude());
-                    Toast.makeText(this, message, Toast.LENGTH_LONG).show();
+
                     Log.i("VIA CEP: ", message);
                 } else {
-                    // Display appropriate message when Geocoder services are not available
-                    Toast.makeText(this, "Unable to geocode zipcode", Toast.LENGTH_LONG).show();
+
                 }
             } catch (IOException e) {
                 // handle exception
