@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent">
+
+
+    <!--Page1-->
+    <RelativeLayout
+        android:id="@+id/layoutPage1"
+        android:clickable="false"
+        android:alpha="1"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_above="@+id/icon"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="-95dp"
+                android:textSize="22sp"
+                android:textStyle="bold"
+                android:textColor="@color/colorWhite"
+                android:text="@string/bemvindoao"/>
+
+            <ImageView
+                android:id="@+id/icon"
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:adjustViewBounds="true"
+                android:layout_centerHorizontal="true"
+                android:src="@drawable/freela_icon"/>
+
+            <TextView
+                android:id="@+id/text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/icon"
+                android:layout_marginTop="-90dp"
+                android:textColor="@color/colorWhite"
+                android:textSize="18sp"
+                android:gravity="center"
+                android:layout_centerHorizontal="true"
+                android:text="@string/txtPag1"/>
+
+            <android.support.v4.widget.Space
+                android:layout_width="match_parent"
+                android:layout_height="120dp"
+                android:layout_below="@+id/text"/>
+        </RelativeLayout>
+    </RelativeLayout>
+
+</RelativeLayout>

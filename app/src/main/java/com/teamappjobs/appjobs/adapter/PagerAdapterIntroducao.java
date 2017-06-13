@@ -20,7 +20,7 @@ public class PagerAdapterIntroducao extends FragmentPagerAdapter {
     private Context context;
 
 
-    public PagerAdapterIntroducao(FragmentManager fm, Context context, ArrayList<String> txts) {
+    public PagerAdapterIntroducao(FragmentManager fm, Context context) {
         super(fm);
         this.txts = txts;
         this.context = context;
@@ -29,12 +29,12 @@ public class PagerAdapterIntroducao extends FragmentPagerAdapter {
     @Override
     public Fragment getItem(int position) {
 
-        SlideViewPagerFragment fragment = SlideViewPagerFragment.novaInstancia(txts.get(position));
+        SlideViewPagerFragment fragment = SlideViewPagerFragment.novaInstancia(position + 1);
         return fragment;
     }
 
     @Override
     public int getCount() {
-        return txts.size();
+        return 3;
     }
 }

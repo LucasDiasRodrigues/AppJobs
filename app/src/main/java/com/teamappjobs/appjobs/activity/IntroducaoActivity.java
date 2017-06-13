@@ -1,6 +1,7 @@
 package com.teamappjobs.appjobs.activity;
 
 import android.animation.Animator;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -20,6 +21,7 @@ public class IntroducaoActivity extends AppCompatActivity {
 
     private ViewPager mViewPager;
     private ImageView mWallpaper;
+    private ImageView mWallpaper2;
     private View mIndicator1;
     private View mIndicator2;
     private View mIndicator3;
@@ -43,20 +45,30 @@ public class IntroducaoActivity extends AppCompatActivity {
             }
         });
 
-        mWallpaper = (ImageView) findViewById(R.id.imageWallpaper);
+        mWallpaper = (ImageView) findViewById(R.id. imageWallpaperUser);
+        mWallpaper2 = (ImageView) findViewById(R.id. imageWallpaperProf);
+
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = false;
+        options.inSampleSize = 2;
+
+        mWallpaper.setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.bg_intro_user,options));
+        mWallpaper2.setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.bg_intro_prof,options));
+
         //Slides
         mViewPager = (ViewPager) findViewById(R.id.viewPager);
-        ArrayList<String> txts = new ArrayList<>();
-        txts.add("Textinho motivador 1");
-        txts.add("Textinho motivador 2");
-        txts.add("Textinho motivador 3");
-        PagerAdapterIntroducao adapter = new PagerAdapterIntroducao(getSupportFragmentManager(), this, txts);
+        PagerAdapterIntroducao adapter = new PagerAdapterIntroducao(getSupportFragmentManager(), this);
         mViewPager.setAdapter(adapter);
+        savePreferences();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+
+        mIndicator1.setDrawingCacheBackgroundColor(getResources().getColor(R.color.colorPrimaryLight));
+        mIndicator1.animate().scaleX(1.5f).scaleY(1.5f);
+        
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -66,33 +78,34 @@ public class IntroducaoActivity extends AppCompatActivity {
             public void onPageSelected(int position) {
                 switch (position) {
                     case 0:
-                        mIndicator1.setBackgroundColor(getResources().getColor(R.color.colorPrimaryLight));
+                        mIndicator1.setDrawingCacheBackgroundColor(getResources().getColor(R.color.colorPrimaryLight));
                         mIndicator1.animate().scaleX(1.5f).scaleY(1.5f);
 
-                        mIndicator2.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
+                        mIndicator2.setDrawingCacheBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
                         mIndicator2.animate().scaleX(1).scaleY(1);
 
-                        mIndicator3.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
+                        mIndicator3.setDrawingCacheBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
                         mIndicator3.animate().scaleX(1).scaleY(1);
 
-                        mWallpaper.animate().alpha(0);
+                        mWallpaper.animate().alpha(0).setStartDelay(0);
 
                         btnContinuar.setVisibility(View.GONE);
 
                         break;
                     case 1:
-                        mIndicator1.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
+                        mIndicator1.setDrawingCacheBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
                         mIndicator1.animate().scaleX(1).scaleY(1);
 
-                        mIndicator2.setBackgroundColor(getResources().getColor(R.color.colorPrimaryLight));
+                        mIndicator2.setDrawingCacheBackgroundColor(getResources().getColor(R.color.colorPrimaryLight));
                         mIndicator2.animate().scaleX(1.5f).scaleY(1.5f);
 
-                        mIndicator3.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
+                        mIndicator3.setDrawingCacheBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
                         mIndicator3.animate().scaleX(1).scaleY(1);
 
-                        mWallpaper.setAlpha(0f);
-                        mWallpaper.setImageBitmap(loadImageBg(2));
+
+                        mWallpaper.setImageResource(R.drawable.bg_intro_user);
                         mWallpaper.animate().alpha(1);
+                        mWallpaper2.animate().alpha(0);
 
                         btnContinuar.animate().alpha(0).setListener(new Animator.AnimatorListener() {
                             @Override
@@ -118,18 +131,16 @@ public class IntroducaoActivity extends AppCompatActivity {
 
                         break;
                     case 2:
-                        mIndicator1.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
+                        mIndicator1.setDrawingCacheBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
                         mIndicator1.animate().scaleX(1).scaleY(1);
 
-                        mIndicator2.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
+                        mIndicator2.setDrawingCacheBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
                         mIndicator2.animate().scaleX(1).scaleY(1);
 
-                        mIndicator3.setBackgroundColor(getResources().getColor(R.color.colorPrimaryLight));
+                        mIndicator3.setDrawingCacheBackgroundColor(getResources().getColor(R.color.colorPrimaryLight));
                         mIndicator3.animate().scaleX(1.5f).scaleY(1.5f);
 
-                        mWallpaper.setAlpha(0f);
-                        mWallpaper.setImageBitmap(loadImageBg(3));
-                        mWallpaper.animate().alpha(1);
+                        mWallpaper2.animate().alpha(1);
 
                         btnContinuar.animate().alpha(1).setListener(new Animator.AnimatorListener() {
                             @Override
@@ -162,49 +173,12 @@ public class IntroducaoActivity extends AppCompatActivity {
         });
     }
 
-    private Bitmap loadImageBg(int page) {
-        int resource;
-        Bitmap bitmap;
-
-        if (page == 2) {
-            resource = R.drawable.bg_intro_user;
-        } else {
-            resource = R.drawable.bg_intro_prof;
-        }
-
-        BitmapFactory.Options options = new BitmapFactory.Options();
-        options.inJustDecodeBounds = true;
-        BitmapFactory.decodeResource(getResources(), resource, options);
-
-        options.inSampleSize = calculateInSampleSize(options, mWallpaper.getWidth(), mWallpaper.getHeight());
-
-        options.inJustDecodeBounds = false;
-        bitmap = BitmapFactory.decodeResource(getResources(), resource, options);
-
-        return bitmap;
+    private void savePreferences(){
+        SharedPreferences preferences = getSharedPreferences("config", MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putBoolean("introduction", true);
+        editor.commit();
     }
 
-    public static int calculateInSampleSize(
-            BitmapFactory.Options options, int reqWidth, int reqHeight) {
-        // Raw height and width of image
-        final int height = options.outHeight;
-        final int width = options.outWidth;
-        int inSampleSize = 1;
-
-        if (height > reqHeight || width > reqWidth) {
-
-            final int halfHeight = height / 2;
-            final int halfWidth = width / 2;
-
-            // Calculate the largest inSampleSize value that is a power of 2 and keeps both
-            // height and width larger than the requested height and width.
-            while ((halfHeight / inSampleSize) >= reqHeight
-                    && (halfWidth / inSampleSize) >= reqWidth) {
-                inSampleSize *= 2;
-            }
-        }
-
-        return inSampleSize;
-    }
 
 }

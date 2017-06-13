@@ -8,13 +8,21 @@
     tools:context="com.teamappjobs.appjobs.activity.IntroducaoActivity">
 
     <ImageView
-        android:id="@+id/imageWallpaper"
+        android:id="@+id/imageWallpaperUser"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:alpha="0"
         android:fitsSystemWindows="false"
-        android:scaleType="centerCrop"
-        />
+        android:scaleType="centerCrop" />
+
+    <ImageView
+        android:id="@+id/imageWallpaperProf"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:alpha="0"
+        android:fitsSystemWindows="false"
+        android:scaleType="centerCrop" />
+
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -25,8 +33,8 @@
         <android.support.v4.view.ViewPager
             android:id="@+id/viewPager"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
             android:background="#66000000"
+            android:layout_height="match_parent"
             android:scrollIndicators="bottom" />
 
         <LinearLayout
@@ -66,15 +74,13 @@
             android:layout_centerHorizontal="true"
             android:layout_gravity="center"
             android:layout_marginBottom="20dp"
-            android:visibility="gone"
             android:background="@drawable/login_btn"
             android:elevation="4dp"
             android:text="Entendi"
             android:textAllCaps="false"
             android:textColor="#212121"
-            android:textSize="18sp" />
+            android:textSize="18sp"
+            android:visibility="gone" />
 
     </RelativeLayout>
-
-
 </android.support.design.widget.CoordinatorLayout>

@@ -3,6 +3,25 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/anchor"
+        android:layout_alignParentTop="true">
+
+        <TextView
+            android:id="@+id/txtTitulo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="60dp"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:textColor="@color/colorAccent"
+            android:textSize="26sp" />
+
+    </FrameLayout>
+
     <View
         android:id="@+id/anchor"
         android:layout_width="1px"
@@ -23,11 +42,7 @@
             android:gravity="center"
             android:shadowColor="#000000"
             android:shadowRadius="2"
-            android:text="textoMotivador"
             android:textColor="#ffffff"
-            android:textSize="18sp" />
-
+            android:textSize="16sp" />
     </FrameLayout>
-
-
 </RelativeLayout>

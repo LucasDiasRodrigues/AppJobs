@@ -16,13 +16,17 @@ import com.teamappjobs.appjobs.R;
 
 public class SlideViewPagerFragment extends Fragment {
 
-    private TextView txt1;
+    private int page;
+
+    private TextView title;
+    private TextView txt;
 
 
-    public static SlideViewPagerFragment novaInstancia(String textoMotivador) {
+
+    public static SlideViewPagerFragment novaInstancia(int page) {
 
         Bundle params = new Bundle();
-        params.putString("txt", textoMotivador);
+        params.putInt("page", page);
 
         SlideViewPagerFragment instancia = new SlideViewPagerFragment();
         instancia.setArguments(params);
@@ -33,16 +37,27 @@ public class SlideViewPagerFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View fragment = inflater.inflate(R.layout.fragment_viewpager_introducao, container, false);
-
         Bundle params = getArguments();
+        int page = params.getInt("page");
+        View fragment;
+        if(page == 1){
+            fragment = inflater.inflate(R.layout.fragment_viewpager_introducao_page1, container, false);
 
-        String txt = params.getString("txt");
 
-        txt1 = (TextView) fragment.findViewById(R.id.txt1);
-        txt1.setText(txt);
+        } else {
+            fragment = inflater.inflate(R.layout.fragment_viewpager_introducao, container, false);
 
+            title = (TextView) fragment.findViewById(R.id.txtTitulo);
+            txt = (TextView) fragment.findViewById(R.id.txt1);
+
+            if(page == 2) {
+                txt.setText(getString(R.string.txtPag2));
+                title.setText(getString(R.string.usuario));
+            } else {
+                txt.setText(getString(R.string.txtPag3));
+                title.setText(getString(R.string.profissional));
+            }
+        }
         return fragment;
     }
-
 }

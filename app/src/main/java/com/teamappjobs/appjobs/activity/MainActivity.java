@@ -168,9 +168,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mTabLayout = (TabLayout) findViewById(R.id.tabs);
         ligaTabsMain(true);
 
-        //Teste
-        Intent intent = new Intent(this, IntroducaoActivity.class);
-        startActivity(intent);
+        //Introduction
+        SharedPreferences preferences = getSharedPreferences("config", MODE_PRIVATE);
+        if(!preferences.getBoolean("introduction", false)){
+            Intent intent = new Intent(this, IntroducaoActivity.class);
+            startActivity(intent);
+        }
     }
 
     @Override
