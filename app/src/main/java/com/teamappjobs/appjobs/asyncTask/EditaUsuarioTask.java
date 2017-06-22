@@ -115,6 +115,7 @@ public class EditaUsuarioTask extends AsyncTask {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 Intent mainIntent = new Intent(activity, MainActivity.class);
+                                mainIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                                 activity.startActivity(mainIntent);
                                 activity.finish();
                             }

@@ -9,6 +9,7 @@
     <android.support.design.widget.AppBarLayout
         android:id="@+id/appBar"
         android:layout_width="match_parent"
+        android:fitsSystemWindows="true"
         android:layout_height="wrap_content"
         android:animateLayoutChanges="true"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
@@ -50,6 +51,7 @@
     <RelativeLayout
         android:id="@+id/frameLayout"
         android:layout_width="match_parent"
+        android:fitsSystemWindows="true"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         android:visibility="visible">

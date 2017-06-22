@@ -34,7 +34,7 @@
     <string name="sobreNome">Sobrenome</string>
     <string name="datanasc">data de nascimento</string>
     <string name="avancar">Avançar</string>
-    <string name="telefone">Telefone</string>
+    <string name="telefone">telefone</string>
     <string name="escolhafoto">Escolha uma foto</string>
     <string name="tirarfoto">Tirar Foto</string>
     <string name="escolherdagaleria">Escolher da galeria</string>
@@ -232,16 +232,16 @@
     <!--Introducao-->
     <string name="usuario">Usuário</string>
     <string name="profissional">Profissional</string>
-    <string name="bemvindoao">Bem vindo ao</string>
+    <string name="bemvindoao">Bem-vindo ao</string>
     <string name="txtPag1">O app que conecta você\nao profissional que procura\nno momento em que precisa.</string>
     <string name="txtPag3">Divulgue seus serviços na aba \"Meus anúncios\".\n
                             Conquiste curtidas e ganhe destaque.\n
                             Seja visto e aumente seu lucro.</string>
     <string name="txtPag2">Localize o profissional que precisa através da\n
                             barra de pesquisa ou na tela principal.\n
-                            Siga anuncios para receber notificações.\n
+                            Siga anúncios para receber notificações.\n
                             Encontre profissionais a qualquer\n
-                            hora e em qualquer lugar</string>
+                            hora e em qualquer lugar.</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

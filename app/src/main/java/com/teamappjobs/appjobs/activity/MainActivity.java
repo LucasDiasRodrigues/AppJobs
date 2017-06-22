@@ -67,7 +67,8 @@ import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,
+        GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
 
     //Variaveis para obter Localização
     public LatLng mLatLng;
@@ -110,6 +111,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     //Firebase
     private FirebaseAnalytics mFirebaseAnalytics;
 
+    //----------------------------------------------------------------------------------------------
+    //
+    // Activity methods
+    //
+    //----------------------------------------------------------------------------------------------
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -122,7 +130,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         //Navigation
         frameLayout = findViewById(R.id.frameLayout);
-        configuraNavigationView();
+       // configuraNavigationView();
 
         //Checa a permissão para location
         checkPermission();
@@ -174,6 +182,37 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             Intent intent = new Intent(this, IntroducaoActivity.class);
             startActivity(intent);
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        configuraNavigationView();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if(Application.getUserLastLocation() != null){
+            mLatLng = Application.getUserLastLocation();
+        } else {
+            mGoogleApiClient.connect();
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        GPSConnect = false;
+        VerificaGPS();
+    }
+
+    @Override
+    protected void onStop() {
+        if(mGoogleApiClient.isConnected() || mGoogleApiClient.isConnecting()){
+            mGoogleApiClient.disconnect();
+        }
+        super.onStop();
     }
 
     @Override
@@ -254,6 +293,125 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return super.onOptionsItemSelected(item);
     }
 
+    //----------------------------------------------------------------------------------------------
+    //
+    // General methods
+    //
+    //----------------------------------------------------------------------------------------------
+
+    public void ligaTabsMain(boolean liga) {
+        if (liga) {
+            frameLayout.setVisibility(View.GONE);
+            mTabLayout.setVisibility(View.VISIBLE);
+            mViewPager.setVisibility(View.VISIBLE);
+            pagerAdapterMain = new PagerAdapterHome(getSupportFragmentManager(), this, numTabs);
+            mViewPager.setAdapter(pagerAdapterMain);
+            mTabLayout.setupWithViewPager(mViewPager);
+        } else {
+            frameLayout.setVisibility(View.VISIBLE);
+            mTabLayout.setVisibility(View.GONE);
+            mViewPager.setVisibility(View.GONE);
+            mViewPager.setAdapter(null);
+        }
+    }
+
+    public void ligaTabsBusca(boolean liga) {
+        if (liga) {
+//            //Configurando as tabs e fragments
+//            frameLayout.setVisibility(View.GONE);
+//            mTabLayout.setVisibility(View.VISIBLE);
+//            mViewPager.setVisibility(View.VISIBLE);
+//            pagerAdapterBusca = new PagerAdapterBuscar(getSupportFragmentManager(), this, numTabs,mLatLng);
+//            mViewPager.setAdapter(pagerAdapterBusca);
+//            mTabLayout.setupWithViewPager(mViewPager);
+//            isBuscaActive = true;
+        } else {
+            frameLayout.setVisibility(View.VISIBLE);
+            mTabLayout.setVisibility(View.GONE);
+            mViewPager.setVisibility(View.GONE);
+            mViewPager.setAdapter(null);
+            isBuscaActive = false;
+        }
+    }
+
+    public boolean EstaLogado() {
+        try {
+            SharedPreferences prefs = getSharedPreferences("Configuracoes", MODE_PRIVATE);
+            if (prefs != null) {
+                logado = prefs.getBoolean("logado", false);
+                usuario = new Usuario();
+                usuario.setNome(prefs.getString("nome", ""));
+                usuario.setEmail(prefs.getString("email", ""));
+                usuario.setImagemPerfil(prefs.getString("imagemperfil", ""));
+                buscaDadosPerfil();
+                return logado;
+            } else {
+                logado = false;
+                return logado;
+            }
+        } catch (NullPointerException exception) {
+        }
+        return false;
+    }
+
+    public void onLogout() {
+        SharedPreferences prefs = getSharedPreferences("Configuracoes", MODE_PRIVATE);
+        LogOutTask task = new LogOutTask(prefs.getString("email", ""), this);
+        task.execute();
+    }
+
+    //Metodo para a busca
+    public void RecebeLista(List<Vitrine> vitrines) {
+        BuscarEventBus event = new BuscarEventBus();
+        event.setVitrines(vitrines);
+        EventBus.getDefault().post(event);
+    }
+
+    public void buscaDadosPerfil() {
+        BuscaDadosPerfilTask taskDados = new BuscaDadosPerfilTask(this, usuario);
+        taskDados.execute();
+    }
+
+    public void recebeDadosPerfil(Usuario usuario) {
+        this.usuario = usuario;
+        Picasso.with(this).load(getResources().getString(R.string.imageservermini) + usuario.getImagemPerfil()).into(imagemPerfil);
+    }
+
+    //----------------------------------------------------------------------------------------------
+    //
+    // Navigation methods
+    //
+    //----------------------------------------------------------------------------------------------
+
+    public void configuraNavigationView() {
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.setDrawerListener(toggle);
+        toggle.syncState();
+
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
+        navigationView.setCheckedItem(R.id.home);
+
+        imagemPerfil = (CircleImageView) navigationView.getHeaderView(0).findViewById(R.id.imageView);
+        txtNome = (TextView) navigationView.getHeaderView(0).findViewById(R.id.txtNome);
+        txtEmail = (TextView) navigationView.getHeaderView(0).findViewById(R.id.txtEmail);
+        //Alterar o conteudo exibido se não logado
+        if (!EstaLogado()) {
+            navigationView.getMenu().setGroupVisible(R.id.group_logado, false);
+            navigationView.getMenu().setGroupVisible(R.id.group_nao_logado, true);
+            txtNome.setText(R.string.entre_ou_cadastrese);
+            txtEmail.setVisibility(View.GONE);
+            imagemPerfil.setVisibility(View.GONE);
+
+        } else {
+            Picasso.with(this).load(getResources().getString(R.string.imageservermini) + usuario.getImagemPerfil()).into(imagemPerfil);
+            txtNome.setText(usuario.getNome());
+            txtEmail.setText(usuario.getEmail());
+        }
+    }
+
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
@@ -324,155 +482,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return true;
     }
 
-    public boolean EstaLogado() {
-        try {
-            SharedPreferences prefs = getSharedPreferences("Configuracoes", MODE_PRIVATE);
-            if (prefs != null) {
-                logado = prefs.getBoolean("logado", false);
-                usuario = new Usuario();
-                usuario.setNome(prefs.getString("nome", ""));
-                usuario.setEmail(prefs.getString("email", ""));
-                usuario.setImagemPerfil(prefs.getString("imagemperfil", ""));
-                buscaDadosPerfil();
-                return logado;
-            } else {
-                logado = false;
-                return logado;
-            }
-        } catch (NullPointerException exception) {
-        }
-        return false;
-    }
 
-    public void onLogout() {
-        SharedPreferences prefs = getSharedPreferences("Configuracoes", MODE_PRIVATE);
-        LogOutTask task = new LogOutTask(prefs.getString("email", ""), this);
-        task.execute();
-    }
-
-    public void ligaTabsMain(boolean liga) {
-        if (liga) {
-            frameLayout.setVisibility(View.GONE);
-            mTabLayout.setVisibility(View.VISIBLE);
-            mViewPager.setVisibility(View.VISIBLE);
-            pagerAdapterMain = new PagerAdapterHome(getSupportFragmentManager(), this, numTabs);
-            mViewPager.setAdapter(pagerAdapterMain);
-            mTabLayout.setupWithViewPager(mViewPager);
-        } else {
-            frameLayout.setVisibility(View.VISIBLE);
-            mTabLayout.setVisibility(View.GONE);
-            mViewPager.setVisibility(View.GONE);
-            mViewPager.setAdapter(null);
-        }
-    }
-
-    public void ligaTabsBusca(boolean liga) {
-        if (liga) {
-//            //Configurando as tabs e fragments
-//            frameLayout.setVisibility(View.GONE);
-//            mTabLayout.setVisibility(View.VISIBLE);
-//            mViewPager.setVisibility(View.VISIBLE);
-//            pagerAdapterBusca = new PagerAdapterBuscar(getSupportFragmentManager(), this, numTabs,mLatLng);
-//            mViewPager.setAdapter(pagerAdapterBusca);
-//            mTabLayout.setupWithViewPager(mViewPager);
-//            isBuscaActive = true;
-        } else {
-            frameLayout.setVisibility(View.VISIBLE);
-            mTabLayout.setVisibility(View.GONE);
-            mViewPager.setVisibility(View.GONE);
-            mViewPager.setAdapter(null);
-            isBuscaActive = false;
-        }
-    }
-
-    //Metodo para a busca
-    public void RecebeLista(List<Vitrine> vitrines) {
-        BuscarEventBus event = new BuscarEventBus();
-        event.setVitrines(vitrines);
-        EventBus.getDefault().post(event);
-    }
-
-    public void configuraNavigationView() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
-        toggle.syncState();
-
-        navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
-        navigationView.setCheckedItem(R.id.home);
-
-        imagemPerfil = (CircleImageView) navigationView.getHeaderView(0).findViewById(R.id.imageView);
-        txtNome = (TextView) navigationView.getHeaderView(0).findViewById(R.id.txtNome);
-        txtEmail = (TextView) navigationView.getHeaderView(0).findViewById(R.id.txtEmail);
-        //Alterar o conteudo exibido se não logado
-        if (!EstaLogado()) {
-            navigationView.getMenu().setGroupVisible(R.id.group_logado, false);
-            navigationView.getMenu().setGroupVisible(R.id.group_nao_logado, true);
-            txtNome.setText(R.string.entre_ou_cadastrese);
-            txtEmail.setVisibility(View.GONE);
-            imagemPerfil.setVisibility(View.GONE);
-
-        } else {
-            Picasso.with(this).load(getResources().getString(R.string.imageservermini) + usuario.getImagemPerfil()).into(imagemPerfil);
-            txtNome.setText(usuario.getNome());
-            txtEmail.setText(usuario.getEmail());
-        }
-    }
-
-    public void buscaDadosPerfil() {
-        BuscaDadosPerfilTask taskDados = new BuscaDadosPerfilTask(this, usuario);
-        taskDados.execute();
-    }
-
-    public void recebeDadosPerfil(Usuario usuario) {
-        this.usuario = usuario;
-        Picasso.with(this).load(getResources().getString(R.string.imageservermini) + usuario.getImagemPerfil()).into(imagemPerfil);
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        if(Application.getUserLastLocation() != null){
-            mLatLng = Application.getUserLastLocation();
-        } else {
-            mGoogleApiClient.connect();
-        }
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        GPSConnect = false;
-        VerificaGPS();
-    }
-
-    @Override
-    protected void onStop() {
-        if(mGoogleApiClient.isConnected() || mGoogleApiClient.isConnecting()){
-            mGoogleApiClient.disconnect();
-        }
-        super.onStop();
-    }
-
-    @Override
-    public void onConnected(Bundle bundle) {
-        apiConnect = true;
-        if (mGoogleApiClient.isConnected() && GPSConnect) {
-            startLocationUpdates();
-        }
-    }
-
-    @Override
-    public void onConnectionSuspended(int i) {
-        apiConnect = false;
-    }
-
-    @Override
-    public void onConnectionFailed(ConnectionResult connectionResult) {
-        apiConnect = false;
-    }
+    //----------------------------------------------------------------------------------------------
+    //
+    // Location methods
+    //
+    //----------------------------------------------------------------------------------------------
 
     protected void startLocationUpdates() {
         if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION)
@@ -485,13 +500,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
     }
 
-    @Override
-    public void onLocationChanged(Location location) {
-        if (location.getAccuracy() <= 500) {
-            mLatLng = new LatLng(location.getLatitude(), location.getLongitude());
-            stopLocationUpdates();
-
-            Application.saveUserLocation(mLatLng);
+    public void checkPermission() {
+        // Here, thisActivity is the current activity
+        if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},
+                    MY_PERMISSIONS_REQUEST_FINE_LOCATION);
         }
     }
 
@@ -525,15 +539,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
-    public void checkPermission() {
-        // Here, thisActivity is the current activity
-        if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},
-                    MY_PERMISSIONS_REQUEST_FINE_LOCATION);
-        }
-    }
-
     public void VerificaGPS() {
         LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         if (!locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
@@ -561,4 +566,31 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
+    @Override
+    public void onConnected(Bundle bundle) {
+        apiConnect = true;
+        if (mGoogleApiClient.isConnected() && GPSConnect) {
+            startLocationUpdates();
+        }
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+        if (location.getAccuracy() <= 500) {
+            mLatLng = new LatLng(location.getLatitude(), location.getLongitude());
+            stopLocationUpdates();
+
+            Application.saveUserLocation(mLatLng);
+        }
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+        apiConnect = false;
+    }
+
+    @Override
+    public void onConnectionFailed(ConnectionResult connectionResult) {
+        apiConnect = false;
+    }
 }

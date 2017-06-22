@@ -227,7 +227,6 @@ public class CadastroUsuarioActivity extends AppCompatActivity {
             }
         });
         if (editar) {
-
             BuscaDadosPerfil();
             LaySenha = (LinearLayout) findViewById(R.id.LaySenha);
             LaySenha.setVisibility(View.GONE);
@@ -412,22 +411,22 @@ public class CadastroUsuarioActivity extends AppCompatActivity {
             }
 
         }
-        if (senha.getText().toString().equals("")) {
+        if (senha.getText().toString().equals("") && !editar) {
             senha.setError(getResources().getString(R.string.preenchacampo));
             senha.setFocusable(true);
             retorno = false;
         } else {
-            if (senha.getText().toString().length() < 5) {
+            if (senha.getText().toString().length() < 5 && !editar) {
                 senha.setError(getResources().getString(R.string.senhacurta));
                 retorno = false;
             }
         }
-        if (confirmaSenha.getText().toString().equals("")) {
+        if (confirmaSenha.getText().toString().equals("") && !editar) {
             confirmaSenha.setError(getResources().getString(R.string.preenchacampo));
             confirmaSenha.setFocusable(true);
             retorno = false;
         } else {
-            if (!confirmaSenha.getText().toString().equals(senha.getText().toString())) {
+            if (!confirmaSenha.getText().toString().equals(senha.getText().toString())&& !editar) {
                 confirmaSenha.setError(getResources().getString(R.string.senhasdiferentes));
                 retorno = false;
             }
